@@ -34,6 +34,10 @@ public class UserService {
         userMapper.insertAndUpdateObjectThenGetNumberOfRowsAffected(user);
     }
 
+    public void deleteUser(Integer userId) {
+        userMapper.deleteUser(userId);
+    }
+
     public User getUser(String username) {
         return userMapper.getUser(username);
     }
