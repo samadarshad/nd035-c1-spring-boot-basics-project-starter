@@ -7,23 +7,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class UserTests {
-
-    @LocalServerPort
-    private Integer port;
-
     @Autowired
     private UserService userService;
 
     @Test
     @Transactional
-    public void whenAddUserToDatabaseTheirUsernameIsNotAvailable() throws InterruptedException {
+    public void whenAddUserToDatabaseThenTheirUsernameIsNotAvailable() throws InterruptedException {
         assertTrue(userService.isUsernameAvailable("user"));
         User user = new User(null, "user", null, "pass", "first", "last");
         userService.createUserAndUpdateObject(user);
@@ -32,7 +30,7 @@ class UserTests {
 
     @Test
     @Transactional
-    public void whenAddUserTheirPasswordIsHashed() throws InterruptedException {
+    public void whenAddUserThenTheirPasswordIsHashed() throws InterruptedException {
         User user = new User(null, "user", null, "pass", "first", "last");
 
         assertEquals("pass", user.getPassword());
@@ -42,7 +40,7 @@ class UserTests {
 
     @Test
     @Transactional
-    public void userIdRefersToSameUser() throws InterruptedException {
+    public void whenAddUserThenCanGetSameUserById() throws InterruptedException {
         User user = new User(null, "user", null, "pass", "first", "last");
         userService.createUserAndUpdateObject(user);
 

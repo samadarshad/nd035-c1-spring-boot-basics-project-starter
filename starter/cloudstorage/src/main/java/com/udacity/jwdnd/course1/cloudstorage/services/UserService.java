@@ -22,7 +22,7 @@ public class UserService {
         return userMapper.getUser(username) == null;
     }
 
-    public int createUserAndUpdateObject(User user) {
+    public void createUserAndUpdateObject(User user) {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);
@@ -31,7 +31,7 @@ public class UserService {
 
         user.setSalt(encodedSalt);
         user.setPassword(hashedPassword);
-        return userMapper.insert(user);
+        userMapper.insertAndUpdateObjectThenGetNumberOfRowsAffected(user);
     }
 
     public User getUser(String username) {

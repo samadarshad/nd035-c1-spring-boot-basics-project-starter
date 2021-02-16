@@ -33,8 +33,8 @@ public class SignupController {
         }
 
         if (signupError == null) {
-            int rowsAdded = userService.createUserAndUpdateObject(user);
-            if (rowsAdded < 0) {
+            userService.createUserAndUpdateObject(user);
+            if (user.getUserId() < 0) {
                 signupError = "There was an error signing you up. Please try again.";
             }
         }

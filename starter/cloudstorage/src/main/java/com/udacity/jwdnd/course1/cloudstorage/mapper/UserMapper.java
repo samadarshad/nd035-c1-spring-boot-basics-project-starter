@@ -16,6 +16,6 @@ public interface UserMapper {
 
     //returns number of rows affected (i.e. 1), and modifies the user object to have userId
     @Insert("INSERT INTO USERS (username, salt, password, firstname, lastname) VALUES(#{username}, #{salt}, #{password}, #{firstName}, #{lastName})")
-    @Options(useGeneratedKeys = true, keyProperty = "userId", keyColumn = "userId")
-    int insert(User user);
+    @Options(useGeneratedKeys = true, keyProperty = "userId")
+    int insertAndUpdateObjectThenGetNumberOfRowsAffected(User user);
 }

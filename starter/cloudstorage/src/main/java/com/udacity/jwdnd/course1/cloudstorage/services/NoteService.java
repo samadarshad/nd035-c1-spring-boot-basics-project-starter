@@ -2,8 +2,9 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 
 import com.udacity.jwdnd.course1.cloudstorage.mapper.NotesMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
-import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class NoteService {
@@ -13,7 +14,15 @@ public class NoteService {
         this.notesMapper = notesMapper;
     }
 
-    public void addNote(NoteForm noteForm) {
-        Note note = new Note();
-    }
+   public void createNoteAndUpdateObject(Note note) {
+        notesMapper.insertAndUpdateObjectThenGetNumberOfRowsAffected(note);
+   }
+
+   public Note getNote(Integer noteId) { return notesMapper.getNote(noteId); }
+
+   public List<Note> getNotesByUserId(Integer userId) { return notesMapper.getAllNotesByUserId(userId); }
+
+   public void deleteNote(Integer noteId) { }
+
+   public void updateNote(Integer noteId) { }
 }
