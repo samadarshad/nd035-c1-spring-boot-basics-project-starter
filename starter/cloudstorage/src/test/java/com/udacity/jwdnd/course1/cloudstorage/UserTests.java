@@ -13,15 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @SpringBootTest(properties = {"spring.datasource.url=jdbc:h2:mem:UserTests"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+@Transactional
 class UserTests {
     @Autowired
     private UserService userService;
 
     @Test
-    @Transactional
     public void whenAddUserToDatabaseThenTheirUsernameIsNotAvailable() throws InterruptedException {
         assertTrue(userService.isUsernameAvailable("user"));
         User user = new User(null, "user", null, "pass", "first", "last");
@@ -30,7 +28,6 @@ class UserTests {
     }
 
     @Test
-    @Transactional
     public void whenAddUserThenTheirPasswordIsHashed() throws InterruptedException {
         User user = new User(null, "user", null, "pass", "first", "last");
 
@@ -40,7 +37,6 @@ class UserTests {
     }
 
     @Test
-    @Transactional
     public void whenAddUserThenCanGetSameUserById() throws InterruptedException {
         User user = new User(null, "user", null, "pass", "first", "last");
         userService.createUserAndUpdateObject(user);

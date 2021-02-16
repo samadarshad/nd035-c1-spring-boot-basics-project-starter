@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
+import static org.junit.jupiter.api.Assertions.*;
 
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @SpringBootTest(properties = {"spring.datasource.url=jdbc:h2:mem:NoteTests"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@Transactional
 public class NoteTests {
 
     @Autowired
@@ -29,15 +29,21 @@ public class NoteTests {
         userService.createUserAndUpdateObject(user);
     }
 
-    @AfterAll
-    public static void AfterAll(@Autowired UserService userService) {
+    @Test
+    public void whenAddNoteThenItExists() {
+        Note note = new Note("title", "description", user.getUserId());
+        assertNull(note.getNoteId());
+        noteService.createNoteAndUpdateObject(note);
+        assertNotNull(note.getNoteId());
     }
 
     @Test
-    @Transactional
-    public void whenAddNoteThenItExists() {
+    public void whenDeleteNoteThenItDoesntExist() {
         Note note = new Note("title", "description", user.getUserId());
         noteService.createNoteAndUpdateObject(note);
-        note.getNoteId();
+
+        noteService.deleteNote(note.getNoteId());
+        Note deletedNote = noteService.getNote(note.getNoteId());
+        assertNull(deletedNote);
     }
 }

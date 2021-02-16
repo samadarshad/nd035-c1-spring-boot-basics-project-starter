@@ -22,7 +22,9 @@ public class NoteService {
 
    public List<Note> getNotesByUserId(Integer userId) { return notesMapper.getAllNotesByUserId(userId); }
 
-   public void deleteNote(Integer noteId) { }
+   public void deleteNote(Integer noteId) {
+        notesMapper.deleteNote(noteId);
+   }
 
    public void updateNote(Integer noteId) { }
 }
