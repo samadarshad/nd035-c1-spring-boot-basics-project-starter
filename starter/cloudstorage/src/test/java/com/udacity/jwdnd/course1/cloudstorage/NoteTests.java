@@ -13,7 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(properties = {"spring.datasource.url=jdbc:h2:mem:NoteTests"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class NoteTests {
 
@@ -30,7 +31,6 @@ public class NoteTests {
 
     @AfterAll
     public static void AfterAll(@Autowired UserService userService) {
-        userService.deleteUser(user.getUserId());
     }
 
     @Test

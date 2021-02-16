@@ -13,7 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(properties = {"spring.datasource.url=jdbc:h2:mem:UserTests"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class UserTests {
     @Autowired
