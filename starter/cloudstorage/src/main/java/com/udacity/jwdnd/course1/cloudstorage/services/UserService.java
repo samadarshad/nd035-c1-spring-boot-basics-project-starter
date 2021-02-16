@@ -22,16 +22,24 @@ public class UserService {
         return userMapper.getUser(username) == null;
     }
 
-    public int createUser(User user) {
+    public int createUserAndUpdateObject(User user) {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);
         String encodedSalt = Base64.getEncoder().encodeToString(salt);
         String hashedPassword = hashService.getHashedValue(user.getPassword(), encodedSalt);
-        return userMapper.insert(new User(null, user.getUsername(), encodedSalt, hashedPassword, user.getFirstName(), user.getLastName()));
+
+        user.setSalt(encodedSalt);
+        user.setPassword(hashedPassword);
+        return userMapper.insert(user);
     }
 
     public User getUser(String username) {
         return userMapper.getUser(username);
     }
+
+    public User getUserById(Integer userId) {
+        return userMapper.getUserById(userId);
+    }
+
 }
