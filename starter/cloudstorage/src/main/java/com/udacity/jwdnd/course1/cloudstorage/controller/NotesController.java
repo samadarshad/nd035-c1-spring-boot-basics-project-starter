@@ -4,6 +4,7 @@ import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,20 +14,16 @@ import org.springframework.web.bind.annotation.*;
 public class NotesController {
 
     @PostMapping
-    public String addNote(@RequestParam("noteTitle") String noteTitle,
-                          @RequestParam("noteDescription") String noteDescription
-    ) {
-        System.out.println("adding note" + noteTitle + noteDescription);
-        return "redirect:/";
-    }
-
-    @PutMapping
-    public String editNote(
-            @RequestParam("noteId") Integer noteId,
+    public String addOrEditNote(
+            @RequestParam("noteId") @Nullable Integer noteId,
             @RequestParam("noteTitle") String noteTitle,
             @RequestParam("noteDescription") String noteDescription
     ) {
-        System.out.println("editing note" + noteId.toString() + noteTitle + noteDescription);
+        if (noteId == null) {
+            System.out.println("add note" + noteTitle + noteDescription);
+        } else {
+            System.out.println("edit note" + noteId.toString() + noteTitle + noteDescription);
+        }
         return "redirect:/";
     }
 
