@@ -17,8 +17,6 @@ public class HomeController {
     private NoteService noteService;
     private FileService fileService;
 
-    private User mockUser; //wip
-
     public HomeController(NoteService noteService,
                           UserService userService,
                           FileService fileService) {

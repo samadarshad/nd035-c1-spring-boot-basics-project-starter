@@ -7,6 +7,11 @@ import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +31,28 @@ public class FilesController {
 
         this.userService = userService;
         this.fileService = fileService;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Resource> get(@PathVariable("id") Integer id, Model model) {
+        File file = fileService.get(id);
+        User user = userService.get("user1"); //get this from auth
+//        if (file == null) {
+//            return error404(model);
+//        }
+//
+//        if (file.getUserId() != user.getUserId()) {
+//            return ResponseEntity.status(401);
+//        }
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.parseMediaType(file.getContentType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\""
+                        + file.getFileName()
+                        + "\""
+                )
+                .body(new ByteArrayResource(file.getFileData()));
     }
 
     @PostMapping
