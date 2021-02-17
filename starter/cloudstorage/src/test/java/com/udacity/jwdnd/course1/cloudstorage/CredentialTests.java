@@ -36,7 +36,7 @@ public class CredentialTests {
 
     @BeforeEach
     public void create() {
-        credential = new Credential(null, "url", "username", "key", "password", user.getUserId());
+        credential = new Credential(null, "url", "username", null, "password", user.getUserId());
         credentialService.createAndUpdateObject(credential);
     }
 
@@ -45,7 +45,6 @@ public class CredentialTests {
         assertNotNull(credential.getCredentialId());
         assertEquals("url", credentialService.get(credential.getCredentialId()).getUrl());
         assertEquals("username", credentialService.get(credential.getCredentialId()).getUsername());
-        assertEquals("key", credentialService.get(credential.getCredentialId()).getKey());
         assertEquals("password", credentialService.get(credential.getCredentialId()).getPassword());
     }
 
