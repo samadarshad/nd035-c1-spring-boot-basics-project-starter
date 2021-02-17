@@ -28,7 +28,9 @@ public class HomeController {
         // wip
         this.mockUser = new User(null, "user", null, "pass", "first", "last");
         this.userService.createUserAndUpdateObject(this.mockUser);
-        Note note = new Note(null, "titleabc", "descriptionabc", mockUser.getUserId());
+        Note note = new Note(null, "title1", "description1", mockUser.getUserId());
+        this.noteService.createNoteAndUpdateObject(note);
+        note = new Note(null, "title2", "description2", mockUser.getUserId());
         this.noteService.createNoteAndUpdateObject(note);
     }
 
