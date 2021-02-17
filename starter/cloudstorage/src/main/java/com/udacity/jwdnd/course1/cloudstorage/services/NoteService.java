@@ -7,29 +7,29 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class NoteService {
+public class NoteService implements CrudService<Note> {
     private final NoteMapper noteMapper;
 
     public NoteService(NoteMapper noteMapper) {
         this.noteMapper = noteMapper;
     }
 
-   public void createAndUpdateObject(Note note) {
+    public void createAndUpdateObject(Note note) {
         int rows = noteMapper.insertAndUpdateObjectThenGetNumberOfRowsAffected(note);
         assert(rows == 1);
-   }
+    }
 
-   public Note get(Integer noteId) { return noteMapper.get(noteId); }
+    public Note get(Integer noteId) { return noteMapper.get(noteId); }
 
-   public List<Note> getByUserId(Integer userId) { return noteMapper.getAllByUserId(userId); }
+    public List<Note> getByUserId(Integer userId) { return noteMapper.getAllByUserId(userId); }
 
-   public void delete(Integer noteId) {
+    public void delete(Integer noteId) {
         int rows = noteMapper.deleteThenGetNumberOfRowsAffected(noteId);
        assert(rows == 1);
-   }
+    }
 
-   public void update(Note note) {
+    public void update(Note note) {
         int rows = noteMapper.updateThenGetNumberOfRowsAffected(note);
         assert(rows == 1);
-   }
+    }
 }
