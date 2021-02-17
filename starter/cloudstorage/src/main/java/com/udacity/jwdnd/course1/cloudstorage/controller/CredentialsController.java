@@ -37,11 +37,12 @@ public class CredentialsController {
     }
 
     @GetMapping("/{id}")
-    public void get(@PathVariable("id") Integer id, Model model) {
+    @ResponseBody
+    public Credential get(@PathVariable("id") Integer id, Model model) {
         Credential credential = credentialService.get(id);
         User user = userService.get("user1"); //get this from auth
         Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(credential, user);
-
+        return credential;
         //display decrypted creds to user
     }
 

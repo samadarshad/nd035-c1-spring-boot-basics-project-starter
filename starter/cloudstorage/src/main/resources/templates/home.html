@@ -198,9 +198,9 @@
             </div>
         </div>
 
-        <script th:src="@{/js/jquery-slim.min.js}"></script>
         <script th:src="@{/js/popper.min.js}"></script>
-        <script th:src="@{/js/bootstrap.min.js}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
         <!--For opening the note modal-->
         <script type="text/javascript">
@@ -214,11 +214,22 @@
 
             // For opening the credentials modal
             function showCredentialModal(credentialId) {
-                $('#credential-id').val(credentialId ? credentialId : '');
-                // $('#credential-url').val(url ? url : '');
-                // $('#credential-username').val(username ? username : '');
-                // $('#credential-password').val(password ? password : '');
-                $('#credentialModal').modal('show');
+                if( credentialId !== undefined ) {
+                    $(document).ready(function() {
+                        $.ajax({
+                            url: "/credentials/"+credentialId
+                        }).then(function(credential) {
+                            console.log(credential)
+                            $('#credential-id').val(credential.credentialId);
+                            $('#credential-url').val(credential.url);
+                            $('#credential-username').val(credential.username);
+                            $('#credential-password').val(credential.password);
+                            $('#credentialModal').modal('show');
+                        });
+                    });
+                } else {
+                    $('#credentialModal').modal('show');
+                }
             }
 
             // For persisting tab on refresh
@@ -230,6 +241,8 @@
                 $('.nav-tabs a[href="' + activeTab + '"]').tab('show');
             }
         </script>
+
+
 
     </body>
 </html>
