@@ -25,7 +25,8 @@ public class NotesController {
     public String addOrEditNote(
             @RequestParam("noteId") @Nullable Integer noteId,
             @RequestParam("noteTitle") String noteTitle,
-            @RequestParam("noteDescription") String noteDescription
+            @RequestParam("noteDescription") String noteDescription,
+            Model model
     ) {
         User user = userService.getUser("user1"); //get this from auth
         if (noteId == null) {
@@ -35,11 +36,15 @@ public class NotesController {
             Note note = new Note(noteId, noteTitle, noteDescription, user.getUserId());
             Note existingNote = noteService.getNote(note.getNoteId());
             if (existingNote == null) {
-                return "redirect:/result/404";
+                model.addAttribute("success",false);
+                model.addAttribute("message","404: Note does not exist.");
+                return "result";
             };
 
             if (existingNote.getUserId() != user.getUserId()) {
-                return "redirect:/result/401";
+                model.addAttribute("success",false);
+                model.addAttribute("message","401: User is not authorized to edit that note.");
+                return "result";
             }
             noteService.updateNote(note);
         }
