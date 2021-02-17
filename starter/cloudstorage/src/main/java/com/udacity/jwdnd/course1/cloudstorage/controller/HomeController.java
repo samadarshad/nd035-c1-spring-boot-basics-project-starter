@@ -7,10 +7,7 @@ import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/home")
@@ -40,6 +37,12 @@ public class HomeController {
         User user = this.mockUser; //get this from auth
         model.addAttribute("notes", noteService.getNotesByUserId(user.getUserId()));
         return "home";
+    }
+
+    @DeleteMapping("/notes/{id}")
+    public String deleteNote(@PathVariable Integer id, Model model) {
+        System.out.println("deleting note id: " + id);
+        return "redirect:/home";
     }
 
 
