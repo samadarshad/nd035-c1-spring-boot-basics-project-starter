@@ -16,13 +16,9 @@ public class NotesController {
     private UserService userService;
     private NoteService noteService;
 
-//    private User mockUser; //wip
-
     public NotesController(UserService userService, NoteService noteService) {
     this.userService=userService;
     this.noteService=noteService;
-
-//    this.mockUser = userService.getUser("user");
     }
 
     @PostMapping
