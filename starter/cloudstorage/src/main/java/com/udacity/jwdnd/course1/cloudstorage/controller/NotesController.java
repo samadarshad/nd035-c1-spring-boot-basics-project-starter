@@ -51,11 +51,17 @@ public class NotesController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteNote(@PathVariable Integer id) {
-        //first find if note exists
-        //then find if user is authenticated to delete that note
-        System.out.println("deleting note id: " + id);
-        noteService.deleteNote(id);
+    public String deleteNote(@PathVariable("id") Integer noteId) {
+        Note existingNote = noteService.getNote(noteId);
+        User user = userService.getUser("user1"); //get this from auth
+        if (existingNote == null) {
+            return "redirect:/result/404";
+        };
+
+        if (existingNote.getUserId() != user.getUserId()) {
+            return "redirect:/result/401";
+        }
+        noteService.deleteNote(noteId);
         return "redirect:/";
     }
 }
