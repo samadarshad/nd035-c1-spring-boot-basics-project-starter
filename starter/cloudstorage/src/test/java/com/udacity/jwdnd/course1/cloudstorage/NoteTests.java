@@ -37,6 +37,18 @@ public class NoteTests {
     @Test
     public void read() {
         assertNotNull(note.getNoteId());
+        assertEquals("title", noteService.get(note.getNoteId()).getNotetitle());
+        assertEquals("description", noteService.get(note.getNoteId()).getNotedescription());
+    }
+
+    @Test
+    public void update() {
+        note.setNotetitle("title2");
+        note.setNotedescription("description2");
+        noteService.createAndUpdateObject(note);
+
+        assertEquals("title2", noteService.get(note.getNoteId()).getNotetitle());
+        assertEquals("description2", noteService.get(note.getNoteId()).getNotedescription());
     }
 
     @Test
