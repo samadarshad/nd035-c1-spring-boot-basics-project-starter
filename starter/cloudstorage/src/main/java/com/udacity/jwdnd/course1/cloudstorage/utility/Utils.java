@@ -8,9 +8,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 @Component
-public class Utils {
+public final class Utils {
 
-    public void checkItemExistsAndUserIsAuthorizedOrThrowError(UserItems item, User user) {
+    private Utils() {
+    }
+
+    public static void checkItemExistsAndUserIsAuthorizedOrThrowError(UserItems item, User user) {
         if (item == null) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Item does not exist."

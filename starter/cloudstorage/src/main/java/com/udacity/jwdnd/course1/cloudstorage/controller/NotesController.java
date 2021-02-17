@@ -18,12 +18,10 @@ public class NotesController {
 
     private UserService userService;
     private NoteService noteService;
-    private Utils utils;
 
-    public NotesController(UserService userService, NoteService noteService, Utils utils) {
+    public NotesController(UserService userService, NoteService noteService) {
         this.userService=userService;
         this.noteService=noteService;
-        this.utils = utils;
     }
 
     @PostMapping
@@ -40,7 +38,7 @@ public class NotesController {
         } else {
             Note note = new Note(noteId, noteTitle, noteDescription, user.getUserId());
             Note existingNote = noteService.get(note.getNoteId());
-            utils.checkItemExistsAndUserIsAuthorizedOrThrowError(existingNote, user);
+            Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(existingNote, user);
             noteService.update(note);
         }
         return "redirect:/";
@@ -50,7 +48,7 @@ public class NotesController {
     public String delete(@PathVariable("id") Integer noteId, Model model) {
         Note existingNote = noteService.get(noteId);
         User user = userService.get("user1"); //get this from auth
-        utils.checkItemExistsAndUserIsAuthorizedOrThrowError(existingNote, user);
+        Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(existingNote, user);
         noteService.delete(noteId);
         return "redirect:/";
     }

@@ -27,20 +27,18 @@ public class FilesController {
 
     private UserService userService;
     private FileService fileService;
-    private Utils utils;
 
-    public FilesController(UserService userService, FileService fileService, Utils utils) {
+    public FilesController(UserService userService, FileService fileService) {
 
         this.userService = userService;
         this.fileService = fileService;
-        this.utils = utils;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Resource> get(@PathVariable("id") Integer id, Model model) {
         File file = fileService.get(id);
         User user = userService.get("user1"); //get this from auth
-        utils.checkItemExistsAndUserIsAuthorizedOrThrowError(file, user);
+        Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(file, user);
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.parseMediaType(file.getContentType()))
@@ -78,7 +76,7 @@ public class FilesController {
     public String delete(@PathVariable("id") Integer id, Model model) {
         File existingFile = fileService.get(id);
         User user = userService.get("user1"); //get this from auth
-        utils.checkItemExistsAndUserIsAuthorizedOrThrowError(existingFile, user);
+        Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(existingFile, user);
         fileService.delete(id);
         return "redirect:/";
     }
