@@ -30,16 +30,16 @@ public class NoteTests {
     }
 
     @Test
-    public void whenAddNoteThenItExists() {
-        Note note = new Note("title", "description", user.getUserId());
+    public void createAndRead() {
+        Note note = new Note(null, "title", "description", user.getUserId());
         assertNull(note.getNoteId());
         noteService.createNoteAndUpdateObject(note);
         assertNotNull(note.getNoteId());
     }
 
     @Test
-    public void whenDeleteNoteThenItDoesntExist() {
-        Note note = new Note("title", "description", user.getUserId());
+    public void createAndDelete() {
+        Note note = new Note(null, "title", "description", user.getUserId());
         noteService.createNoteAndUpdateObject(note);
 
         noteService.deleteNote(note.getNoteId());

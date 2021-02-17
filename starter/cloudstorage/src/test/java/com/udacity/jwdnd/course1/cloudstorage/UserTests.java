@@ -20,7 +20,7 @@ class UserTests {
     private UserService userService;
 
     @Test
-    public void whenAddUserToDatabaseThenTheirUsernameIsNotAvailable() throws InterruptedException {
+    public void createAndReadUsername() throws InterruptedException {
         assertTrue(userService.isUsernameAvailable("user"));
         User user = new User(null, "user", null, "pass", "first", "last");
         userService.createUserAndUpdateObject(user);
@@ -28,7 +28,7 @@ class UserTests {
     }
 
     @Test
-    public void whenAddUserThenTheirPasswordIsHashed() throws InterruptedException {
+    public void createAndReadHashedPassword() throws InterruptedException {
         User user = new User(null, "user", null, "pass", "first", "last");
 
         assertEquals("pass", user.getPassword());
@@ -37,7 +37,7 @@ class UserTests {
     }
 
     @Test
-    public void whenAddUserThenCanGetSameUserById() throws InterruptedException {
+    public void createAndReadUserId() throws InterruptedException {
         User user = new User(null, "user", null, "pass", "first", "last");
         userService.createUserAndUpdateObject(user);
 

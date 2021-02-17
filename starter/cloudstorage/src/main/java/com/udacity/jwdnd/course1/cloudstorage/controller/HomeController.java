@@ -19,22 +19,24 @@ public class HomeController {
     private UserService userService;
     private NoteService noteService;
 
-//    private User fakeUser; //wip
+    private User mockUser; //wip
 
     public HomeController(NoteService noteService, UserService userService) {
         this.userService = userService;
         this.noteService = noteService;
 
-//        // wip
-//        fakeUser.setFirstName("first");
-//        fakeUser.setUserId(0);
-//        fakeUser.setLastName("last");
-//        fakeUser.setPassword("pass");
-//        fakeUser.setUsername("user");
+        // wip
+        this.mockUser = new User(null, "user", null, "pass", "first", "last");
+        this.userService.createUserAndUpdateObject(this.mockUser);
+        Note note = new Note(null, "titleabc", "descriptionabc", mockUser.getUserId());
+        this.noteService.createNoteAndUpdateObject(note);
     }
+
 
     @GetMapping
     public String getHomePage(Model model) {
+        User user = this.mockUser; //get this from auth
+        model.addAttribute("notes", noteService.getNotesByUserId(user.getUserId()));
         return "home";
     }
 
