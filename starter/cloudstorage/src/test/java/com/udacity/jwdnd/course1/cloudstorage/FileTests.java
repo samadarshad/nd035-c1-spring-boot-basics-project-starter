@@ -36,7 +36,6 @@ public class FileTests {
 
     @BeforeEach
     public void create() {
-
         file = new File(null, "fileName", "contentType", (long) 10, user.getUserId(), fileData);
         fileService.createAndUpdateObject(file);
     }
@@ -48,6 +47,13 @@ public class FileTests {
         assertEquals("contentType", fileService.get(file.getFileId()).getContentType());
         assertEquals((long) 10, fileService.get(file.getFileId()).getFileSize());
         assertArrayEquals(fileData, fileService.get(file.getFileId()).getFileData());
+    }
+
+    @Test
+    public void delete() {
+        fileService.delete(file.getFileId());
+        File deletedFile = fileService.get(file.getFileId());
+        assertNull(deletedFile);
     }
 
 }

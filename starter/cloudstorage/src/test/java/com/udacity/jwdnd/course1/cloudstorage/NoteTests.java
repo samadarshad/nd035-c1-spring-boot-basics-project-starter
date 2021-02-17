@@ -45,8 +45,10 @@ public class NoteTests {
     public void update() {
         note.setNotetitle("title2");
         note.setNotedescription("description2");
-        noteService.createAndUpdateObject(note);
+        Integer noteId = note.getNoteId();
+        noteService.update(note);
 
+        assertEquals(noteId, note.getNoteId());
         assertEquals("title2", noteService.get(note.getNoteId()).getNotetitle());
         assertEquals("description2", noteService.get(note.getNoteId()).getNotedescription());
     }

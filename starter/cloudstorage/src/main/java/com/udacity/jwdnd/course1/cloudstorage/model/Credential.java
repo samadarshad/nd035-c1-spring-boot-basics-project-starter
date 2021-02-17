@@ -6,6 +6,7 @@ public class Credential implements UserItems {
     private String username;
     private String key;
     private String password;
+    private Integer userId;
 
     public Integer getCredentialId() {
         return credentialId;
@@ -56,7 +57,7 @@ public class Credential implements UserItems {
         this.userId = userId;
     }
 
-    private Integer userId;
+
 
     @Override
     public Integer getUserId() {
