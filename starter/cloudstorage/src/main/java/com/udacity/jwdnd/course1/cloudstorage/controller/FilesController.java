@@ -43,14 +43,12 @@ public class FilesController {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "File does not exist."
             );
-//            return error404(model);
         }
-//
+        
         if (file.getUserId() != user.getUserId()) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED, "User is not authorized to access that file."
             );
-//            return ResponseEntity.status(401);
         }
         return ResponseEntity
                 .ok()
@@ -69,7 +67,9 @@ public class FilesController {
     {
         User user = userService.get("user1"); //get this from auth
         if(fileUpload.isEmpty()) {
-            return error400(model);
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "No file selected to upload."
+            );
         }
         System.out.println("uploading" + fileUpload.getOriginalFilename());
         File file = new File(null,
@@ -88,32 +88,18 @@ public class FilesController {
         File existingFile = fileService.get(id);
         User user = userService.get("user1"); //get this from auth
         if (existingFile == null) {
-            return error404(model);
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "File does not exist."
+            );
         };
 
         if (existingFile.getUserId() != user.getUserId()) {
-            return error401(model);
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "User is not authorized to access that file."
+            );
         }
         fileService.delete(id);
         return "redirect:/";
-    }
-
-    private String error400(Model model) {
-        model.addAttribute("success",false);
-        model.addAttribute("message","400: No file selected to upload.");
-        return "result";
-    }
-
-    private String error404(Model model) {
-        model.addAttribute("success",false);
-        model.addAttribute("message","404: File does not exist.");
-        return "result";
-    }
-
-    private String error401(Model model) {
-        model.addAttribute("success",false);
-        model.addAttribute("message","401: User is not authorized to access that file.");
-        return "result";
     }
 
 }
