@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
+@Mapper
 public interface CredentialMapper extends CrudMapper<Credential> {
     @Select("SELECT * FROM CREDENTIALS WHERE credentialId = #{credentialId}")
     Credential get(Integer credentialId);

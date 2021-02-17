@@ -3,9 +3,11 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.CredentialMapper;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CredentialService implements CrudService<Credential> {
     private final CredentialMapper credentialMapper;
 
@@ -15,6 +17,7 @@ public class CredentialService implements CrudService<Credential> {
 
     @Override
     public void createAndUpdateObject(Credential credential) {
+        //encrypt and store key too
         int rows = credentialMapper.insertAndUpdateObjectThenGetNumberOfRowsAffected(credential);
         assert(rows == 1);
     }
