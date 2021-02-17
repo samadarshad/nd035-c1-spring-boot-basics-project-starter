@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/home")
+@RequestMapping("/")
 public class HomeController {
 
     private UserService userService;
@@ -39,11 +39,11 @@ public class HomeController {
         return "home";
     }
 
-    @DeleteMapping("/notes/{id}")
-    public String deleteNote(@PathVariable Integer id, Model model) {
-        System.out.println("deleting note id: " + id);
-        return "redirect:/home";
-    }
+//    @DeleteMapping("/notes/{id}")
+//    public String deleteNote(@PathVariable Integer id, Model model) {
+//        System.out.println("deleting note id: " + id);
+//        return "redirect:/home";
+//    }
 
 
 }
