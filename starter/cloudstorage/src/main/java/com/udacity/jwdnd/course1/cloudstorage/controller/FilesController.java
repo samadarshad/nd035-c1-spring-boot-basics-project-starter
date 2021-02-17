@@ -10,12 +10,14 @@ import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
@@ -37,13 +39,19 @@ public class FilesController {
     public ResponseEntity<Resource> get(@PathVariable("id") Integer id, Model model) {
         File file = fileService.get(id);
         User user = userService.get("user1"); //get this from auth
-//        if (file == null) {
+        if (file == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "File does not exist."
+            );
 //            return error404(model);
-//        }
+        }
 //
-//        if (file.getUserId() != user.getUserId()) {
+        if (file.getUserId() != user.getUserId()) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "User is not authorized to access that file."
+            );
 //            return ResponseEntity.status(401);
-//        }
+        }
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.parseMediaType(file.getContentType()))
