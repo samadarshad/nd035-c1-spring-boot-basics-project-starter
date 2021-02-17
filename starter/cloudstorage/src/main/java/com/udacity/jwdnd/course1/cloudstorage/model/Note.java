@@ -1,8 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.model;
 
-public class Note {
-
-
+public class Note implements UserItems {
     public Note(Integer noteId, String notetitle, String notedescription, Integer userId) {
         this.noteId = noteId;
         this.notetitle = notetitle;

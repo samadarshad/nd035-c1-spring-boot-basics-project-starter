@@ -1,12 +1,11 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
-import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
-import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 
+import com.udacity.jwdnd.course1.cloudstorage.utility.Utils;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -28,28 +27,20 @@ public class FilesController {
 
     private UserService userService;
     private FileService fileService;
+    private Utils utils;
 
-    public FilesController(UserService userService, FileService fileService) {
+    public FilesController(UserService userService, FileService fileService, Utils utils) {
 
         this.userService = userService;
         this.fileService = fileService;
+        this.utils = utils;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Resource> get(@PathVariable("id") Integer id, Model model) {
         File file = fileService.get(id);
         User user = userService.get("user1"); //get this from auth
-        if (file == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "File does not exist."
-            );
-        }
-
-        if (file.getUserId() != user.getUserId()) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "User is not authorized to access that file."
-            );
-        }
+        utils.checkItemExistsAndUserIsAuthorizedOrThrowError(file, user);
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.parseMediaType(file.getContentType()))
@@ -87,17 +78,7 @@ public class FilesController {
     public String delete(@PathVariable("id") Integer id, Model model) {
         File existingFile = fileService.get(id);
         User user = userService.get("user1"); //get this from auth
-        if (existingFile == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "File does not exist."
-            );
-        };
-
-        if (existingFile.getUserId() != user.getUserId()) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "User is not authorized to access that file."
-            );
-        }
+        utils.checkItemExistsAndUserIsAuthorizedOrThrowError(existingFile, user);
         fileService.delete(id);
         return "redirect:/";
     }
