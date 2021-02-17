@@ -51,11 +51,11 @@ public class CredentialService implements CrudService<Credential> {
     }
 
     @Override
-    public void update(Credential credential) {
-        Credential newCredential = credentialMapper.get(credential.getCredentialId());
-        String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), newCredential.getKey());
-        newCredential.setPassword(encryptedPassword);
-        int rows = credentialMapper.updateThenGetNumberOfRowsAffected(newCredential);
+    public void update(Credential newPartialCredential) {
+        Credential actualCredential = credentialMapper.get(newPartialCredential.getCredentialId());
+        String encryptedPassword = encryptionService.encryptValue(newPartialCredential.getPassword(), actualCredential.getKey());
+        actualCredential.setPassword(encryptedPassword);
+        int rows = credentialMapper.updateThenGetNumberOfRowsAffected(actualCredential);
         assert(rows == 1);
     }
 
