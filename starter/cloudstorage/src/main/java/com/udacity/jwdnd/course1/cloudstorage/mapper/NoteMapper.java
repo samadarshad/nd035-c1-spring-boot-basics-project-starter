@@ -7,15 +7,12 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 @Mapper
-public interface NotesMapper {
+public interface NoteMapper {
     @Select("SELECT * FROM NOTES WHERE noteId = #{noteId}")
-    Note getNote(Integer noteId);
-
-    @Select("SELECT * FROM NOTES")
-    List<Note> getAllNotes();
+    Note get(Integer noteId);
 
     @Select("SELECT * FROM NOTES WHERE userId = #{userId}")
-    List<Note> getAllNotesByUserId(Integer userId);
+    List<Note> getAllByUserId(Integer userId);
 
     //returns number of rows affected (i.e. 1), and modifies the note object to have noteId
     @Insert("INSERT INTO NOTES (notetitle, notedescription, userId) VALUES(#{notetitle}, #{notedescription}, #{userId})")
@@ -26,5 +23,5 @@ public interface NotesMapper {
     int updateThenGetNumberOfRowsAffected(Note note);
 
     @Delete("DELETE FROM NOTES WHERE noteId = #{noteId}")
-    int deleteNoteThenGetNumberOfRowsAffected(Integer noteId);
+    int deleteThenGetNumberOfRowsAffected(Integer noteId);
 }

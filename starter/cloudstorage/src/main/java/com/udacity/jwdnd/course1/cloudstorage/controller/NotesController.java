@@ -28,13 +28,13 @@ public class NotesController {
             @RequestParam("noteDescription") String noteDescription,
             Model model
     ) {
-        User user = userService.getUser("user1"); //get this from auth
+        User user = userService.get("user1"); //get this from auth
         if (noteId == null) {
             Note note = new Note(null, noteTitle, noteDescription, user.getUserId());
-            noteService.createNoteAndUpdateObject(note);
+            noteService.createAndUpdateObject(note);
         } else {
             Note note = new Note(noteId, noteTitle, noteDescription, user.getUserId());
-            Note existingNote = noteService.getNote(note.getNoteId());
+            Note existingNote = noteService.get(note.getNoteId());
             if (existingNote == null) {
                 model.addAttribute("success",false);
                 model.addAttribute("message","404: Note does not exist.");
@@ -46,15 +46,15 @@ public class NotesController {
                 model.addAttribute("message","401: User is not authorized to edit that note.");
                 return "result";
             }
-            noteService.updateNote(note);
+            noteService.update(note);
         }
         return "redirect:/";
     }
 
     @DeleteMapping("/{id}")
     public String deleteNote(@PathVariable("id") Integer noteId) {
-        Note existingNote = noteService.getNote(noteId);
-        User user = userService.getUser("user1"); //get this from auth
+        Note existingNote = noteService.get(noteId);
+        User user = userService.get("user1"); //get this from auth
         if (existingNote == null) {
             return "redirect:/result/404";
         };
@@ -62,7 +62,7 @@ public class NotesController {
         if (existingNote.getUserId() != user.getUserId()) {
             return "redirect:/result/401";
         }
-        noteService.deleteNote(noteId);
+        noteService.delete(noteId);
         return "redirect:/";
     }
 }

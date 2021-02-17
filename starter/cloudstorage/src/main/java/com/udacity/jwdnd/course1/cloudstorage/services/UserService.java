@@ -19,10 +19,10 @@ public class UserService {
     }
 
     public boolean isUsernameAvailable(String username) {
-        return userMapper.getUser(username) == null;
+        return userMapper.getByUsername(username) == null;
     }
 
-    public void createUserAndUpdateObject(User user) {
+    public void createAndUpdateObject(User user) {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);
@@ -39,12 +39,12 @@ public class UserService {
 //        userMapper.deleteUser(userId);
 //    }
 
-    public User getUser(String username) { //needed for getting user by username from auth
-        return userMapper.getUser(username);
+    public User get(String username) { //needed for getting user by username from auth
+        return userMapper.getByUsername(username);
     }
 
-    public User getUserById(Integer userId) {
-        return userMapper.getUserById(userId);
+    public User get(Integer userId) {
+        return userMapper.get(userId);
     }
 
 }

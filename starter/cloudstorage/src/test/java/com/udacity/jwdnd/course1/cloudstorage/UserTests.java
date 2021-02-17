@@ -6,8 +6,6 @@ import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,7 +21,7 @@ class UserTests {
     public void createAndReadUsername() throws InterruptedException {
         assertTrue(userService.isUsernameAvailable("user"));
         User user = new User(null, "user", null, "pass", "first", "last");
-        userService.createUserAndUpdateObject(user);
+        userService.createAndUpdateObject(user);
         assertFalse(userService.isUsernameAvailable("user"));
     }
 
@@ -32,17 +30,17 @@ class UserTests {
         User user = new User(null, "user", null, "pass", "first", "last");
 
         assertEquals("pass", user.getPassword());
-        userService.createUserAndUpdateObject(user);
+        userService.createAndUpdateObject(user);
         assertNotEquals("pass", user.getPassword());
     }
 
     @Test
     public void createAndReadUserId() throws InterruptedException {
         User user = new User(null, "user", null, "pass", "first", "last");
-        userService.createUserAndUpdateObject(user);
+        userService.createAndUpdateObject(user);
 
         int userId = user.getUserId();
-        User sameUser = userService.getUserById(userId);
+        User sameUser = userService.get(userId);
         assertEquals(user.getUsername(), sameUser.getUsername());
     }
 }

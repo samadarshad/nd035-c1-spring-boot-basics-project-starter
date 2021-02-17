@@ -1,6 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.services;
 
-import com.udacity.jwdnd.course1.cloudstorage.mapper.NotesMapper;
+import com.udacity.jwdnd.course1.cloudstorage.mapper.NoteMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import org.springframework.stereotype.Service;
 
@@ -8,28 +8,28 @@ import java.util.List;
 
 @Service
 public class NoteService {
-    private final NotesMapper notesMapper;
+    private final NoteMapper noteMapper;
 
-    public NoteService(NotesMapper notesMapper) {
-        this.notesMapper = notesMapper;
+    public NoteService(NoteMapper noteMapper) {
+        this.noteMapper = noteMapper;
     }
 
-   public void createNoteAndUpdateObject(Note note) {
-        int rows = notesMapper.insertAndUpdateObjectThenGetNumberOfRowsAffected(note);
+   public void createAndUpdateObject(Note note) {
+        int rows = noteMapper.insertAndUpdateObjectThenGetNumberOfRowsAffected(note);
         assert(rows == 1);
    }
 
-   public Note getNote(Integer noteId) { return notesMapper.getNote(noteId); }
+   public Note get(Integer noteId) { return noteMapper.get(noteId); }
 
-   public List<Note> getNotesByUserId(Integer userId) { return notesMapper.getAllNotesByUserId(userId); }
+   public List<Note> getByUserId(Integer userId) { return noteMapper.getAllByUserId(userId); }
 
-   public void deleteNote(Integer noteId) {
-        int rows = notesMapper.deleteNoteThenGetNumberOfRowsAffected(noteId);
+   public void delete(Integer noteId) {
+        int rows = noteMapper.deleteThenGetNumberOfRowsAffected(noteId);
        assert(rows == 1);
    }
 
-   public void updateNote(Note note) {
-        int rows = notesMapper.updateThenGetNumberOfRowsAffected(note);
+   public void update(Note note) {
+        int rows = noteMapper.updateThenGetNumberOfRowsAffected(note);
         assert(rows == 1);
    }
 }
