@@ -7,14 +7,13 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 @Mapper
-public interface NoteMapper {
+public interface NoteMapper extends CrudMapper<Note> {
     @Select("SELECT * FROM NOTES WHERE noteId = #{noteId}")
     Note get(Integer noteId);
 
     @Select("SELECT * FROM NOTES WHERE userId = #{userId}")
     List<Note> getAllByUserId(Integer userId);
 
-    //returns number of rows affected (i.e. 1), and modifies the note object to have noteId
     @Insert("INSERT INTO NOTES (notetitle, notedescription, userId) VALUES(#{notetitle}, #{notedescription}, #{userId})")
     @Options(useGeneratedKeys = true, keyProperty = "noteId")
     int insertAndUpdateObjectThenGetNumberOfRowsAffected(Note note);

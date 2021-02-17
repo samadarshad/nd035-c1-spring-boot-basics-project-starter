@@ -21,9 +21,13 @@ public class FileService implements CrudService<File> {
         assert(rows == 1);
     }
 
-    public File get(Integer fileId) { return fileMapper.get(fileId); }
+    public File get(Integer fileId) {
+        return fileMapper.get(fileId);
+    }
 
-    public List<File> getByUserId(Integer userId) { return fileMapper.getAllByUserId(userId); }
+    public List<File> getByUserId(Integer userId) {
+        return fileMapper.getAllByUserId(userId);
+    }
 
     public void update(File obj) {
         throw new UnsupportedOperationException();
