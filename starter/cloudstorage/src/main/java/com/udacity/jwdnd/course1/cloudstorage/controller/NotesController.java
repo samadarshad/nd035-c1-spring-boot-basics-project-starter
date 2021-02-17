@@ -20,6 +20,16 @@ public class NotesController {
         return "redirect:/";
     }
 
+    @PutMapping
+    public String editNote(
+            @RequestParam("noteId") Integer noteId,
+            @RequestParam("noteTitle") String noteTitle,
+            @RequestParam("noteDescription") String noteDescription
+    ) {
+        System.out.println("editing note" + noteId.toString() + noteTitle + noteDescription);
+        return "redirect:/";
+    }
+
     @DeleteMapping("/{id}")
     public String deleteNote(@PathVariable Integer id, Model model) {
         System.out.println("deleting note id: " + id);
