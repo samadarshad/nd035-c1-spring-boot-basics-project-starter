@@ -5,6 +5,7 @@ import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +20,7 @@ public class NoteTests {
     private NoteService noteService;
 
     private static User user;
+    private Note note;
 
     @BeforeAll
     public static void BeforeAll(@Autowired UserService userService) {
@@ -26,19 +28,19 @@ public class NoteTests {
         userService.createAndUpdateObject(user);
     }
 
-    @Test
-    public void createAndRead() {
-        Note note = new Note(null, "title", "description", user.getUserId());
-        assertNull(note.getNoteId());
+    @BeforeEach
+    public void create() {
+        note = new Note(null, "title", "description", user.getUserId());
         noteService.createAndUpdateObject(note);
+    }
+
+    @Test
+    public void read() {
         assertNotNull(note.getNoteId());
     }
 
     @Test
-    public void createAndDelete() {
-        Note note = new Note(null, "title", "description", user.getUserId());
-        noteService.createAndUpdateObject(note);
-
+    public void delete() {
         noteService.delete(note.getNoteId());
         Note deletedNote = noteService.get(note.getNoteId());
         assertNull(deletedNote);
