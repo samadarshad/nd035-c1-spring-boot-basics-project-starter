@@ -15,7 +15,8 @@ public class NoteService {
     }
 
    public void createNoteAndUpdateObject(Note note) {
-        notesMapper.insertAndUpdateObjectThenGetNumberOfRowsAffected(note);
+        int rows = notesMapper.insertAndUpdateObjectThenGetNumberOfRowsAffected(note);
+        assert(rows == 1);
    }
 
    public Note getNote(Integer noteId) { return notesMapper.getNote(noteId); }
@@ -23,8 +24,12 @@ public class NoteService {
    public List<Note> getNotesByUserId(Integer userId) { return notesMapper.getAllNotesByUserId(userId); }
 
    public void deleteNote(Integer noteId) {
-        notesMapper.deleteNote(noteId);
+        int rows = notesMapper.deleteNoteThenGetNumberOfRowsAffected(noteId);
+       assert(rows == 1);
    }
 
-   public void updateNote(Integer noteId) { }
+   public void updateNote(Note note) {
+        int rows = notesMapper.updateThenGetNumberOfRowsAffected(note);
+        assert(rows == 1);
+   }
 }

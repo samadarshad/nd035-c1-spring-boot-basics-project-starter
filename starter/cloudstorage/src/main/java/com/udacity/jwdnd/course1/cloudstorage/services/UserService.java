@@ -39,9 +39,9 @@ public class UserService {
 //        userMapper.deleteUser(userId);
 //    }
 
-//    public User getUser(String username) {
-//        return userMapper.getUser(username);
-//    }
+    public User getUser(String username) { //needed for getting user by username from auth
+        return userMapper.getUser(username);
+    }
 
     public User getUserById(Integer userId) {
         return userMapper.getUserById(userId);
