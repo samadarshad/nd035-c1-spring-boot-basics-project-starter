@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 
 
 @Controller
@@ -29,7 +30,7 @@ public class FilesController {
     @PostMapping
     public String uploadFile(@RequestParam("fileUpload") MultipartFile fileUpload,
                              Model model
-    ) {
+    ) throws IOException {
         System.out.println("uploading" + fileUpload.getOriginalFilename());
         if(fileUpload.isEmpty()) {
             model.addAttribute("success",false);
@@ -37,8 +38,8 @@ public class FilesController {
             return "result";
         }
         System.out.println("uploading" + fileUpload.getOriginalFilename());
-//        File file = new File();
-//        file.setFiledata(fileUpload.getBytes());
+        File file = new File(null, null, null, null, null, null);
+        file.setFileData(fileUpload.getBytes());
         return "redirect:/";
     }
 
