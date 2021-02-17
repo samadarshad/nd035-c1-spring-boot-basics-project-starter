@@ -23,18 +23,26 @@ public class HomeController {
         this.noteService = noteService;
 
         // wip
-        this.mockUser = new User(null, "user", null, "pass", "first", "last");
-        this.userService.createUserAndUpdateObject(this.mockUser);
-        Note note = new Note(null, "title1", "description1", mockUser.getUserId());
+        User mockUser1 = new User(null, "user1", null, "pass", "first", "last");
+        this.userService.createUserAndUpdateObject(mockUser1);
+        Note note = new Note(null, "title1", "description1", mockUser1.getUserId());
         this.noteService.createNoteAndUpdateObject(note);
-        note = new Note(null, "title2", "description2", mockUser.getUserId());
+        note = new Note(null, "title2", "description2", mockUser1.getUserId());
+        this.noteService.createNoteAndUpdateObject(note);
+
+
+        User mockUser2 = new User(null, "user2", null, "pass", "first", "last");
+        this.userService.createUserAndUpdateObject(mockUser2);
+        note = new Note(null, "title1_user2", "description1", mockUser2.getUserId());
+        this.noteService.createNoteAndUpdateObject(note);
+        note = new Note(null, "title2_user2", "description2", mockUser2.getUserId());
         this.noteService.createNoteAndUpdateObject(note);
     }
 
 
     @GetMapping
     public String getHomePage(Model model) {
-        User user = this.mockUser; //get this from auth
+        User user = userService.getUser("user1"); //get this from auth
         model.addAttribute("notes", noteService.getNotesByUserId(user.getUserId()));
         return "home";
     }

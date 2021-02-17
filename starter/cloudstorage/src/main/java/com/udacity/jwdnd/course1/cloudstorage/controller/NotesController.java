@@ -31,16 +31,20 @@ public class NotesController {
             @RequestParam("noteTitle") String noteTitle,
             @RequestParam("noteDescription") String noteDescription
     ) {
-        User user = userService.getUser("user");;
+        User user = userService.getUser("user1"); //get this from auth
         if (noteId == null) {
-            System.out.println("add note" + noteTitle + noteDescription);
             Note note = new Note(null, noteTitle, noteDescription, user.getUserId());
             noteService.createNoteAndUpdateObject(note);
         } else {
-            //first find if note exists
-            //then find if user is authenticated to edit that note
-            System.out.println("edit note" + noteId.toString() + noteTitle + noteDescription);
             Note note = new Note(noteId, noteTitle, noteDescription, user.getUserId());
+            Note existingNote = noteService.getNote(note.getNoteId());
+            if (existingNote == null) {
+                return "redirect:/result/404";
+            };
+
+            if (existingNote.getUserId() != user.getUserId()) {
+                return "redirect:/result/401";
+            }
             noteService.updateNote(note);
         }
         return "redirect:/";
