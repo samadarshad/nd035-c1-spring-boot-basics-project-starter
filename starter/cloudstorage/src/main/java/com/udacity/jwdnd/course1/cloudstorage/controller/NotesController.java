@@ -4,10 +4,12 @@ import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequestMapping("/notes")
@@ -36,11 +38,15 @@ public class NotesController {
             Note note = new Note(noteId, noteTitle, noteDescription, user.getUserId());
             Note existingNote = noteService.get(note.getNoteId());
             if (existingNote == null) {
-                return error404(model);
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Note does not exist."
+                );
             };
 
             if (existingNote.getUserId() != user.getUserId()) {
-                return error401(model);
+                throw new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED, "User is not authorized to access that note."
+                );
             }
             noteService.update(note);
         }
@@ -52,25 +58,18 @@ public class NotesController {
         Note existingNote = noteService.get(noteId);
         User user = userService.get("user1"); //get this from auth
         if (existingNote == null) {
-            return error404(model);
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Note does not exist."
+            );
         };
 
         if (existingNote.getUserId() != user.getUserId()) {
-            return error401(model);
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "User is not authorized to access that note."
+            );
         }
         noteService.delete(noteId);
         return "redirect:/";
     }
 
-    private String error404(Model model) {
-        model.addAttribute("success",false);
-        model.addAttribute("message","404: Note does not exist.");
-        return "result";
-    }
-
-    private String error401(Model model) {
-        model.addAttribute("success",false);
-        model.addAttribute("message","401: User is not authorized to access that note.");
-        return "result";
-    }
 }

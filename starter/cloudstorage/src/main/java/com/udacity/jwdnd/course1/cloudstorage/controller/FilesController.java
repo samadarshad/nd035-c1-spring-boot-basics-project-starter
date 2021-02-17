@@ -44,7 +44,7 @@ public class FilesController {
                     HttpStatus.NOT_FOUND, "File does not exist."
             );
         }
-        
+
         if (file.getUserId() != user.getUserId()) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED, "User is not authorized to access that file."
