@@ -144,8 +144,12 @@
                                 <tbody>
                                 <tr th:each="credential: ${credentials}">
                                     <td>
-                                        <button type="button" class="btn btn-success">Edit</button>
-                                        <a class="btn btn-danger">Delete</a>
+                                        <button type="button" class="btn btn-success" th:attr="onclick=|showCredentialModal('${credential.credentialId}')|">Edit</button>
+                                        <form action="#" th:action="@{'/credentials/{id}'(id=${credential.credentialId})}" th:method="delete" >
+                                            <button class="btn btn-danger" type="submit">
+                                                Delete
+                                            </button>
+                                        </form>
                                     </td>
                                     <th scope="row" th:text="${credential.url}">>Example Credential URL</th>
                                     <td th:text="${credential.username}">Example Credential Username</td>
@@ -209,11 +213,11 @@
             }
 
             // For opening the credentials modal
-            function showCredentialModal(credentialId, url, username, password) {
+            function showCredentialModal(credentialId) {
                 $('#credential-id').val(credentialId ? credentialId : '');
-                $('#credential-url').val(url ? url : '');
-                $('#credential-username').val(username ? username : '');
-                $('#credential-password').val(password ? password : '');
+                // $('#credential-url').val(url ? url : '');
+                // $('#credential-username').val(username ? username : '');
+                // $('#credential-password').val(password ? password : '');
                 $('#credentialModal').modal('show');
             }
 
