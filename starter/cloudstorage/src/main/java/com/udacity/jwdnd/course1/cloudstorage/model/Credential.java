@@ -8,6 +8,8 @@ public class Credential implements UserItems {
     private String password;
     private Integer userId;
 
+
+
     public Integer getCredentialId() {
         return credentialId;
     }
@@ -57,7 +59,14 @@ public class Credential implements UserItems {
         this.userId = userId;
     }
 
-
+    public Credential(Credential credential) {
+        this.credentialId = credential.credentialId;
+        this.url = credential.url;
+        this.username = credential.username;
+        this.key = credential.key;
+        this.password = credential.password;
+        this.userId = credential.userId;
+    }
 
     @Override
     public Integer getUserId() {

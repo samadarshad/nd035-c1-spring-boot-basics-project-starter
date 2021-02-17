@@ -43,6 +43,7 @@ public class CredentialTests {
     @Test
     public void read() {
         assertNotNull(credential.getCredentialId());
+        assertNotNull(credential.getKey());
         assertEquals("url", credentialService.get(credential.getCredentialId()).getUrl());
         assertEquals("username", credentialService.get(credential.getCredentialId()).getUsername());
         assertEquals("password", credentialService.get(credential.getCredentialId()).getPassword());
@@ -52,7 +53,6 @@ public class CredentialTests {
     public void update() {
         credential.setUrl("url2");
         credential.setUsername("username2");
-        credential.setKey("key2");
         credential.setPassword("password2");
         Integer credentialId = credential.getCredentialId();
         credentialService.update(credential);
@@ -60,7 +60,6 @@ public class CredentialTests {
         assertEquals(credentialId, credential.getCredentialId());
         assertEquals("url2", credentialService.get(credential.getCredentialId()).getUrl());
         assertEquals("username2", credentialService.get(credential.getCredentialId()).getUsername());
-        assertEquals("key2", credentialService.get(credential.getCredentialId()).getKey());
         assertEquals("password2", credentialService.get(credential.getCredentialId()).getPassword());
     }
 
@@ -68,8 +67,10 @@ public class CredentialTests {
     @Test
     public void delete() {
         credentialService.delete(credential.getCredentialId());
-        Credential deletedCredential = credentialService.get(credential.getCredentialId());
-        assertNull(deletedCredential);
+
+        assertThrows(NullPointerException.class, ()-> {
+                    credentialService.get(credential.getCredentialId());
+        });
     }
 
 }
