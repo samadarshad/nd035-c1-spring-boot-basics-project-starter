@@ -22,7 +22,7 @@ public class NotesController {
     }
 
     @PostMapping
-    public String addOrEditNote(
+    public String addOrEdit(
             @RequestParam("noteId") @Nullable Integer noteId,
             @RequestParam("noteTitle") String noteTitle,
             @RequestParam("noteDescription") String noteDescription,
@@ -36,15 +36,11 @@ public class NotesController {
             Note note = new Note(noteId, noteTitle, noteDescription, user.getUserId());
             Note existingNote = noteService.get(note.getNoteId());
             if (existingNote == null) {
-                model.addAttribute("success",false);
-                model.addAttribute("message","404: Note does not exist.");
-                return "result";
+                return error404(model);
             };
 
             if (existingNote.getUserId() != user.getUserId()) {
-                model.addAttribute("success",false);
-                model.addAttribute("message","401: User is not authorized to edit that note.");
-                return "result";
+                return error401(model);
             }
             noteService.update(note);
         }
@@ -52,17 +48,29 @@ public class NotesController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteNote(@PathVariable("id") Integer noteId) {
+    public String delete(@PathVariable("id") Integer noteId, Model model) {
         Note existingNote = noteService.get(noteId);
         User user = userService.get("user1"); //get this from auth
         if (existingNote == null) {
-            return "redirect:/result/404";
+            return error404(model);
         };
 
         if (existingNote.getUserId() != user.getUserId()) {
-            return "redirect:/result/401";
+            return error401(model);
         }
         noteService.delete(noteId);
         return "redirect:/";
+    }
+
+    private String error404(Model model) {
+        model.addAttribute("success",false);
+        model.addAttribute("message","404: Note does not exist.");
+        return "result";
+    }
+
+    private String error401(Model model) {
+        model.addAttribute("success",false);
+        model.addAttribute("message","401: User is not authorized to access that note.");
+        return "result";
     }
 }

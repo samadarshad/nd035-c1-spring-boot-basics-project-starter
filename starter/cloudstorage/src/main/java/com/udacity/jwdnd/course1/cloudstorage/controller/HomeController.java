@@ -2,6 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
+import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
@@ -14,12 +15,16 @@ public class HomeController {
 
     private UserService userService;
     private NoteService noteService;
+    private FileService fileService;
 
     private User mockUser; //wip
 
-    public HomeController(NoteService noteService, UserService userService) {
+    public HomeController(NoteService noteService,
+                          UserService userService,
+                          FileService fileService) {
         this.userService = userService;
         this.noteService = noteService;
+        this.fileService = fileService;
 
         // wip
         User mockUser1 = new User(null, "user1", null, "pass", "first", "last");
@@ -38,19 +43,12 @@ public class HomeController {
         this.noteService.createAndUpdateObject(note);
     }
 
-
     @GetMapping
     public String getHomePage(Model model) {
         User user = userService.get("user1"); //get this from auth
         model.addAttribute("notes", noteService.getByUserId(user.getUserId()));
+        model.addAttribute("files", fileService.getByUserId(user.getUserId()));
         return "home";
     }
-
-//    @DeleteMapping("/notes/{id}")
-//    public String deleteNote(@PathVariable Integer id, Model model) {
-//        System.out.println("deleting note id: " + id);
-//        return "redirect:/home";
-//    }
-
 
 }
