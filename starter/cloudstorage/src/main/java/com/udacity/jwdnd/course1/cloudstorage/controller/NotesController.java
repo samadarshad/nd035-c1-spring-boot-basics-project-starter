@@ -37,6 +37,8 @@ public class NotesController {
             Note note = new Note(null, noteTitle, noteDescription, user.getUserId());
             noteService.createNoteAndUpdateObject(note);
         } else {
+            //first find if note exists
+            //then find if user is authenticated to edit that note
             System.out.println("edit note" + noteId.toString() + noteTitle + noteDescription);
             Note note = new Note(noteId, noteTitle, noteDescription, user.getUserId());
             noteService.updateNote(note);
@@ -45,8 +47,11 @@ public class NotesController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteNote(@PathVariable Integer id, Model model) {
+    public String deleteNote(@PathVariable Integer id) {
+        //first find if note exists
+        //then find if user is authenticated to delete that note
         System.out.println("deleting note id: " + id);
+        noteService.deleteNote(id);
         return "redirect:/";
     }
 }
