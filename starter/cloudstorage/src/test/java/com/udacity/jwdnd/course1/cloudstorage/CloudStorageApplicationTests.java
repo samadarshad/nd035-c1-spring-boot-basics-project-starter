@@ -1,7 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.User;
-import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import com.udacity.jwdnd.course1.cloudstorage.model.*;
+import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
@@ -12,6 +12,8 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,15 +28,68 @@ class CloudStorageApplicationTests {
 	private int port;
 
 	private WebDriver driver;
-	private LoginPage loginPage;
-	private SignupPage signupPage;
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private FileService fileService;
+	@Autowired
+	private NoteService noteService;
+	@Autowired
+	private CredentialService credentialService;
+
+	private static final User user1 = new User(null, "user1", null, "pass1", "first1", "last1");
+	private static final User user2 = new User(null, "user2", null, "pass2", "first2", "last2");
+	private static final byte [] fileData1 = "Hello World1".getBytes(StandardCharsets.UTF_8);
+	private static final byte [] fileData2 = "Hello World2".getBytes(StandardCharsets.UTF_8);
+	private static final Note note1 = new Note(null, "title1", "description1", null);
+	private static final Note note2 = new Note(null, "title2", "description2", null);
+	private static final Credential credential1 = new Credential(null, "url1", "username1", null, "password1", null);
+	private static final Credential credential2 = new Credential(null, "url2", "username2", null, "password2", null);
+	private static final File file1 = new File(null, "fileName1", "contentType1", (long) fileData1.length, null, fileData1);
+	private static final File file2 = new File(null, "fileName2", "contentType2", (long) fileData2.length, null, fileData2);
+
+
+	private static List<CrudService> genCrudServices(CrudService... crudServices) {
+		List<CrudService> list = new ArrayList<>();
+		for (CrudService service : crudServices) {
+			list.add(service);
+		}
+		return list;
+	}
+
+	public static CrudService itemToServiceMapper(UserItems item, List<CrudService> crudServices) {
+		for (CrudService service : crudServices) {
+			if (item.getClass() == service.getObjectType()) {
+				return service;
+			}
+		}
+		throw new IllegalStateException("Unexpected value: " + item.getClass());
+	}
+
+	public static void addItemsToUser(User user, List<CrudService> crudServices, UserItems... items) {
+		for (UserItems item : items) {
+			item.setUserId(user.getUserId());
+			CrudService crudService = itemToServiceMapper(item, crudServices);
+			crudService.createAndUpdateObject(item);
+		}
+	}
 
 	@BeforeAll
-	static void beforeAll() {
+	static void beforeAll(@Autowired UserService userService,
+						  @Autowired FileService fileService,
+						  @Autowired NoteService noteService,
+						  @Autowired CredentialService credentialService) {
+
+		List<CrudService> crudServices = genCrudServices(fileService, noteService, credentialService);
+
 		WebDriverManager.chromedriver().setup();
+
+		userService.createAndUpdateObject(user1);
+		addItemsToUser(user1, crudServices, note1, credential1, file1);
+
+		userService.createAndUpdateObject(user2);
+		addItemsToUser(user2, crudServices, note2, credential2, file2);
 	}
 
 	@BeforeEach
@@ -54,13 +109,13 @@ class CloudStorageApplicationTests {
 		String lastname = "last";
 
 		driver.get("http://localhost:" + port + "/signup");
-		signupPage = new SignupPage(driver);
+		SignupPage signupPage = new SignupPage(driver);
 		signupPage.signup(firstname, lastname, username, password);
 	}
 
 	public void login(String username, String password) {
 		driver.get("http://localhost:" + port + "/login");
-		loginPage = new LoginPage(driver);
+		LoginPage loginPage = new LoginPage(driver);
 
 		loginPage.login(username, password);
 	}
@@ -70,6 +125,8 @@ class CloudStorageApplicationTests {
 		signup(username, password);
 		login(username, password);
 	}
+
+
 
 	@Test
 	public void getLoginPage() {
@@ -85,7 +142,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void whenAddUserToDatabaseTheirUsernameIsNotAvailable() throws InterruptedException {
+	public void whenAddUserToDatabaseTheirUsernameIsNotAvailable() {
 		assertTrue(userService.isUsernameAvailable("user"));
 		User user = new User(null, "user", null, "pass", "first", "last");
 		userService.createAndUpdateObject(user);

@@ -16,6 +16,12 @@ public class FileService implements CrudService<File> {
         this.fileMapper = fileMapper;
     }
 
+
+    @Override
+    public Class<File> getObjectType() {
+        return File.class;
+    }
+
     public void createAndUpdateObject(File file) {
         int rows = fileMapper.insertAndUpdateObjectThenGetNumberOfRowsAffected(file);
         assert(rows == 1);

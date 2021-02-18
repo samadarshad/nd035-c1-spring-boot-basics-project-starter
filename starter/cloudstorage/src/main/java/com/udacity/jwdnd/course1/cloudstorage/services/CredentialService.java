@@ -22,6 +22,11 @@ public class CredentialService implements CrudService<Credential> {
     }
 
     @Override
+    public Class<Credential> getObjectType() {
+        return Credential.class;
+    }
+
+    @Override
     public void createAndUpdateObject(Credential credential) {
         SecureRandom random = new SecureRandom();
         byte[] key = new byte[16];

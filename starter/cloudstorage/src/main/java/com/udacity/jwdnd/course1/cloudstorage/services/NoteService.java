@@ -14,6 +14,11 @@ public class NoteService implements CrudService<Note> {
         this.noteMapper = noteMapper;
     }
 
+    @Override
+    public Class<Note> getObjectType() {
+        return Note.class;
+    }
+
     public void createAndUpdateObject(Note note) {
         int rows = noteMapper.insertAndUpdateObjectThenGetNumberOfRowsAffected(note);
         assert(rows == 1);
