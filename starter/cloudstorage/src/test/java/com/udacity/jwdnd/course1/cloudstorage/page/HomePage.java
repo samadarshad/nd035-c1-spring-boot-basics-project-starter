@@ -53,19 +53,17 @@ public class HomePage {
     public void waitForLogin(WebDriver driver) throws InterruptedException {
         //wait-until isnt working as intended, so just using a delay
 //        Thread.sleep(500);
-        WebDriverWait wait = new WebDriverWait(driver, 3000);
-        wait
-//                .until(ExpectedConditions.elementToBeClickable(By.id("nav-notes-tab")));
-//                .until(d -> d.findElement(By.id("nav-notes-tab")));
-//                .until(ExpectedConditions.elementToBeClickable(navNotesTab));
-                .until(ExpectedConditions.visibilityOf(navNotesTab));
+        new WebDriverWait(driver, 3000).until(ExpectedConditions.elementToBeClickable(logoutButton));
+        new WebDriverWait(driver, 3000).until(ExpectedConditions.elementToBeClickable(navNotesTab));
+        new WebDriverWait(driver, 3000).until(ExpectedConditions.elementToBeClickable(navFilesTab));
+        new WebDriverWait(driver, 3000).until(ExpectedConditions.elementToBeClickable(navCredentialsTab));
     }
 
     public void waitForNotes(WebDriver driver) throws InterruptedException {
         //wait-until isnt working as intended, so just using a delay
-        Thread.sleep(500);
-//        new WebDriverWait(driver, 3000)
-//                .until(ExpectedConditions.visibilityOfAllElements(noteTitleList));
+//        Thread.sleep(500);
+        new WebDriverWait(driver, 3000)
+                .until(ExpectedConditions.visibilityOfAllElements(noteTitleList));
     }
 
     public List<String> getNoteTitleList() {

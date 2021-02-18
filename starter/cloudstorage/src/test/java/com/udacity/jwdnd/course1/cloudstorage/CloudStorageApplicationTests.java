@@ -191,14 +191,14 @@ class CloudStorageApplicationTests {
 		login("user1", "pass1");
 		HomePage homePage = new HomePage(driver);
 		assertTrue(homePage.isLoggedIn());
-//		homePage.waitForLogin(driver); //wait to be able to click on navNotesTab
+		homePage.waitForLogin(driver); //wait to be able to click on navNotesTab
 
-		WebDriverWait wait = new WebDriverWait(driver, 3000);
-		WebElement navNotesTab = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("nav-notes-tab")));
+//		WebDriverWait wait = new WebDriverWait(driver, 3000);
+//		WebElement navNotesTab = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("nav-notes-tab")));
 //		navNotesTab.click();
 //		homePage.navNotesTab.click();
 		JavascriptExecutor jexec = (JavascriptExecutor) driver;
-		jexec.executeScript("arguments[0].click();", navNotesTab);
+		jexec.executeScript("arguments[0].click();", homePage.navNotesTab);
 		homePage.waitForNotes(driver);
 		List<String> noteTitles = homePage.getNoteTitleList();
 
