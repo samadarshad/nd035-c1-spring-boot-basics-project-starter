@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.WebDriverWaitTimeoutSeconds;
 import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.click;
 
 public class HomePageFileTab {
@@ -31,7 +32,7 @@ public class HomePageFileTab {
     }
 
     public void waitForFiles(WebDriver driver) {
-        new WebDriverWait(driver, 3000)
+        new WebDriverWait(driver, WebDriverWaitTimeoutSeconds)
                 .until(ExpectedConditions.visibilityOfAllElements(fileNameList));
     }
 

@@ -8,6 +8,7 @@ import com.udacity.jwdnd.course1.cloudstorage.page.SignupPage;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.function.Executable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.WebDriverWaitTimeoutSeconds;
 import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.click;
 import static com.udacity.jwdnd.course1.cloudstorage.utility.Utils.addItemsToUser;
 import static com.udacity.jwdnd.course1.cloudstorage.utility.Utils.genCrudServices;
@@ -153,24 +155,6 @@ class CloudStorageApplicationTests {
 
 		HomePage homePage = new HomePage(driver);
 		assertTrue(homePage.isLoggedIn());
-
-		List<String> fileNames = homePage.getFileNameList();
-
-	}
-
-	@Test
-	void newUserCanAddAndReadTheirItemsAndPersistThroughLogout() {
-
-	}
-
-	@Test
-	void newUserCanEditTheirItemsAndPersistThroughLogout() {
-
-	}
-
-	@Test
-	void newUserCanDeleteTheirItemsAndPersistThroughLogout() {
-
 	}
 
 	@Test
@@ -184,52 +168,24 @@ class CloudStorageApplicationTests {
 	@Test
 	void successfulLogoutShowsLogoutMessage() {
 		login("user1", "pass1");
-
-
 	}
 
 	@Test
-	void user1CanReadTheirExistingItems() throws InterruptedException {
+	void user1CanLogin() {
 		login("user1", "pass1");
 		HomePage homePage = new HomePage(driver);
 		assertTrue(homePage.isLoggedIn());
-		homePage.waitForLogin(driver); //wait to be able to click on navNotesTab
-
-		HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
-		click(driver, homePage.navNotesTab);
-		homePage.waitForNotes(driver);
-		List<String> noteTitles = homePage.getNoteTitleList();
-
-		List<String> expectedNoteTitles = Arrays.asList("title1");
-		assertEquals(noteTitles, expectedNoteTitles);
+		homePage.waitForLogin(driver);
 	}
 
 	@Test
-	void user1CanEditTheirExistingItems() {
-
+	void timeoutExeptionIfElementDoesntLoad() {
+		WebDriverWait wait = new WebDriverWait(driver, WebDriverWaitTimeoutSeconds);
+		assertThrows(
+				TimeoutException.class,
+				() -> wait.until(ExpectedConditions.elementToBeClickable(By.id("nonexisting-element")))
+		);
 	}
-
-	@Test
-	void user1CanDeleteTheirExistingItems() {
-
-	}
-
-	@Test
-	void user1CannotReadUser2Items() {
-
-	}
-
-	@Test
-	void user1CannotEditUser2Items() {
-
-	}
-
-	@Test
-	void user1CannotDeleteUser2Items() {
-
-	}
-
-
 
 
 }

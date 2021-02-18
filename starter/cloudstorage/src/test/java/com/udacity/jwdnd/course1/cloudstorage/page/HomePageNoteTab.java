@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.WebDriverWaitTimeoutSeconds;
+
 public class HomePageNoteTab {
     @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-notes']/div[1]/table/tbody/tr/th")
     private List<WebElement> noteTitleList;
@@ -25,12 +27,12 @@ public class HomePageNoteTab {
     }
 
     public void waitForNotesTab(WebDriver driver) {
-        new WebDriverWait(driver, 3000)
+        new WebDriverWait(driver, WebDriverWaitTimeoutSeconds)
                 .until(ExpectedConditions.elementToBeClickable(navNotesTab));
     }
 
     public void waitForNotes(WebDriver driver) {
-        new WebDriverWait(driver, 3000)
+        new WebDriverWait(driver, WebDriverWaitTimeoutSeconds)
                 .until(ExpectedConditions.visibilityOfAllElements(noteTitleList));
     }
 
