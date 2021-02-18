@@ -7,9 +7,11 @@ import com.udacity.jwdnd.course1.cloudstorage.page.SignupPage;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -189,8 +191,14 @@ class CloudStorageApplicationTests {
 		login("user1", "pass1");
 		HomePage homePage = new HomePage(driver);
 		assertTrue(homePage.isLoggedIn());
-		homePage.waitForLogin(driver); //wait to be able to click on navNotesTab
-		homePage.navNotesTab.click();
+//		homePage.waitForLogin(driver); //wait to be able to click on navNotesTab
+
+		WebDriverWait wait = new WebDriverWait(driver, 3000);
+		WebElement navNotesTab = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("nav-notes-tab")));
+//		navNotesTab.click();
+//		homePage.navNotesTab.click();
+		JavascriptExecutor jexec = (JavascriptExecutor) driver;
+		jexec.executeScript("arguments[0].click();", navNotesTab);
 		homePage.waitForNotes(driver);
 		List<String> noteTitles = homePage.getNoteTitleList();
 
