@@ -28,7 +28,7 @@ public class HomePage {
     }
 
     public void waitForLogin(WebDriver driver) {
-        new WebDriverWait(driver, WebDriverWaitTimeoutSeconds).until(ExpectedConditions.elementToBeClickable(logoutButton));
+        new WebDriverWait(driver, WebDriverWaitTimeoutSeconds).until(ExpectedConditions.visibilityOf(logoutButton));
     }
 
     public void logout() {

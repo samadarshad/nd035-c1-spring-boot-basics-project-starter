@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.click;
+
 public class LoginPage {
     @FindBy(id = "inputUsername")
     private WebElement inputUsername;
@@ -22,10 +24,10 @@ public class LoginPage {
         PageFactory.initElements(driver, this);
     }
 
-    public void login(String username, String password) {
+    public void login(WebDriver driver, String username, String password) {
         inputUsername.sendKeys(username);
         inputPassword.sendKeys(password);
-        submitButton.click();
+        click(driver, submitButton);
     }
 
     public void goToSignup() {

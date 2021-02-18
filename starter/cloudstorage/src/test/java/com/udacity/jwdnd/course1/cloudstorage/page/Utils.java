@@ -18,13 +18,13 @@ public final class Utils {
     private Utils() {
     }
 
-    public static Integer WebDriverWaitTimeoutSeconds = 3;
+    public static Integer WebDriverWaitTimeoutSeconds = 5;
 
     public static void login(WebDriver driver, int port, String username, String password) {
         driver.get("http://localhost:" + port + "/login");
         LoginPage loginPage = new LoginPage(driver);
 
-        loginPage.login(username, password);
+        loginPage.login(driver, username, password);
     }
 
     public static void click(WebDriver driver, WebElement element) {

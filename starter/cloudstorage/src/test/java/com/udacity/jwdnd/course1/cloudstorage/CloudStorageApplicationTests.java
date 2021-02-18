@@ -106,7 +106,7 @@ class CloudStorageApplicationTests {
 		driver.get("http://localhost:" + port + "/login");
 		LoginPage loginPage = new LoginPage(driver);
 
-		loginPage.login(username, password);
+		loginPage.login(driver, username, password);
 	}
 
 	public void signupAndLoginAndRedirectToHomePage(String username) {
