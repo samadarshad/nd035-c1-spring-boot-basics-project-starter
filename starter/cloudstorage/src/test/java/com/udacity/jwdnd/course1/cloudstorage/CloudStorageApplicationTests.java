@@ -191,7 +191,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	void user1CanReadTheirExistingItems() {
+	void user1CanReadTheirExistingItems() throws InterruptedException {
 		login("user1", "pass1");
 
 		HomePage homePage = new HomePage(driver);

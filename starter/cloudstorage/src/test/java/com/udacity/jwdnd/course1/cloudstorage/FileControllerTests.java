@@ -56,7 +56,7 @@ class FileControllerTests {
     private static final File file2 = new File(null, "fileName2", "application/octet-stream", (long) fileData2.length, null, fileData2);
 
     private static final String downloadsDirectory = System.getProperty("user.dir") + java.io.File.separator + "testDownloads";
-    private static final long downloadWaitTime = 3000;
+    private static final long downloadWaitTime = 500;
 
     @BeforeAll
     static void beforeAll(@Autowired UserService userService,
@@ -102,14 +102,14 @@ class FileControllerTests {
     }
 
     @Test
-    void user1CanReadFilenames() {
+    void user1CanReadFilenames() throws InterruptedException {
         Utils.login(driver, port, "user1", "pass1");
         HomePage homePage = new HomePage(driver);
         homePage.navFilesTab.click();
         homePage.waitForFiles(driver);
         List<String> fileNames = homePage.getFileNameList();
 
-        List<String> expectedFileNames = Arrays.asList("fileName1");
+        List<String> expectedFileNames = Arrays.asList(file1a.getFileName(), file1b.getFileName());
         assertEquals(fileNames, expectedFileNames);
     }
 

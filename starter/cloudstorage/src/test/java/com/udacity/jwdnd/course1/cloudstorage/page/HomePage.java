@@ -17,10 +17,10 @@ public class HomePage {
     @FindBy(id = "logout-button")
     private WebElement logoutButton;
 
-    @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-files']/div/table/tbody/tr/th")
+    @FindBy(xpath = "//*[@id=\"fileTable\"]/tbody/tr/th")
     private List<WebElement> fileNameList;
 
-    @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-files']/div/table/tbody/tr/td/a")
+    @FindBy(xpath = "//*[@id=\"fileTable\"]/tbody/tr/td/a")
     private List<WebElement> fileDownloadLinkList;
 
     @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-notes']/div[1]/table/tbody/tr/th")
@@ -50,9 +50,12 @@ public class HomePage {
         return fileNameList.stream().map(item -> item.getText()).collect(Collectors.toList());
     }
 
-    public void waitForFiles(WebDriver driver) {
-        new WebDriverWait(driver, 3000)
-                .until(ExpectedConditions.visibilityOfAllElements(fileNameList));
+    public void waitForFiles(WebDriver driver) throws InterruptedException {
+        Thread.sleep(500);
+//        new WebDriverWait(driver, 3000)
+////                .until(ExpectedConditions.visibilityOf()); //todo maybe this isnt working as intended
+////                .until(ExpectedConditions.visibilityOfAllElements(fileNameList)); //todo maybe this isnt working as intended
+//                .until(ExpectedConditions.elementToBeClickable(fileDownloadLinkList.get(0))); //todo maybe this isnt working as intended
     }
 
     public void downloadFile(int index) {
