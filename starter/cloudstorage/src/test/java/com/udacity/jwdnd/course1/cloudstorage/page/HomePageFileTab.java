@@ -31,6 +31,11 @@ public class HomePageFileTab {
         return fileNameList.stream().map(item -> item.getText()).collect(Collectors.toList());
     }
 
+    public void waitForNav(WebDriver driver) {
+        new WebDriverWait(driver, WebDriverWaitTimeoutSeconds)
+                .until(ExpectedConditions.visibilityOf(navFilesTab));
+    }
+
     public void waitForFiles(WebDriver driver) {
         new WebDriverWait(driver, WebDriverWaitTimeoutSeconds)
                 .until(ExpectedConditions.visibilityOfAllElements(fileNameList));

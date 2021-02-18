@@ -97,6 +97,7 @@ class FileControllerTests {
     void user1CanReadFilenames() throws InterruptedException {
         Utils.login(driver, port, "user1", "pass1");
         HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
+        homePageFileTab.waitForNav(driver);
         homePageFileTab.navFilesTab.click();
         homePageFileTab.waitForFiles(driver);
         List<String> fileNames = homePageFileTab.getFileNameList();
@@ -109,6 +110,7 @@ class FileControllerTests {
     void user1CanDownloadTheirFiles() throws InterruptedException, IOException {
         Utils.login(driver, port, "user1", "pass1");
         HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
+        homePageFileTab.waitForNav(driver);
         homePageFileTab.navFilesTab.click();
         homePageFileTab.waitForFiles(driver);
         List<String> fileNames = homePageFileTab.getFileNameList();
