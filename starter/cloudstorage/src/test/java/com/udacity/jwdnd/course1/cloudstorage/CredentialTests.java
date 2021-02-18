@@ -41,12 +41,24 @@ public class CredentialTests {
     }
 
     @Test
-    public void read() {
+    public void createEncryptsPassword() {
         assertNotNull(credential.getCredentialId());
         assertNotNull(credential.getKey());
+        assertNotEquals("password", credential.getPassword());
+    }
+
+    @Test
+    public void getDecryptsPassword() {
         assertEquals("url", credentialService.get(credential.getCredentialId()).getUrl());
         assertEquals("username", credentialService.get(credential.getCredentialId()).getUsername());
         assertEquals("password", credentialService.get(credential.getCredentialId()).getPassword());
+    }
+
+    @Test
+    public void getAllByUserIsWithEncryptedPassword() {
+        assertEquals("url", credentialService.getByUserId(credential.getUserId()).get(0).getUrl());
+        assertEquals("username", credentialService.getByUserId(credential.getUserId()).get(0).getUsername());
+        assertNotEquals("password", credentialService.getByUserId(credential.getUserId()).get(0).getPassword());
     }
 
     @Test
@@ -67,10 +79,8 @@ public class CredentialTests {
     @Test
     public void delete() {
         credentialService.delete(credential.getCredentialId());
-
-        assertThrows(NullPointerException.class, ()-> {
-                    credentialService.get(credential.getCredentialId());
-        });
+        Credential deletedCredential = credentialService.get(credential.getCredentialId());
+        assertNull(deletedCredential);
     }
 
 }

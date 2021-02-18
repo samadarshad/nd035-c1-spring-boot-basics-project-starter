@@ -3,6 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.CredentialMapper;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -37,12 +38,10 @@ public class CredentialService implements CrudService<Credential> {
 
     @Override
     public Credential get(Integer credentialId) {
-        Credential credential = new Credential(credentialMapper.get(credentialId));
-
+        Credential credential = Credential.getInstance(credentialMapper.get(credentialId));
         if (credential == null) {
             return null;
         }
-
         String decryptedPassword = encryptionService.decryptValue(credential.getPassword(), credential.getKey());
 
         credential.setPassword(decryptedPassword);

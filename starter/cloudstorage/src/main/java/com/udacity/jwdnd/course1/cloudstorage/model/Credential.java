@@ -59,13 +59,21 @@ public class Credential implements UserItems {
         this.userId = userId;
     }
 
-    public Credential(Credential credential) {
+    private Credential(Credential credential) {
         this.credentialId = credential.credentialId;
         this.url = credential.url;
         this.username = credential.username;
         this.key = credential.key;
         this.password = credential.password;
         this.userId = credential.userId;
+    }
+
+    public static Credential getInstance(Credential credential) {
+        if (credential == null) {
+            return null;
+        } else {
+            return new Credential(credential);
+        }
     }
 
     @Override
