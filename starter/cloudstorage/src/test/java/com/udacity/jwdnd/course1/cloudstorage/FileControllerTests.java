@@ -7,6 +7,7 @@ import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.page.HomePage;
 import com.udacity.jwdnd.course1.cloudstorage.page.LoginPage;
 import com.udacity.jwdnd.course1.cloudstorage.page.SignupPage;
+import com.udacity.jwdnd.course1.cloudstorage.page.Utils;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
@@ -40,19 +41,11 @@ class FileControllerTests {
     private UserService userService;
     @Autowired
     private FileService fileService;
-    @Autowired
-    private NoteService noteService;
-    @Autowired
-    private CredentialService credentialService;
 
     private static final User user1 = new User(null, "user1", null, "pass1", "first1", "last1");
     private static final User user2 = new User(null, "user2", null, "pass2", "first2", "last2");
     private static final byte [] fileData1 = "Hello World1".getBytes(StandardCharsets.UTF_8);
     private static final byte [] fileData2 = "Hello World2".getBytes(StandardCharsets.UTF_8);
-    private static final Note note1 = new Note(null, "title1", "description1", null);
-    private static final Note note2 = new Note(null, "title2", "description2", null);
-    private static final Credential credential1 = new Credential(null, "url1", "username1", null, "password1", null);
-    private static final Credential credential2 = new Credential(null, "url2", "username2", null, "password2", null);
     private static final File file1 = new File(null, "fileName1", "application/octet-stream", (long) fileData1.length, null, fileData1);
     private static final File file2 = new File(null, "fileName2", "application/octet-stream", (long) fileData2.length, null, fileData2);
 
@@ -70,10 +63,10 @@ class FileControllerTests {
         WebDriverManager.chromedriver().setup();
 
         userService.createAndUpdateObject(user1);
-        addItemsToUser(user1, crudServices, note1, credential1, file1);
+        addItemsToUser(user1, crudServices, file1);
 
         userService.createAndUpdateObject(user2);
-        addItemsToUser(user2, crudServices, note2, credential2, file2);
+        addItemsToUser(user2, crudServices, file2);
     }
 
     @BeforeEach
@@ -102,19 +95,10 @@ class FileControllerTests {
                 file.delete();
     }
 
-    public void login(String username, String password) {
-        driver.get("http://localhost:" + port + "/login");
-        LoginPage loginPage = new LoginPage(driver);
-
-        loginPage.login(username, password);
-    }
-
     @Test
-    void user1CanReadTheirExistingItems() throws InterruptedException {
-        login("user1", "pass1");
-
+    void user1CanDownloadTheirFile() throws InterruptedException {
+        Utils.login(driver, port, "user1", "pass1");
         HomePage homePage = new HomePage(driver);
-        assertTrue(homePage.isLoggedIn());
 
         homePage.navFilesTab.click();
         homePage.waitForFiles(driver);
@@ -124,33 +108,5 @@ class FileControllerTests {
         Thread.sleep(1000); // wait for download
         assertTrue(downloadedFile.exists());
     }
-
-    @Test
-    void user1CanEditTheirExistingItems() {
-
-    }
-
-    @Test
-    void user1CanDeleteTheirExistingItems() {
-
-    }
-
-    @Test
-    void user1CannotReadUser2Items() {
-
-    }
-
-    @Test
-    void user1CannotEditUser2Items() {
-
-    }
-
-    @Test
-    void user1CannotDeleteUser2Items() {
-
-    }
-
-
-
 
 }
