@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.click;
 import static com.udacity.jwdnd.course1.cloudstorage.utility.Utils.addItemsToUser;
 import static com.udacity.jwdnd.course1.cloudstorage.utility.Utils.genCrudServices;
 import static org.junit.jupiter.api.Assertions.*;
@@ -193,12 +194,7 @@ class CloudStorageApplicationTests {
 		assertTrue(homePage.isLoggedIn());
 		homePage.waitForLogin(driver); //wait to be able to click on navNotesTab
 
-//		WebDriverWait wait = new WebDriverWait(driver, 3000);
-//		WebElement navNotesTab = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("nav-notes-tab")));
-//		navNotesTab.click();
-//		homePage.navNotesTab.click();
-		JavascriptExecutor jexec = (JavascriptExecutor) driver;
-		jexec.executeScript("arguments[0].click();", homePage.navNotesTab);
+		click(driver, homePage.navNotesTab);
 		homePage.waitForNotes(driver);
 		List<String> noteTitles = homePage.getNoteTitleList();
 
