@@ -2,6 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.*;
 import com.udacity.jwdnd.course1.cloudstorage.page.HomePage;
+import com.udacity.jwdnd.course1.cloudstorage.page.HomePageNoteTab;
 import com.udacity.jwdnd.course1.cloudstorage.page.LoginPage;
 import com.udacity.jwdnd.course1.cloudstorage.page.SignupPage;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
@@ -194,6 +195,7 @@ class CloudStorageApplicationTests {
 		assertTrue(homePage.isLoggedIn());
 		homePage.waitForLogin(driver); //wait to be able to click on navNotesTab
 
+		HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
 		click(driver, homePage.navNotesTab);
 		homePage.waitForNotes(driver);
 		List<String> noteTitles = homePage.getNoteTitleList();
