@@ -1,4 +1,4 @@
-package com.udacity.jwdnd.course1.cloudstorage;
+package com.udacity.jwdnd.course1.cloudstorage.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -20,6 +20,9 @@ public class HomePage {
     @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-files']/div/table/tbody/tr/th")
     private List<WebElement> fileNameList;
 
+    @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-files']/div/table/tbody/tr/td/a")
+    private List<WebElement> fileDownloadLinkList;
+
     @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-notes']/div[1]/table/tbody/tr/th")
     private List<WebElement> noteTitleList;
 
@@ -32,8 +35,8 @@ public class HomePage {
     @FindBy(id = "nav-notes-tab")
     public WebElement navNotesTab;
 
-    @FindBy(id = "nav-notes")
-    public WebElement navNotes;
+    @FindBy(id = "nav-credentials-tab")
+    public WebElement navCredentialsTab;
 
     public HomePage (WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -47,11 +50,19 @@ public class HomePage {
         return fileNameList.stream().map(item -> item.getText()).collect(Collectors.toList());
     }
 
+    public void waitForFiles(WebDriver driver) {
+        new WebDriverWait(driver, 1000)
+                .until(ExpectedConditions.visibilityOfAllElements(fileNameList));
+    }
+
+    public void downloadFile(int index) {
+        fileDownloadLinkList.get(index).click();
+    }
+
     public void waitForNotes(WebDriver driver) {
         new WebDriverWait(driver, 1000)
                 .until(ExpectedConditions.visibilityOfAllElements(noteTitleList));
     }
-
 
     public List<String> getNoteTitleList() {
         return noteTitleList.stream().map(item -> item.getText()).collect(Collectors.toList());

@@ -36,7 +36,7 @@ public class FileTests {
 
     @BeforeEach
     public void create() {
-        file = new File(null, "fileName", "contentType", (long) 10, user.getUserId(), fileData);
+        file = new File(null, "fileName", "application/octet-stream", (long) 10, user.getUserId(), fileData);
         fileService.createAndUpdateObject(file);
     }
 
@@ -44,7 +44,7 @@ public class FileTests {
     public void read() {
         assertNotNull(file.getFileId());
         assertEquals("fileName", fileService.get(file.getFileId()).getFileName());
-        assertEquals("contentType", fileService.get(file.getFileId()).getContentType());
+        assertEquals("application/octet-stream", fileService.get(file.getFileId()).getContentType());
         assertEquals((long) 10, fileService.get(file.getFileId()).getFileSize());
         assertArrayEquals(fileData, fileService.get(file.getFileId()).getFileData());
     }

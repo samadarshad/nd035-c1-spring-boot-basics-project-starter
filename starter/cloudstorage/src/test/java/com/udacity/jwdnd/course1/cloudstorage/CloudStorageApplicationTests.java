@@ -1,23 +1,25 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.*;
+import com.udacity.jwdnd.course1.cloudstorage.page.HomePage;
+import com.udacity.jwdnd.course1.cloudstorage.page.LoginPage;
+import com.udacity.jwdnd.course1.cloudstorage.page.SignupPage;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.udacity.jwdnd.course1.cloudstorage.utility.Utils.addItemsToUser;
 import static com.udacity.jwdnd.course1.cloudstorage.utility.Utils.genCrudServices;
@@ -50,8 +52,11 @@ class CloudStorageApplicationTests {
 	private static final Note note2 = new Note(null, "title2", "description2", null);
 	private static final Credential credential1 = new Credential(null, "url1", "username1", null, "password1", null);
 	private static final Credential credential2 = new Credential(null, "url2", "username2", null, "password2", null);
-	private static final File file1 = new File(null, "fileName1", "contentType1", (long) fileData1.length, null, fileData1);
-	private static final File file2 = new File(null, "fileName2", "contentType2", (long) fileData2.length, null, fileData2);
+	private static final File file1 = new File(null, "fileName1", "application/octet-stream", (long) fileData1.length, null, fileData1);
+	private static final File file2 = new File(null, "fileName2", "application/octet-stream", (long) fileData2.length, null, fileData2);
+
+	private static final String downloadsDirectory = System.getProperty("user.dir") + java.io.File.separator + "testDownloads";
+
 
 	@BeforeAll
 	static void beforeAll(@Autowired UserService userService,
@@ -72,7 +77,13 @@ class CloudStorageApplicationTests {
 
 	@BeforeEach
 	public void beforeEach() {
-		driver = new ChromeDriver();
+		//set temp download directory for file tests
+		ChromeOptions options = new ChromeOptions();
+		Map<String, Object> prefs = new HashMap();
+		prefs.put("download.prompt_for_download", false);
+		prefs.put("download.default_directory", downloadsDirectory);
+		options.setExperimentalOption("prefs", prefs);
+		driver = new ChromeDriver(options);
 	}
 
 	@AfterEach
@@ -180,14 +191,18 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	void user1CanReadTheirExistingItems() throws InterruptedException {
+	void user1CanReadTheirExistingItems() {
 		login("user1", "pass1");
 
 		HomePage homePage = new HomePage(driver);
 		assertTrue(homePage.isLoggedIn());
 
 		homePage.navFilesTab.click();
+		homePage.waitForFiles(driver);
 		List<String> fileNames = homePage.getFileNameList();
+		homePage.downloadFile(0);
+		java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + fileNames.get(0));
+		assertTrue(downloadedFile.exists());
 
 		homePage.navNotesTab.click();
 		homePage.waitForNotes(driver);
