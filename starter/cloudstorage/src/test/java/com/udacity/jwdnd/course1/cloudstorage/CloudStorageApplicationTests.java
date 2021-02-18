@@ -187,12 +187,9 @@ class CloudStorageApplicationTests {
 	@Test
 	void user1CanReadTheirExistingItems() throws InterruptedException {
 		login("user1", "pass1");
-
-
-
 		HomePage homePage = new HomePage(driver);
 		assertTrue(homePage.isLoggedIn());
-
+		homePage.waitForLogin(driver); //wait to be able to click on navNotesTab
 		homePage.navNotesTab.click();
 		homePage.waitForNotes(driver);
 		List<String> noteTitles = homePage.getNoteTitleList();
