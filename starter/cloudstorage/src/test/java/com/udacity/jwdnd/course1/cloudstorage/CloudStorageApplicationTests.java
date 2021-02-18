@@ -77,13 +77,7 @@ class CloudStorageApplicationTests {
 
 	@BeforeEach
 	public void beforeEach() {
-		//set temp download directory for file tests
-		ChromeOptions options = new ChromeOptions();
-		Map<String, Object> prefs = new HashMap();
-		prefs.put("download.prompt_for_download", false);
-		prefs.put("download.default_directory", downloadsDirectory);
-		options.setExperimentalOption("prefs", prefs);
-		driver = new ChromeDriver(options);
+		driver = new ChromeDriver();
 	}
 
 	@AfterEach
@@ -194,23 +188,16 @@ class CloudStorageApplicationTests {
 	void user1CanReadTheirExistingItems() throws InterruptedException {
 		login("user1", "pass1");
 
+
+
 		HomePage homePage = new HomePage(driver);
 		assertTrue(homePage.isLoggedIn());
-
-		homePage.navFilesTab.click();
-		homePage.waitForFiles(driver);
-		List<String> fileNames = homePage.getFileNameList();
-		homePage.downloadFile(0);
-		java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + fileNames.get(0));
-		assertTrue(downloadedFile.exists());
 
 		homePage.navNotesTab.click();
 		homePage.waitForNotes(driver);
 		List<String> noteTitles = homePage.getNoteTitleList();
 
-		List<String> expectedFileNames = Arrays.asList("fileName1");
 		List<String> expectedNoteTitles = Arrays.asList("title1");
-		assertEquals(fileNames, expectedFileNames);
 		assertEquals(noteTitles, expectedNoteTitles);
 
 
