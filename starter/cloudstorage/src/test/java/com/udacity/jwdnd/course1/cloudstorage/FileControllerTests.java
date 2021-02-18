@@ -99,14 +99,35 @@ class FileControllerTests {
     void user1CanDownloadTheirFile() throws InterruptedException {
         Utils.login(driver, port, "user1", "pass1");
         HomePage homePage = new HomePage(driver);
-
         homePage.navFilesTab.click();
         homePage.waitForFiles(driver);
         List<String> fileNames = homePage.getFileNameList();
-        homePage.downloadFile(0);
-        java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + fileNames.get(0));
+        int index = 0;
+        homePage.downloadFile(index);
+        java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + fileNames.get(index));
         Thread.sleep(1000); // wait for download
+
         assertTrue(downloadedFile.exists());
+    }
+
+    @Test
+    void user1CanDownloadTheirFileViaUrl() throws InterruptedException {
+        Utils.login(driver, port, "user1", "pass1");
+        driver.get("http://localhost:" + port + "/files/" + file1.getFileId());
+        java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + file1.getFileName());
+        Thread.sleep(1000); // wait for download
+
+        assertTrue(downloadedFile.exists());
+    }
+
+    @Test
+    void user1CannotDownloadUser2File() throws InterruptedException {
+        Utils.login(driver, port, "user1", "pass1");
+        driver.get("http://localhost:" + port + "/files/" + file2.getFileId());
+        java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + file2.getFileName());
+        Thread.sleep(1000); // wait for download
+
+        assertFalse(downloadedFile.exists());
     }
 
 }
