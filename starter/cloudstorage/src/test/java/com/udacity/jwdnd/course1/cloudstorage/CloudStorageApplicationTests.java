@@ -1,18 +1,25 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.User;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Transactional
 class CloudStorageApplicationTests {
 
 	@LocalServerPort
@@ -21,6 +28,9 @@ class CloudStorageApplicationTests {
 	private WebDriver driver;
 	private LoginPage loginPage;
 	private SignupPage signupPage;
+
+	@Autowired
+	private UserService userService;
 
 	@BeforeAll
 	static void beforeAll() {
@@ -72,6 +82,23 @@ class CloudStorageApplicationTests {
 		signupAndLoginAndRedirectToHomePage("user");
 
 		Thread.sleep(3000);
+	}
+
+	@Test
+	public void whenAddUserToDatabaseTheirUsernameIsNotAvailable() throws InterruptedException {
+		assertTrue(userService.isUsernameAvailable("user"));
+		User user = new User(null, "user", null, "pass", "first", "last");
+		userService.createAndUpdateObject(user);
+		assertFalse(userService.isUsernameAvailable("user"));
+	}
+
+	@Test
+	public void whenAddUserToDatabaseTheyCanLogin() throws InterruptedException {
+		User user = new User(null, "user", null, "pass", "first", "last");
+		userService.createAndUpdateObject(user);
+		login("user", "pass");
+
+        Thread.sleep(3000);
 	}
 
 }
