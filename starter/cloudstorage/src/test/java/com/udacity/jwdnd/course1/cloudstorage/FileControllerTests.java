@@ -115,14 +115,14 @@ class FileControllerTests {
 
         //test file1a
         int index = 0;
-        homePageFileTab.downloadFile(index);
+        homePageFileTab.downloadFile(driver, index);
         Thread.sleep(downloadWaitTime); // wait for download
         byte[] fileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + fileNames.get(index)));
         assertArrayEquals(fileContent, file1a.getFileData());
 
         //test file1b
         index = 1;
-        homePageFileTab.downloadFile(index);
+        homePageFileTab.downloadFile(driver, index);
         Thread.sleep(downloadWaitTime); // wait for download
         fileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + fileNames.get(index)));
         assertArrayEquals(fileContent, file1b.getFileData());

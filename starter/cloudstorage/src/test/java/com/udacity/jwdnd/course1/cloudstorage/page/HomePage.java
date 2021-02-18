@@ -50,18 +50,14 @@ public class HomePage {
         return fileNameList.stream().map(item -> item.getText()).collect(Collectors.toList());
     }
 
-    public void waitForLogin(WebDriver driver) throws InterruptedException {
-        //wait-until isnt working as intended, so just using a delay
-//        Thread.sleep(500);
+    public void waitForLogin(WebDriver driver) {
         new WebDriverWait(driver, 3000).until(ExpectedConditions.elementToBeClickable(logoutButton));
         new WebDriverWait(driver, 3000).until(ExpectedConditions.elementToBeClickable(navNotesTab));
         new WebDriverWait(driver, 3000).until(ExpectedConditions.elementToBeClickable(navFilesTab));
         new WebDriverWait(driver, 3000).until(ExpectedConditions.elementToBeClickable(navCredentialsTab));
     }
 
-    public void waitForNotes(WebDriver driver) throws InterruptedException {
-        //wait-until isnt working as intended, so just using a delay
-//        Thread.sleep(500);
+    public void waitForNotes(WebDriver driver) {
         new WebDriverWait(driver, 3000)
                 .until(ExpectedConditions.visibilityOfAllElements(noteTitleList));
     }

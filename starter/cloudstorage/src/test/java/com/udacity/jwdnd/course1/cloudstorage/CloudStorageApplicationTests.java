@@ -200,8 +200,6 @@ class CloudStorageApplicationTests {
 
 		List<String> expectedNoteTitles = Arrays.asList("title1");
 		assertEquals(noteTitles, expectedNoteTitles);
-
-
 	}
 
 	@Test
