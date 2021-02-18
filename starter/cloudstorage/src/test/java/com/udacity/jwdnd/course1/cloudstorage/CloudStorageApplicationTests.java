@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.udacity.jwdnd.course1.cloudstorage.utility.Utils.addItemsToUser;
+import static com.udacity.jwdnd.course1.cloudstorage.utility.Utils.genCrudServices;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -49,32 +51,6 @@ class CloudStorageApplicationTests {
 	private static final File file1 = new File(null, "fileName1", "contentType1", (long) fileData1.length, null, fileData1);
 	private static final File file2 = new File(null, "fileName2", "contentType2", (long) fileData2.length, null, fileData2);
 
-
-	private static List<CrudService> genCrudServices(CrudService... crudServices) {
-		List<CrudService> list = new ArrayList<>();
-		for (CrudService service : crudServices) {
-			list.add(service);
-		}
-		return list;
-	}
-
-	public static CrudService itemToServiceMapper(UserItems item, List<CrudService> crudServices) {
-		for (CrudService service : crudServices) {
-			if (item.getClass() == service.getObjectType()) {
-				return service;
-			}
-		}
-		throw new IllegalStateException("Unexpected value: " + item.getClass());
-	}
-
-	public static void addItemsToUser(User user, List<CrudService> crudServices, UserItems... items) {
-		for (UserItems item : items) {
-			item.setUserId(user.getUserId());
-			CrudService crudService = itemToServiceMapper(item, crudServices);
-			crudService.createAndUpdateObject(item);
-		}
-	}
-
 	@BeforeAll
 	static void beforeAll(@Autowired UserService userService,
 						  @Autowired FileService fileService,
@@ -94,12 +70,12 @@ class CloudStorageApplicationTests {
 
 	@BeforeEach
 	public void beforeEach() {
-		this.driver = new ChromeDriver();
+		driver = new ChromeDriver();
 	}
 
 	@AfterEach
 	public void afterEach() {
-		if (this.driver != null) {
+		if (null != driver) {
 			driver.quit();
 		}
 	}
@@ -125,8 +101,6 @@ class CloudStorageApplicationTests {
 		signup(username, password);
 		login(username, password);
 	}
-
-
 
 	@Test
 	public void getLoginPage() {
