@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +39,11 @@ public class CredentialsController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    public Credential get(@PathVariable("id") Integer id, Model model) {
+    public Credential get(@PathVariable("id") Integer id, Model model,
+                          Authentication auth
+    ) {
+        User user = this.userService.get(auth.getName());
         Credential credential = credentialService.get(id);
-        User user = userService.get("user1"); //get this from auth
         Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(credential, user);
         return credential;
         //display decrypted creds to user
@@ -52,9 +55,10 @@ public class CredentialsController {
             @RequestParam("url") String url,
             @RequestParam("username") String username,
             @RequestParam("password") String password,
-            Model model
+            Model model,
+            Authentication auth
     ) {
-        User user = userService.get("user1"); //get this from auth
+        User user = this.userService.get(auth.getName());
         if (credentialId == null) {
             Credential credential = new Credential(null, url, username, null, password, user.getUserId());
             credentialService.createAndUpdateObject(credential);
@@ -69,9 +73,11 @@ public class CredentialsController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Integer id, Model model) {
+    public String delete(@PathVariable("id") Integer id, Model model,
+                         Authentication auth
+    ) {
+        User user = this.userService.get(auth.getName());
         Credential credential = credentialService.get(id);
-        User user = userService.get("user1"); //get this from auth
         Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(credential, user);
         credentialService.delete(id);
         return "redirect:/";

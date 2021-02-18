@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,9 +36,11 @@ public class FilesController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Resource> get(@PathVariable("id") Integer id, Model model) {
+    public ResponseEntity<Resource> get(@PathVariable("id") Integer id, Model model,
+                                        Authentication auth
+    ) {
+        User user = this.userService.get(auth.getName());
         File file = fileService.get(id);
-        User user = userService.get("user1"); //get this from auth
         Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(file, user);
         return ResponseEntity
                 .ok()
@@ -51,10 +54,10 @@ public class FilesController {
     }
 
     @PostMapping
-    public String add(@RequestParam("fileUpload") MultipartFile fileUpload, Model model
-    ) throws IOException
-    {
-        User user = userService.get("user1"); //get this from auth
+    public String add(@RequestParam("fileUpload") MultipartFile fileUpload, Model model,
+                      Authentication auth
+    ) throws IOException {
+        User user = this.userService.get(auth.getName());
         if(fileUpload.isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "No file selected to upload."
@@ -73,9 +76,11 @@ public class FilesController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Integer id, Model model) {
+    public String delete(@PathVariable("id") Integer id, Model model,
+                         Authentication auth
+    ) {
+        User user = this.userService.get(auth.getName());
         File existingFile = fileService.get(id);
-        User user = userService.get("user1"); //get this from auth
         Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(existingFile, user);
         fileService.delete(id);
         return "redirect:/";

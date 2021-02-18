@@ -7,6 +7,7 @@ import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import com.udacity.jwdnd.course1.cloudstorage.utility.Utils;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +30,10 @@ public class NotesController {
             @RequestParam("noteId") @Nullable Integer noteId,
             @RequestParam("noteTitle") String noteTitle,
             @RequestParam("noteDescription") String noteDescription,
-            Model model
+            Model model,
+            Authentication auth
     ) {
-        User user = userService.get("user1"); //get this from auth
+        User user = this.userService.get(auth.getName());
         if (noteId == null) {
             Note note = new Note(null, noteTitle, noteDescription, user.getUserId());
             noteService.createAndUpdateObject(note);
@@ -45,9 +47,11 @@ public class NotesController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Integer noteId, Model model) {
+    public String delete(@PathVariable("id") Integer noteId, Model model,
+                         Authentication auth
+    ) {
+        User user = this.userService.get(auth.getName());
         Note existingNote = noteService.get(noteId);
-        User user = userService.get("user1"); //get this from auth
         Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(existingNote, user);
         noteService.delete(noteId);
         return "redirect:/";

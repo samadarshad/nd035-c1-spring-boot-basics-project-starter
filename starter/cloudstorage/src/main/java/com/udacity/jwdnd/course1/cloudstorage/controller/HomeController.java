@@ -6,6 +6,7 @@ import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,27 +28,13 @@ public class HomeController {
         this.noteService = noteService;
         this.fileService = fileService;
         this.credentialService = credentialService;
-
-        // wip
-        User mockUser1 = new User(null, "user1", null, "pass", "first", "last");
-        this.userService.createAndUpdateObject(mockUser1);
-        Note note = new Note(null, "title1", "description1", mockUser1.getUserId());
-        this.noteService.createAndUpdateObject(note);
-        note = new Note(null, "title2", "description2", mockUser1.getUserId());
-        this.noteService.createAndUpdateObject(note);
-
-
-        User mockUser2 = new User(null, "user2", null, "pass", "first", "last");
-        this.userService.createAndUpdateObject(mockUser2);
-        note = new Note(null, "title1_user2", "description1", mockUser2.getUserId());
-        this.noteService.createAndUpdateObject(note);
-        note = new Note(null, "title2_user2", "description2", mockUser2.getUserId());
-        this.noteService.createAndUpdateObject(note);
     }
 
     @GetMapping
-    public String getHomePage(Model model) {
-        User user = userService.get("user1"); //get this from auth
+    public String getHomePage(Model model,
+                              Authentication auth
+    ) {
+        User user = this.userService.get(auth.getName());
         model.addAttribute("notes", noteService.getByUserId(user.getUserId()));
         model.addAttribute("files", fileService.getByUserId(user.getUserId()));
         model.addAttribute("credentials", credentialService.getByUserId(user.getUserId()));
