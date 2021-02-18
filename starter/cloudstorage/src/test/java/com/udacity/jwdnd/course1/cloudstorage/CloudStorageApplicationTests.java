@@ -134,6 +134,88 @@ class CloudStorageApplicationTests {
 		assertTrue(homePage.isLoggedIn());
 	}
 
+	@Test
+	public void newUserItemsAreEmpty() {
+		User user = new User(null, "user", null, "pass", "first", "last");
+		userService.createAndUpdateObject(user);
+		login("user", "pass");
+
+		HomePage homePage = new HomePage(driver);
+		assertTrue(homePage.isLoggedIn());
+
+		List<String> fileNames = homePage.getFileNameList();
+
+	}
+
+	@Test
+	void newUserCanAddAndReadTheirItemsAndPersistThroughLogout() {
+
+	}
+
+	@Test
+	void newUserCanEditTheirItemsAndPersistThroughLogout() {
+
+	}
+
+	@Test
+	void newUserCanDeleteTheirItemsAndPersistThroughLogout() {
+
+	}
+
+	@Test
+	void incorrectLoginShowsError() {
+		login("user1", "badpassword");
+
+		LoginPage loginPage = new LoginPage(driver);
+		// assert error is showing
+	}
+
+	@Test
+	void successfulLogoutShowsLogoutMessage() {
+		login("user1", "pass1");
+
+
+	}
+
+	@Test
+	void user1CanReadTheirExistingItems() {
+		login("user1", "pass1");
+
+		HomePage homePage = new HomePage(driver);
+		assertTrue(homePage.isLoggedIn());
+
+		List<String> fileNames = homePage.getFileNameList();
+
+		List<String> expectedList = Arrays.asList("fileName1");
+		assertEquals(fileNames, expectedList);
+	}
+
+	@Test
+	void user1CanEditTheirExistingItems() {
+
+	}
+
+	@Test
+	void user1CanDeleteTheirExistingItems() {
+
+	}
+
+	@Test
+	void user1CannotReadUser2Items() {
+
+	}
+
+	@Test
+	void user1CannotEditUser2Items() {
+
+	}
+
+	@Test
+	void user1CannotDeleteUser2Items() {
+
+	}
+
+
 
 
 }

@@ -13,12 +13,20 @@ public class HomePage {
     @FindBy(id = "logout-button")
     private WebElement logoutButton;
 
+    @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-files']/div/table/tbody/tr/th")
+    private List<WebElement> fileNameList;
+
     public HomePage (WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
 
     public Boolean isLoggedIn() {
         return logoutButton != null;
+    }
+
+    public List<String> getFileNameList() {
+        List<String> fileNameListStr = fileNameList.stream().map(item -> item.getText()).collect(Collectors.toList());
+        return fileNameListStr;
     }
 
     public void logout() {
