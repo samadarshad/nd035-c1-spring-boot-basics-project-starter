@@ -27,7 +27,7 @@ class CloudStorageApplicationTests {
 	@LocalServerPort
 	private int port;
 
-	private WebDriver driver;
+	private static WebDriver driver;
 
 	@Autowired
 	private UserService userService;
@@ -138,7 +138,8 @@ class CloudStorageApplicationTests {
 	public void whenUserSignsUpTheyCanLogin() throws InterruptedException {
 		signupAndLoginAndRedirectToHomePage("user");
 
-		Thread.sleep(3000);
+		HomePage homePage = new HomePage(driver);
+		assertTrue(homePage.isLoggedIn());
 	}
 
 	@Test
@@ -150,12 +151,15 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void whenAddUserToDatabaseTheyCanLogin() throws InterruptedException {
+	public void whenAddUserToDatabaseTheyCanLogin() {
 		User user = new User(null, "user", null, "pass", "first", "last");
 		userService.createAndUpdateObject(user);
 		login("user", "pass");
 
-        Thread.sleep(3000);
+		HomePage homePage = new HomePage(driver);
+		assertTrue(homePage.isLoggedIn());
 	}
+
+
 
 }
