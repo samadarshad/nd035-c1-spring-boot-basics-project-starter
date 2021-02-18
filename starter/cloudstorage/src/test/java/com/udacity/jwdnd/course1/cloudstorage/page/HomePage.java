@@ -54,7 +54,9 @@ public class HomePage {
         //wait-until isnt working as intended, so just using a delay
         Thread.sleep(500);
 //        new WebDriverWait(driver, 3000)
-//                .until(ExpectedConditions.visibilityOf(logoutButton));
+//                .until(ExpectedConditions.elementToBeClickable(By.id("nav-notes-tab")));
+//                .until(d -> d.findElement(By.id("nav-notes-tab")));
+//                .until(ExpectedConditions.elementToBeClickable(navNotesTab));
     }
 
     public void waitForNotes(WebDriver driver) throws InterruptedException {
