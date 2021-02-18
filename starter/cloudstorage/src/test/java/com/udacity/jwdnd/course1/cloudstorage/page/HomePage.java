@@ -51,7 +51,7 @@ public class HomePage {
     }
 
     public void waitForFiles(WebDriver driver) {
-        new WebDriverWait(driver, 1000)
+        new WebDriverWait(driver, 3000)
                 .until(ExpectedConditions.visibilityOfAllElements(fileNameList));
     }
 
@@ -60,7 +60,7 @@ public class HomePage {
     }
 
     public void waitForNotes(WebDriver driver) {
-        new WebDriverWait(driver, 1000)
+        new WebDriverWait(driver, 3000)
                 .until(ExpectedConditions.visibilityOfAllElements(noteTitleList));
     }
 
