@@ -5,7 +5,9 @@ import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -178,16 +180,26 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	void user1CanReadTheirExistingItems() {
+	void user1CanReadTheirExistingItems() throws InterruptedException {
 		login("user1", "pass1");
 
 		HomePage homePage = new HomePage(driver);
 		assertTrue(homePage.isLoggedIn());
 
+		homePage.navFilesTab.click();
 		List<String> fileNames = homePage.getFileNameList();
 
-		List<String> expectedList = Arrays.asList("fileName1");
-		assertEquals(fileNames, expectedList);
+		homePage.navNotesTab.click();
+		homePage.waitForNotes(driver);
+		List<String> noteTitles = homePage.getNoteTitleList();
+
+		List<String> expectedFileNames = Arrays.asList("fileName1");
+		List<String> expectedNoteTitles = Arrays.asList("title1");
+		assertEquals(fileNames, expectedFileNames);
+		assertEquals(noteTitles, expectedNoteTitles);
+		// download the file and expect
+
+
 	}
 
 	@Test
