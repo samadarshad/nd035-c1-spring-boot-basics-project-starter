@@ -50,7 +50,7 @@ class FileControllerTests {
     private static final File file2 = new File(null, "fileName2", "application/octet-stream", (long) fileData2.length, null, fileData2);
 
     private static final String downloadsDirectory = System.getProperty("user.dir") + java.io.File.separator + "testDownloads";
-
+    private static final long downloadWaitTime = 3000;
 
     @BeforeAll
     static void beforeAll(@Autowired UserService userService,
@@ -102,10 +102,12 @@ class FileControllerTests {
         homePage.navFilesTab.click();
         homePage.waitForFiles(driver);
         List<String> fileNames = homePage.getFileNameList();
+        assert(fileNames.size() == 1);
         int index = 0;
         homePage.downloadFile(index);
+        Thread.sleep(downloadWaitTime); // wait for download
         java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + fileNames.get(index));
-        Thread.sleep(1000); // wait for download
+
 
         assertTrue(downloadedFile.exists());
     }
@@ -114,8 +116,9 @@ class FileControllerTests {
     void user1CanDownloadTheirFileViaUrl() throws InterruptedException {
         Utils.login(driver, port, "user1", "pass1");
         driver.get("http://localhost:" + port + "/files/" + file1.getFileId());
+        Thread.sleep(downloadWaitTime); // wait for download
         java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + file1.getFileName());
-        Thread.sleep(1000); // wait for download
+
 
         assertTrue(downloadedFile.exists());
     }
@@ -124,8 +127,9 @@ class FileControllerTests {
     void user1CannotDownloadUser2File() throws InterruptedException {
         Utils.login(driver, port, "user1", "pass1");
         driver.get("http://localhost:" + port + "/files/" + file2.getFileId());
+        Thread.sleep(downloadWaitTime); // wait for download
         java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + file2.getFileName());
-        Thread.sleep(1000); // wait for download
+
 
         assertFalse(downloadedFile.exists());
     }

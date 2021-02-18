@@ -212,7 +212,6 @@ class CloudStorageApplicationTests {
 		List<String> expectedNoteTitles = Arrays.asList("title1");
 		assertEquals(fileNames, expectedFileNames);
 		assertEquals(noteTitles, expectedNoteTitles);
-		// download the file and expect
 
 
 	}
