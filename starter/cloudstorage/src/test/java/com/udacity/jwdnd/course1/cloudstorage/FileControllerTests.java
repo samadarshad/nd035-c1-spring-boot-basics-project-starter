@@ -38,9 +38,6 @@ class FileControllerTests {
 
     private static WebDriver driver;
 
-    @Autowired
-    private FileService fileService;
-
     private static final User user1 = new User(null, "user1", null, "pass1", "first1", "last1");
     private static final User user2 = new User(null, "user2", null, "pass2", "first2", "last2");
     private static final byte [] fileData1a = "Hello World1a".getBytes(StandardCharsets.UTF_8);
@@ -92,15 +89,35 @@ class FileControllerTests {
         clearDownloadsDirectory();
     }
 
-    public void clearDownloadsDirectory() {
+    private void clearDownloadsDirectory() {
         java.io.File folder = new java.io.File(downloadsDirectory);
         for(java.io.File file: folder.listFiles())
             if (!file.isDirectory())
                 file.delete();
     }
 
+    private void loginAndGoToFilesTab() {
+        Utils.login(driver, port, "user1", "pass1");
+        HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
+        homePageFileTab.waitForNav(driver);
+        Utils.click(driver, homePageFileTab.navFilesTab);
+        homePageFileTab.waitForFiles(driver);
+    }
+
+    private void testDownloadOf(File file) throws InterruptedException, IOException {
+        //download file
+        String fileName = file.getFileName();
+        HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
+        homePageFileTab.downloadFileByFilename(driver, fileName);
+        Thread.sleep(fileTransferWaitTime); // wait for download
+
+        //check file
+        byte[] fileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + fileName));
+        assertArrayEquals(fileContent, file.getFileData());
+    }
+
     @Test
-    void user1CanReadFilenames() throws InterruptedException {
+    void user1CanReadFilenames() {
         loginAndGoToFilesTab();
         HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
         List<String> fileNames = homePageFileTab.getFileNameList();
@@ -116,18 +133,10 @@ class FileControllerTests {
         List<String> fileNames = homePageFileTab.getFileNameList();
 
         //test file1a
-        int index = 0;
-        homePageFileTab.downloadFileByFilename(driver, fileNames.get(index));
-        Thread.sleep(fileTransferWaitTime); // wait for download
-        byte[] fileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + fileNames.get(index)));
-        assertArrayEquals(fileContent, file1a.getFileData());
+        testDownloadOf(file1a);
 
         //test file1b
-        index = 1;
-        homePageFileTab.downloadFileByFilename(driver, fileNames.get(index));
-        Thread.sleep(fileTransferWaitTime); // wait for download
-        fileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + fileNames.get(index)));
-        assertArrayEquals(fileContent, file1b.getFileData());
+        testDownloadOf(file1b);
     }
 
     @Test
@@ -139,14 +148,6 @@ class FileControllerTests {
         Thread.sleep(fileTransferWaitTime); // wait for download
         byte[] fileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + file1a.getFileName()));
         assertArrayEquals(fileContent, file1a.getFileData());
-    }
-
-    void loginAndGoToFilesTab() {
-        Utils.login(driver, port, "user1", "pass1");
-        HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
-        homePageFileTab.waitForNav(driver);
-        Utils.click(driver, homePageFileTab.navFilesTab);
-        homePageFileTab.waitForFiles(driver);
     }
 
     @Test
@@ -218,5 +219,4 @@ class FileControllerTests {
 
         assertFalse(downloadedFile.exists());
     }
-
 }
