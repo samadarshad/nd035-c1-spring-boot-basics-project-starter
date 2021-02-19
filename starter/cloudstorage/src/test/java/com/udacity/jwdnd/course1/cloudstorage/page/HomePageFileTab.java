@@ -80,6 +80,11 @@ public class HomePageFileTab {
         click(driver, downloadLink);
     }
 
+    public void downloadFileByFilename(WebDriver driver, String filename) {
+        String fileId = getFileIdOfFilename(driver, filename);
+        downloadFileById(driver, fileId);
+    }
+
     public void uploadFile(WebDriver driver, String filePath) {
         fileUpload.sendKeys(filePath);
         click(driver, uploadButton);

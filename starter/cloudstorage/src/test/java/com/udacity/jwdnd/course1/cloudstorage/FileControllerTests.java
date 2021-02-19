@@ -149,7 +149,6 @@ class FileControllerTests {
 
     @Test
     void userCanUploadFileAndDownloadIt() throws InterruptedException, IOException {
-        byte[] fileData = "Hello World1a".getBytes(StandardCharsets.UTF_8);
         String fileName = "fileUpload1a";
         String filePath = uploadsDirectory + java.io.File.separator + fileName;
 
@@ -166,13 +165,13 @@ class FileControllerTests {
         assertTrue(fileNames.contains(fileName));
 
         //download
-        String fileId = homePageFileTab.getFileIdOfFilename(driver, fileName);
-        homePageFileTab.downloadFileById(driver, fileId);
+        homePageFileTab.downloadFileByFilename(driver, fileName);
         Thread.sleep(fileTransferWaitTime);
 
         //check contents
-        byte[] fileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + fileName));
-        assertArrayEquals(fileContent, fileData);
+        byte[] downloadedFileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + fileName));
+        byte[] originalUploadedFileContent = Files.readAllBytes(Path.of(filePath));
+        assertArrayEquals(originalUploadedFileContent, downloadedFileContent);
     }
 
 
