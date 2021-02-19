@@ -47,10 +47,6 @@ public class HomePageFileTab {
                 .until(ExpectedConditions.visibilityOfAllElements(fileNameList));
     }
 
-    public void downloadFile(WebDriver driver, int index) {
-        click(driver, fileDownloadLinkList.get(index));
-    }
-
     public List<String> getFileIdsList(WebDriver driver) {
         //*[@id="fileTable"]/tbody
         String xpath = "//*[@id=\"fileTable\"]/tbody/tr";

@@ -116,5 +116,20 @@ class NoteControllerTests {
         assertTrue(noteTitles.contains(newTitle));
     }
 
+    @Test
+    void userCanDeleteTheirNote() {
+        loginAndGoToNotesTab();
+        HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
+
+        List<String> noteTitles = homePageNoteTab.getNoteTitleList();
+        assertTrue(noteTitles.contains(note1c.getNotetitle()));
+
+        homePageNoteTab.deleteNoteByTitle(driver, note1c.getNotetitle());
+        homePageNoteTab.waitForNotes(driver);
+        
+        noteTitles = homePageNoteTab.getNoteTitleList();
+        assertFalse(noteTitles.contains(note1c.getNotetitle()));
+    }
+
 
 }

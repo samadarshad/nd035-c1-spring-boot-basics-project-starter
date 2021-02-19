@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.page;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.WebDriverWaitTimeoutSeconds;
+import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.click;
 
 public class HomePageNoteTab {
     @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-notes']/div[1]/table/tbody/tr/th")
@@ -61,11 +63,34 @@ public class HomePageNoteTab {
                 .until(ExpectedConditions.visibilityOf(noteSaveChangesButton));
     }
 
+    public String getIdStrOfItemName(WebDriver driver, String noteTitle) {
+        return Utils.getIdStrOfItemName(driver, noteTitle, "noteTable");
+    }
+
+    public Integer getIdOfItemName(WebDriver driver, String filename) {
+        return Utils.getIdOfItemName(driver, filename, "noteTable", "note");
+    }
+
+    public String getItemNameById(WebDriver driver, String id) {
+        return Utils.getItemNameById(driver, id);
+    }
+
     public List<String> getNoteTitleList() {
         return noteTitleList.stream().map(item -> item.getText()).collect(Collectors.toList());
     }
 
     public List<String> getNoteDescriptionList() {
         return noteDescriptionList.stream().map(item -> item.getText()).collect(Collectors.toList());
+    }
+
+    public void deleteNoteById(WebDriver driver, String id) {
+        String xpath = "//*[@id=\"" + id + "\"]/td[1]/form/button";
+        WebElement deleteButton = driver.findElement(By.xpath(xpath));
+        click(driver, deleteButton);
+    }
+
+    public void deleteNoteByTitle(WebDriver driver, String title) {
+        String noteId = getIdStrOfItemName(driver, title);
+        deleteNoteById(driver, noteId);
     }
 }
