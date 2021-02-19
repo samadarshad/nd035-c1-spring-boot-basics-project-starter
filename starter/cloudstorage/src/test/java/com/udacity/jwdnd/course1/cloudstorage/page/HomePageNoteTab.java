@@ -15,6 +15,7 @@ import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.WebDriverWaitTim
 import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.click;
 
 public class HomePageNoteTab {
+
     @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-notes']/div[1]/table/tbody/tr/th")
     private List<WebElement> noteTitleList;
 
@@ -48,12 +49,12 @@ public class HomePageNoteTab {
                 .until(ExpectedConditions.elementToBeClickable(navNotesTab));
     }
 
-    public void waitForNotes(WebDriver driver) {
+    public void waitForItems(WebDriver driver) {
         new WebDriverWait(driver, WebDriverWaitTimeoutSeconds)
                 .until(ExpectedConditions.visibilityOfAllElements(noteTitleList));
     }
 
-    public void waitForAddNoteButton(WebDriver driver) {
+    public void waitForAddButton(WebDriver driver) {
         new WebDriverWait(driver, WebDriverWaitTimeoutSeconds)
                 .until(ExpectedConditions.elementToBeClickable(addNoteButton));
     }
@@ -71,11 +72,11 @@ public class HomePageNoteTab {
         return Utils.getIdOfItemName(driver, filename, "noteTable", "note");
     }
 
-    public String getNoteTitleByIdStr(WebDriver driver, String id) {
+    public String getItemNameByIdStr(WebDriver driver, String id) {
         return Utils.getItemNameByIdStr(driver, id);
     }
 
-    public List<String> getNoteTitleList() {
+    public List<String> getItemNameList() {
         return noteTitleList.stream().map(item -> item.getText()).collect(Collectors.toList());
     }
 
@@ -84,18 +85,26 @@ public class HomePageNoteTab {
     }
 
     public void deleteNoteByTitle(WebDriver driver, String title) {
-        String noteId = getIdStrOfItemName(driver, title);
-        String xpath = "//*[@id=\"" + noteId + "\"]/td[1]/form/button";
-        WebElement deleteButton = driver.findElement(By.xpath(xpath));
-        click(driver, deleteButton);
+        Utils.deleteItemByItemName(driver, title, "noteTable");
     }
 
     public void editNoteByTitle(WebDriver driver, String title) {
-        String noteId = getIdStrOfItemName(driver, title);
-        String xpath = "//*[@id=\"" + noteId + "\"]/td[1]/button";
-        WebElement editButton = driver.findElement(By.xpath(xpath));
-        click(driver, editButton);
+        Utils.editItemByItemName(driver, title, "noteTable");
     }
+
+//    public void deleteItemByItemName(WebDriver driver, String itemName) {
+//        String idStr = getIdStrOfItemName(driver, itemName);
+//        String xpath = "//*[@id=\"" + idStr + "\"]/td[1]/form/button";
+//        WebElement deleteButton = driver.findElement(By.xpath(xpath));
+//        click(driver, deleteButton);
+//    }
+//
+//    public void editItemByItemName(WebDriver driver, String title) {
+//        String idStr = getIdStrOfItemName(driver, title);
+//        String xpath = "//*[@id=\"" + idStr + "\"]/td[1]/button";
+//        WebElement editButton = driver.findElement(By.xpath(xpath));
+//        click(driver, editButton);
+//    }
 
     public String getNoteDescriptionByTitle(WebDriver driver, String title) {
         String noteId = getIdStrOfItemName(driver, title);

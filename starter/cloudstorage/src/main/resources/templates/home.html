@@ -81,9 +81,9 @@
                                 <tbody>
                                     <tr th:each="note : ${notes}" th:id="${'note'+ note.noteId}">
                                         <td>
-                                            <button type="button" class="btn btn-success" th:attr="onclick=|showNoteModal('${note.noteId}','${note.notetitle}', '${note.notedescription}')|">Edit</button>
+                                            <button type="button" th:id="${'edit-note'+ note.noteId}" class="btn btn-success" th:attr="onclick=|showNoteModal('${note.noteId}','${note.notetitle}', '${note.notedescription}')|">Edit</button>
                                             <form action="#" th:action="@{'/notes/{id}'(id=${note.noteId})}" th:method="delete" >
-                                                <button class="btn btn-danger" type="submit">
+                                                <button th:id="${'delete-note'+ note.noteId}" class="btn btn-danger" type="submit">
                                                     Delete
                                                 </button>
                                             </form>
@@ -144,9 +144,9 @@
                                 <tbody>
                                 <tr th:each="credential: ${credentials}" th:id="${'credential'+ credential.credentialId}">
                                     <td>
-                                        <button type="button" class="btn btn-success" th:attr="onclick=|showCredentialModal('${credential.credentialId}')|">Edit</button>
+                                        <button type="button" th:id="${'edit-credential'+ credential.credentialId}" class="btn btn-success" th:attr="onclick=|showCredentialModal('${credential.credentialId}')|">Edit</button>
                                         <form action="#" th:action="@{'/credentials/{id}'(id=${credential.credentialId})}" th:method="delete" >
-                                            <button class="btn btn-danger" type="submit">
+                                            <button th:id="${'delete-credential'+ credential.credentialId}" class="btn btn-danger" type="submit">
                                                 Delete
                                             </button>
                                         </form>
@@ -187,8 +187,8 @@
                                         </form>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="$('#credentialSubmit').click();">Save changes</button>
+                                        <button type="button" id="credential-cancel-changes" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" id="credential-save-changes" class="btn btn-primary" onclick="$('#credentialSubmit').click();">Save changes</button>
                                     </div>
                                 </div>
                             </div>

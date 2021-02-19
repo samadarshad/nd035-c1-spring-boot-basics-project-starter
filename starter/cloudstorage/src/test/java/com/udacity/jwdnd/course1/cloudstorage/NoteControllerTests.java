@@ -31,11 +31,6 @@ class NoteControllerTests {
 
     private static WebDriver driver;
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private NoteService noteService;
-
     private static final User user1 = new User(null, "user1", null, "pass1", "first1", "last1");
     private static final User user2 = new User(null, "user2", null, "pass2", "first2", "last2");
     private static final Note note1a = new Note(null, "title1a", "description1a", null); // to remain same
@@ -79,15 +74,15 @@ class NoteControllerTests {
         HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
         homePageNoteTab.waitForNav(driver);
         Utils.click(driver, homePageNoteTab.navNotesTab);
-        homePageNoteTab.waitForNotes(driver);
+        homePageNoteTab.waitForItems(driver);
     }
 
     @Test
-    void user1CanReadTheirNotes() {
+    void user1CanReadTheirNotesButNotUser2Notes() {
         loginAndGoToNotesTab();
 
         HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
-        List<String> noteTitles = homePageNoteTab.getNoteTitleList();
+        List<String> noteTitles = homePageNoteTab.getItemNameList();
         List<String> noteDescriptions = homePageNoteTab.getNoteDescriptionList();
 
         List<String> expectedNoteTitles = Arrays.asList(note1a.getNotetitle(), note1b.getNotetitle());
@@ -105,7 +100,7 @@ class NoteControllerTests {
     void userCanAddNewNote() {
         loginAndGoToNotesTab();
         HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
-        homePageNoteTab.waitForAddNoteButton(driver);
+        homePageNoteTab.waitForAddButton(driver);
         click(driver, homePageNoteTab.addNoteButton);
         homePageNoteTab.waitForModal(driver);
 
@@ -115,10 +110,10 @@ class NoteControllerTests {
         homePageNoteTab.noteTitleInput.sendKeys(newTitle);
         homePageNoteTab.noteDescriptionInput.sendKeys(newDescription);
         click(driver, homePageNoteTab.noteSaveChangesButton);
-        homePageNoteTab.waitForNotes(driver);
+        homePageNoteTab.waitForItems(driver);
 
         //check note is added
-        List<String> noteTitles = homePageNoteTab.getNoteTitleList();
+        List<String> noteTitles = homePageNoteTab.getItemNameList();
         assertTrue(noteTitles.contains(newTitle));
     }
 
@@ -127,13 +122,13 @@ class NoteControllerTests {
         loginAndGoToNotesTab();
         HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
 
-        List<String> noteTitles = homePageNoteTab.getNoteTitleList();
+        List<String> noteTitles = homePageNoteTab.getItemNameList();
         assertTrue(noteTitles.contains(note1c.getNotetitle()));
 
         homePageNoteTab.deleteNoteByTitle(driver, note1c.getNotetitle());
-        homePageNoteTab.waitForNotes(driver);
+        homePageNoteTab.waitForItems(driver);
 
-        noteTitles = homePageNoteTab.getNoteTitleList();
+        noteTitles = homePageNoteTab.getItemNameList();
         assertFalse(noteTitles.contains(note1c.getNotetitle()));
     }
 
@@ -142,7 +137,7 @@ class NoteControllerTests {
         loginAndGoToNotesTab();
         HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
 
-        List<String> noteTitles = homePageNoteTab.getNoteTitleList();
+        List<String> noteTitles = homePageNoteTab.getItemNameList();
         assertTrue(noteTitles.contains(note1b.getNotetitle()));
 
         homePageNoteTab.editNoteByTitle(driver, note1b.getNotetitle());
@@ -152,7 +147,7 @@ class NoteControllerTests {
         String newDescription = "edit description";
         homePageNoteTab.noteDescriptionInput.sendKeys(Keys.chord(Keys.CONTROL, "a"), newDescription); // selecting all text to overwrite
         click(driver, homePageNoteTab.noteSaveChangesButton);
-        homePageNoteTab.waitForNotes(driver);
+        homePageNoteTab.waitForItems(driver);
 
         String description = homePageNoteTab.getNoteDescriptionByTitle(driver, note1b.getNotetitle());
         assertEquals(newDescription, description);
@@ -163,7 +158,7 @@ class NoteControllerTests {
         loginAndGoToNotesTab();
         HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
 
-        List<String> noteTitles = homePageNoteTab.getNoteTitleList();
+        List<String> noteTitles = homePageNoteTab.getItemNameList();
         assertTrue(noteTitles.contains(note1d.getNotetitle()));
         String noteIdStr = homePageNoteTab.getIdStrOfItemName(driver, note1d.getNotetitle()); //keep id to refer in future
 
@@ -174,9 +169,9 @@ class NoteControllerTests {
         String newTitle = "edit title";
         homePageNoteTab.noteTitleInput.sendKeys(Keys.chord(Keys.CONTROL, "a"), newTitle); // selecting all text to overwrite
         click(driver, homePageNoteTab.noteSaveChangesButton);
-        homePageNoteTab.waitForNotes(driver);
+        homePageNoteTab.waitForItems(driver);
 
-        String title = homePageNoteTab.getNoteTitleByIdStr(driver, noteIdStr);
+        String title = homePageNoteTab.getItemNameByIdStr(driver, noteIdStr);
         assertEquals(newTitle, title);
     }
 

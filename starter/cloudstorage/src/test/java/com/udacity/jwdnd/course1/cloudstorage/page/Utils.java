@@ -45,7 +45,7 @@ public final class Utils {
         List<String> fileIdsList = getIdsList(driver, tableId);
         return fileIdsList.stream().filter(
                 id -> getItemNameByIdStr(driver, id).equals(itemName)
-        ).collect(Collectors.toList()).get(0);
+        ).collect(Collectors.toList()).get(0); // this only gets the id of the first matching itemname
     }
 
     public static Integer getIdOfItemName(WebDriver driver, String filename, String tableId, String idPrefix) {
@@ -57,6 +57,20 @@ public final class Utils {
         String xpath = "//*[@id=\"" + id + "\"]/th";
         WebElement title = driver.findElement(By.xpath(xpath));
         return title.getText();
+    }
+
+    public static void deleteItemByItemName(WebDriver driver, String itemName, String tableId) {
+        String idStr = getIdStrOfItemName(driver, itemName, tableId);
+        String xpath = "//*[@id=\"delete-" + idStr + "\"]";
+        WebElement deleteButton = driver.findElement(By.xpath(xpath));
+        click(driver, deleteButton);
+    }
+
+    public static void editItemByItemName(WebDriver driver, String title, String tableId) {
+        String idStr = getIdStrOfItemName(driver, title, tableId);
+        String xpath = "//*[@id=\"edit-" + idStr + "\"]";
+        WebElement editButton = driver.findElement(By.xpath(xpath));
+        click(driver, editButton);
     }
     // ^ consistent html format
 }
