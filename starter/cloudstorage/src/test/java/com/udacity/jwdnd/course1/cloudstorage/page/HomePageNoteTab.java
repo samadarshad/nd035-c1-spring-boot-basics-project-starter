@@ -71,7 +71,7 @@ public class HomePageNoteTab {
         return Utils.getIdOfItemName(driver, filename, "noteTable", "note");
     }
 
-    public String getItemNameById(WebDriver driver, String id) {
+    public String getNoteTitleByIdStr(WebDriver driver, String id) {
         return Utils.getItemNameByIdStr(driver, id);
     }
 

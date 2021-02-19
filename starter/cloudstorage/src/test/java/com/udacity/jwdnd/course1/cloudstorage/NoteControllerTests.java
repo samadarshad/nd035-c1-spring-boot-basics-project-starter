@@ -95,6 +95,10 @@ class NoteControllerTests {
 
         assertTrue(noteTitles.containsAll(expectedNoteTitles));
         assertTrue(noteDescriptions.containsAll(expectedNoteDescriptions));
+
+        //check user1 cannot read user2's notes
+        assertFalse(noteTitles.contains(note2.getNotetitle()));
+        assertFalse(noteDescriptions.contains(note2.getNotedescription()));
     }
 
     @Test
@@ -152,6 +156,28 @@ class NoteControllerTests {
 
         String description = homePageNoteTab.getNoteDescriptionByTitle(driver, note1b.getNotetitle());
         assertEquals(newDescription, description);
+    }
+
+    @Test
+    void userCanEditTheirNoteTitle() {
+        loginAndGoToNotesTab();
+        HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
+
+        List<String> noteTitles = homePageNoteTab.getNoteTitleList();
+        assertTrue(noteTitles.contains(note1d.getNotetitle()));
+        String noteIdStr = homePageNoteTab.getIdStrOfItemName(driver, note1d.getNotetitle()); //keep id to refer in future
+
+        homePageNoteTab.editNoteByTitle(driver, note1d.getNotetitle());
+        homePageNoteTab.waitForModal(driver);
+
+        //edit note
+        String newTitle = "edit title";
+        homePageNoteTab.noteTitleInput.sendKeys(Keys.chord(Keys.CONTROL, "a"), newTitle); // selecting all text to overwrite
+        click(driver, homePageNoteTab.noteSaveChangesButton);
+        homePageNoteTab.waitForNotes(driver);
+
+        String title = homePageNoteTab.getNoteTitleByIdStr(driver, noteIdStr);
+        assertEquals(newTitle, title);
     }
 
 
