@@ -1,7 +1,5 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
-import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.page.*;
@@ -13,10 +11,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -74,13 +70,19 @@ class NoteControllerTests {
         }
     }
 
-    @Test
-    void user1CanReadTheirNotes() throws InterruptedException {
+    private void loginAndGoToNotesTab() {
         Utils.login(driver, port, "user1", "pass1");
         HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
-        homePageNoteTab.waitForNotesTab(driver);
-        click(driver, homePageNoteTab.navNotesTab);
+        homePageNoteTab.waitForNav(driver);
+        Utils.click(driver, homePageNoteTab.navNotesTab);
         homePageNoteTab.waitForNotes(driver);
+    }
+
+    @Test
+    void user1CanReadTheirNotes() throws InterruptedException {
+        loginAndGoToNotesTab();
+
+        HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
         List<String> noteTitles = homePageNoteTab.getNoteTitleList();
 
         List<String> expectedNoteTitles = Arrays.asList("title1");

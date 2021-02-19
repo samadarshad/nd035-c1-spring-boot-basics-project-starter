@@ -22,11 +22,14 @@ public class HomePageNoteTab {
     @FindBy(id = "nav-notes-tab")
     public WebElement navNotesTab;
 
+    @FindBy(xpath = "//*[@id=\"nav-notes\"]/button")
+    public WebElement addNoteButton;
+
     public HomePageNoteTab (WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
 
-    public void waitForNotesTab(WebDriver driver) {
+    public void waitForNav(WebDriver driver) {
         new WebDriverWait(driver, WebDriverWaitTimeoutSeconds)
                 .until(ExpectedConditions.elementToBeClickable(navNotesTab));
     }
