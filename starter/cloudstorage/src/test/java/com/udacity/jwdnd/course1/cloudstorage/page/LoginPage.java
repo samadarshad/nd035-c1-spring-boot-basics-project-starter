@@ -4,8 +4,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.click;
+import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.*;
 
 public class LoginPage {
     @FindBy(id = "inputUsername")
@@ -24,9 +26,13 @@ public class LoginPage {
         PageFactory.initElements(driver, this);
     }
 
+    public void waitForLoginPage(WebDriver driver) {
+        new WebDriverWait(driver, WebDriverWaitTimeoutSeconds).until(ExpectedConditions.elementToBeClickable(submitButton));
+    }
+
     public void login(WebDriver driver, String username, String password) {
-        inputUsername.sendKeys(username);
-        inputPassword.sendKeys(password);
+        sendKeys(driver, inputUsername, username);
+        sendKeys(driver, inputPassword, password);
         click(driver, submitButton);
     }
 

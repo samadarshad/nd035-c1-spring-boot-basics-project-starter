@@ -23,7 +23,7 @@ public final class Utils {
     public static void login(WebDriver driver, int port, String username, String password) {
         driver.get("http://localhost:" + port + "/login");
         LoginPage loginPage = new LoginPage(driver);
-
+        loginPage.waitForLoginPage(driver);
         loginPage.login(driver, username, password);
     }
 
@@ -35,6 +35,10 @@ public final class Utils {
     public static void sendKeys(WebDriver driver, WebElement element, String keys) {
         JavascriptExecutor jexec = (JavascriptExecutor) driver;
         jexec.executeScript("arguments[0].value='" + keys + "';", element);
+    }
+
+    public static void waitForPageLoad() {
+        //temporary workaround for bug which causes tests to be intermittent
     }
 
 }
