@@ -72,5 +72,12 @@ public final class Utils {
         WebElement editButton = driver.findElement(By.xpath(xpath));
         click(driver, editButton);
     }
+
+    public static String getColumnOfItemByItemName(WebDriver driver, String itemName, Integer columnId, String tableId) {
+        String idStr = getIdStrOfItemName(driver, itemName, tableId);
+        String xpath = "//*[@id=\"" + idStr + "\"]/td[" + columnId + "]";
+        WebElement description = driver.findElement(By.xpath(xpath));
+        return description.getText();
+    }
     // ^ consistent html format
 }

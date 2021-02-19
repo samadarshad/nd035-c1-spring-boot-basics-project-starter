@@ -185,7 +185,7 @@ class FileControllerTests {
 
         //select file1c
         String fileName = file1c.getFileName();
-        int fileId = homePageFileTab.getIdOfFilename(driver, fileName);
+        int fileId = homePageFileTab.getIdOfFilename(driver, fileName); // used for url download later
 
         //delete file
         assertTrue(fileNames.contains(fileName));

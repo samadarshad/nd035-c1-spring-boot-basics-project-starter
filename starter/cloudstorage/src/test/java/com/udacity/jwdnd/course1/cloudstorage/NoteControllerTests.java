@@ -160,7 +160,7 @@ class NoteControllerTests {
 
         List<String> noteTitles = homePageNoteTab.getItemNameList();
         assertTrue(noteTitles.contains(note1d.getNotetitle()));
-        String noteIdStr = homePageNoteTab.getIdStrOfItemName(driver, note1d.getNotetitle()); //keep id to refer in future
+        String noteIdStr = homePageNoteTab.getIdStrOfNoteTitle(driver, note1d.getNotetitle()); //keep id to refer in future
 
         homePageNoteTab.editNoteByTitle(driver, note1d.getNotetitle());
         homePageNoteTab.waitForModal(driver);
@@ -171,7 +171,7 @@ class NoteControllerTests {
         click(driver, homePageNoteTab.noteSaveChangesButton);
         homePageNoteTab.waitForItems(driver);
 
-        String title = homePageNoteTab.getItemNameByIdStr(driver, noteIdStr);
+        String title = homePageNoteTab.getNoteTitleByIdStr(driver, noteIdStr);
         assertEquals(newTitle, title);
     }
 

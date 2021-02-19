@@ -97,16 +97,10 @@ public class HomePageCredentialsTab {
     }
 
     public String getCredentialUsernameByUrl(WebDriver driver, String url) {
-        String idStr = getIdStrOfItemName(driver, url);
-        String xpath = "//*[@id=\"" + idStr + "\"]/td[2]";
-        WebElement description = driver.findElement(By.xpath(xpath));
-        return description.getText();
+        return Utils.getColumnOfItemByItemName(driver, url, 2, tableName);
     }
 
     public String getCredentialPasswordByUrl(WebDriver driver, String url) {
-        String idStr = getIdStrOfItemName(driver, url);
-        String xpath = "//*[@id=\"" + idStr + "\"]/td[3]";
-        WebElement description = driver.findElement(By.xpath(xpath));
-        return description.getText();
+        return Utils.getColumnOfItemByItemName(driver, url, 3, tableName);
     }
 }

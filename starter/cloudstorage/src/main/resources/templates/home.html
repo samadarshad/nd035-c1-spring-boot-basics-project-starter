@@ -51,9 +51,9 @@
                                 <tbody>
                                 <tr th:each="file : ${files}" th:id="${'file'+ file.fileId}">
                                     <td>
-                                        <a target="_blank"  class="btn btn-success" th:href="@{'/files/{id}'(id=${file.fileId})}">View</a>
+                                        <a target="_blank"  th:id="${'edit-file'+ file.fileId}" class="btn btn-success" th:href="@{'/files/{id}'(id=${file.fileId})}">View</a>
                                         <form action="#" th:action="@{'/files/{id}'(id=${file.fileId})}" th:method="delete" >
-                                            <button class="btn btn-danger" type="submit">
+                                            <button th:id="${'delete-file'+ file.fileId}" class="btn btn-danger" type="submit">
                                                 Delete
                                             </button>
                                         </form>

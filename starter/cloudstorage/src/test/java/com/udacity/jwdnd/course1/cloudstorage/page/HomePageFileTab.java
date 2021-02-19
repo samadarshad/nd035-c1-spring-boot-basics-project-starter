@@ -29,6 +29,9 @@ public class HomePageFileTab {
     @FindBy(id = "upload-button")
     public WebElement uploadButton;
 
+    public String tableName = "fileTable";
+    public String idPrefix = "file";
+
     public HomePageFileTab (WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -47,53 +50,16 @@ public class HomePageFileTab {
                 .until(ExpectedConditions.visibilityOfAllElements(fileNameList));
     }
 
-    public List<String> getFileIdsList(WebDriver driver) {
-        //*[@id="fileTable"]/tbody
-        String xpath = "//*[@id=\"fileTable\"]/tbody/tr";
-        List<WebElement> fileIdsList = driver.findElements(By.xpath(xpath));
-        return fileIdsList.stream().map(item -> item.getAttribute("id")).collect(Collectors.toList());
-    }
-
-    public String getFileIdOfFilename(WebDriver driver, String filename) {
-        List<String> fileIdsList = getFileIdsList(driver);
-        return fileIdsList.stream().filter(
-                id -> getFilenameById(driver, id).equals(filename)
-        ).collect(Collectors.toList()).get(0);
-    }
-
     public Integer getIdOfFilename(WebDriver driver, String filename) {
-        String fileIdStr = getFileIdOfFilename(driver, filename);
-        return Integer.parseInt(fileIdStr.split("file")[1]);
-    }
-
-    public String getFilenameById(WebDriver driver, String id) {
-        //*[@id="file4"]/th
-        String xpath = "//*[@id=\"" + id + "\"]/th";
-        WebElement filename = driver.findElement(By.xpath(xpath));
-        return filename.getText();
-    }
-
-    public void downloadFileById(WebDriver driver, String id) {
-        //*[@id="file4"]/td/a
-        String xpath = "//*[@id=\"" + id + "\"]/td/a";
-        WebElement downloadLink = driver.findElement(By.xpath(xpath));
-        click(driver, downloadLink);
-    }
-
-    public void deleteFileById(WebDriver driver, String id) {
-        String xpath = "//*[@id=\"" + id + "\"]/td/form/button";
-        WebElement deleteButton = driver.findElement(By.xpath(xpath));
-        click(driver, deleteButton);
+        return Utils.getIdOfItemName(driver, filename, tableName, idPrefix);
     }
 
     public void deleteFileByFilename(WebDriver driver, String filename) {
-        String fileId = getFileIdOfFilename(driver, filename);
-        deleteFileById(driver, fileId);
+        Utils.deleteItemByItemName(driver, filename, tableName);
     }
 
     public void downloadFileByFilename(WebDriver driver, String filename) {
-        String fileId = getFileIdOfFilename(driver, filename);
-        downloadFileById(driver, fileId);
+        Utils.editItemByItemName(driver, filename, tableName);
     }
 
     public void uploadFile(WebDriver driver, String filePath) {

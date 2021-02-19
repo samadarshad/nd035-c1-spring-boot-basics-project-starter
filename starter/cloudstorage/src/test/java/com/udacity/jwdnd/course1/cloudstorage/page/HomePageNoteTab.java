@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.WebDriverWaitTimeoutSeconds;
-import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.click;
 
 public class HomePageNoteTab {
 
@@ -67,15 +66,11 @@ public class HomePageNoteTab {
                 .until(ExpectedConditions.visibilityOf(noteSaveChangesButton));
     }
 
-    public String getIdStrOfItemName(WebDriver driver, String noteTitle) {
+    public String getIdStrOfNoteTitle(WebDriver driver, String noteTitle) {
         return Utils.getIdStrOfItemName(driver, noteTitle, tableName);
     }
 
-    public Integer getIdOfItemName(WebDriver driver, String filename) {
-        return Utils.getIdOfItemName(driver, filename, tableName, idPrefix);
-    }
-
-    public String getItemNameByIdStr(WebDriver driver, String id) {
+    public String getNoteTitleByIdStr(WebDriver driver, String id) {
         return Utils.getItemNameByIdStr(driver, id);
     }
 
@@ -95,10 +90,7 @@ public class HomePageNoteTab {
         Utils.editItemByItemName(driver, title, tableName);
     }
 
-    public String getNoteDescriptionByTitle(WebDriver driver, String title) {
-        String noteId = getIdStrOfItemName(driver, title);
-        String xpath = "//*[@id=\"" + noteId + "\"]/td[2]";
-        WebElement description = driver.findElement(By.xpath(xpath));
-        return description.getText();
+    public String getNoteDescriptionByTitle(WebDriver driver, String url) {
+        return Utils.getColumnOfItemByItemName(driver, url, 2, tableName);
     }
 }
