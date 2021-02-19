@@ -161,7 +161,13 @@ class FileControllerTests {
         List<String> fileNames = homePageFileTab.getFileNameList();
 
         assertTrue(fileNames.contains(fileName));
+
+        List<String> fileIds = homePageFileTab.getFileIdsList(driver);
+
+        homePageFileTab.downloadFileById(driver, fileIds.get(3));
     }
+
+    
 
 //    @Test
 //    void unauthenticatedUserCannotDownloadUser1File() throws InterruptedException {

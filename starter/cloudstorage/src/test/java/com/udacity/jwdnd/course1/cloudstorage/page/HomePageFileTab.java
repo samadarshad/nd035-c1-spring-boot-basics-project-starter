@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.page;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -48,6 +49,27 @@ public class HomePageFileTab {
 
     public void downloadFile(WebDriver driver, int index) {
         click(driver, fileDownloadLinkList.get(index));
+    }
+
+    public List<String> getFileIdsList(WebDriver driver) {
+        //*[@id="fileTable"]/tbody
+        String xpath = "//*[@id=\"fileTable\"]/tbody/tr";
+        List<WebElement> fileIdsList = driver.findElements(By.xpath(xpath));
+        return fileIdsList.stream().map(item -> item.getAttribute("id")).collect(Collectors.toList());
+    }
+
+    public String getFilenameById(WebDriver driver, String id) {
+        //*[@id="file4"]/th
+        String xpath = "//*[@id=\"" + id + "\"]/th";
+        WebElement filename = driver.findElement(By.xpath(xpath));
+        return filename.getText();
+    }
+
+    public void downloadFileById(WebDriver driver, String id) {
+        //*[@id="file4"]/td/a
+        String xpath = "//*[@id=\"" + id + "\"]/td/a";
+        WebElement downloadLink = driver.findElement(By.xpath(xpath));
+        click(driver, downloadLink);
     }
 
     public void uploadFile(WebDriver driver, String filePath) {
