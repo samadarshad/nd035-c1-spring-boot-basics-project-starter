@@ -106,7 +106,7 @@ class FileControllerTests {
         List<String> fileNames = homePageFileTab.getFileNameList();
 
         List<String> expectedFileNames = Arrays.asList(file1a.getFileName(), file1b.getFileName());
-        assertEquals(fileNames, expectedFileNames);
+        assertTrue(fileNames.containsAll(expectedFileNames));
     }
 
     @Test
