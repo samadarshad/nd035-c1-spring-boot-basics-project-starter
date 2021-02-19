@@ -6,6 +6,7 @@ import com.udacity.jwdnd.course1.cloudstorage.page.*;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +38,10 @@ class NoteControllerTests {
 
     private static final User user1 = new User(null, "user1", null, "pass1", "first1", "last1");
     private static final User user2 = new User(null, "user2", null, "pass2", "first2", "last2");
-    private static final Note note1a = new Note(null, "title1a", "description1a", null);
-    private static final Note note1b = new Note(null, "title1b", "description1b", null);
-    private static final Note note1c = new Note(null, "title1c", "description1c", null);
+    private static final Note note1a = new Note(null, "title1a", "description1a", null); // to remain same
+    private static final Note note1b = new Note(null, "title1b", "description1b", null); // to have description edited
+    private static final Note note1c = new Note(null, "title1c", "description1c", null); // to be deleted
+    private static final Note note1d = new Note(null, "title1d", "description1d", null); // to have title edited
     private static final Note note2 = new Note(null, "title2", "description2", null);
 
 
@@ -54,7 +56,7 @@ class NoteControllerTests {
         WebDriverManager.chromedriver().setup();
 
         userService.createAndUpdateObject(user1);
-        addItemsToUser(user1, crudServices, note1a, note1b, note1c);
+        addItemsToUser(user1, crudServices, note1a, note1b, note1c, note1d);
 
         userService.createAndUpdateObject(user2);
         addItemsToUser(user2, crudServices, note2);
@@ -89,7 +91,7 @@ class NoteControllerTests {
         List<String> noteDescriptions = homePageNoteTab.getNoteDescriptionList();
 
         List<String> expectedNoteTitles = Arrays.asList(note1a.getNotetitle(), note1b.getNotetitle());
-        List<String> expectedNoteDescriptions = Arrays.asList(note1a.getNotedescription(), note1b.getNotedescription());
+        List<String> expectedNoteDescriptions = Arrays.asList(note1a.getNotedescription(), note1d.getNotedescription());
 
         assertTrue(noteTitles.containsAll(expectedNoteTitles));
         assertTrue(noteDescriptions.containsAll(expectedNoteDescriptions));
@@ -126,9 +128,30 @@ class NoteControllerTests {
 
         homePageNoteTab.deleteNoteByTitle(driver, note1c.getNotetitle());
         homePageNoteTab.waitForNotes(driver);
-        
+
         noteTitles = homePageNoteTab.getNoteTitleList();
         assertFalse(noteTitles.contains(note1c.getNotetitle()));
+    }
+
+    @Test
+    void userCanEditTheirNoteDescription() {
+        loginAndGoToNotesTab();
+        HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
+
+        List<String> noteTitles = homePageNoteTab.getNoteTitleList();
+        assertTrue(noteTitles.contains(note1b.getNotetitle()));
+
+        homePageNoteTab.editNoteByTitle(driver, note1b.getNotetitle());
+        homePageNoteTab.waitForModal(driver);
+
+        //edit note
+        String newDescription = "edit description";
+        homePageNoteTab.noteDescriptionInput.sendKeys(Keys.chord(Keys.CONTROL, "a"), newDescription); // selecting all text to overwrite
+        click(driver, homePageNoteTab.noteSaveChangesButton);
+        homePageNoteTab.waitForNotes(driver);
+
+        String description = homePageNoteTab.getNoteDescriptionByTitle(driver, note1b.getNotetitle());
+        assertEquals(newDescription, description);
     }
 
 

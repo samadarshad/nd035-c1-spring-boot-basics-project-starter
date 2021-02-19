@@ -72,7 +72,7 @@ public class HomePageNoteTab {
     }
 
     public String getItemNameById(WebDriver driver, String id) {
-        return Utils.getItemNameById(driver, id);
+        return Utils.getItemNameByIdStr(driver, id);
     }
 
     public List<String> getNoteTitleList() {
@@ -83,14 +83,24 @@ public class HomePageNoteTab {
         return noteDescriptionList.stream().map(item -> item.getText()).collect(Collectors.toList());
     }
 
-    public void deleteNoteById(WebDriver driver, String id) {
-        String xpath = "//*[@id=\"" + id + "\"]/td[1]/form/button";
+    public void deleteNoteByTitle(WebDriver driver, String title) {
+        String noteId = getIdStrOfItemName(driver, title);
+        String xpath = "//*[@id=\"" + noteId + "\"]/td[1]/form/button";
         WebElement deleteButton = driver.findElement(By.xpath(xpath));
         click(driver, deleteButton);
     }
 
-    public void deleteNoteByTitle(WebDriver driver, String title) {
+    public void editNoteByTitle(WebDriver driver, String title) {
         String noteId = getIdStrOfItemName(driver, title);
-        deleteNoteById(driver, noteId);
+        String xpath = "//*[@id=\"" + noteId + "\"]/td[1]/button";
+        WebElement editButton = driver.findElement(By.xpath(xpath));
+        click(driver, editButton);
+    }
+
+    public String getNoteDescriptionByTitle(WebDriver driver, String title) {
+        String noteId = getIdStrOfItemName(driver, title);
+        String xpath = "//*[@id=\"" + noteId + "\"]/td[2]";
+        WebElement description = driver.findElement(By.xpath(xpath));
+        return description.getText();
     }
 }

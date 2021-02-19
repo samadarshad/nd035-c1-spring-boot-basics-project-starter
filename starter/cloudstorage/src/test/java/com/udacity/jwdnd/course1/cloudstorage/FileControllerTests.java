@@ -44,9 +44,9 @@ class FileControllerTests {
     private static final byte [] fileData1b = "Hello World1b".getBytes(StandardCharsets.UTF_8);
     private static final byte [] fileData1c = "Hello World1c".getBytes(StandardCharsets.UTF_8);
     private static final byte [] fileData2 = "Hello World2".getBytes(StandardCharsets.UTF_8);
-    private static final File file1a = new File(null, "fileName1a", "application/octet-stream", (long) fileData1a.length, null, fileData1a);
-    private static final File file1b = new File(null, "fileName1b", "application/octet-stream", (long) fileData1b.length, null, fileData1b);
-    private static final File file1c = new File(null, "fileName1c", "application/octet-stream", (long) fileData1c.length, null, fileData1c);
+    private static final File file1a = new File(null, "fileName1a", "application/octet-stream", (long) fileData1a.length, null, fileData1a); // to remain same
+    private static final File file1b = new File(null, "fileName1b", "application/octet-stream", (long) fileData1b.length, null, fileData1b); // to remain same
+    private static final File file1c = new File(null, "fileName1c", "application/octet-stream", (long) fileData1c.length, null, fileData1c); // to be deleted
     private static final File file2 = new File(null, "fileName2", "application/octet-stream", (long) fileData2.length, null, fileData2);
 
     private static final String downloadsDirectory = System.getProperty("user.dir") + java.io.File.separator + "testDownloads";

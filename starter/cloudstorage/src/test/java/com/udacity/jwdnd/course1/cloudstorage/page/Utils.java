@@ -1,17 +1,11 @@
 package com.udacity.jwdnd.course1.cloudstorage.page;
 
 
-import com.udacity.jwdnd.course1.cloudstorage.model.User;
-import com.udacity.jwdnd.course1.cloudstorage.model.UserItems;
-import com.udacity.jwdnd.course1.cloudstorage.services.CrudService;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +44,7 @@ public final class Utils {
     public static String getIdStrOfItemName(WebDriver driver, String itemName, String tableId) {
         List<String> fileIdsList = getIdsList(driver, tableId);
         return fileIdsList.stream().filter(
-                id -> getItemNameById(driver, id).equals(itemName)
+                id -> getItemNameByIdStr(driver, id).equals(itemName)
         ).collect(Collectors.toList()).get(0);
     }
 
@@ -59,7 +53,7 @@ public final class Utils {
         return Integer.parseInt(IdStr.split(idPrefix)[1]);
     }
 
-    public static String getItemNameById(WebDriver driver, String id) {
+    public static String getItemNameByIdStr(WebDriver driver, String id) {
         String xpath = "//*[@id=\"" + id + "\"]/th";
         WebElement title = driver.findElement(By.xpath(xpath));
         return title.getText();
