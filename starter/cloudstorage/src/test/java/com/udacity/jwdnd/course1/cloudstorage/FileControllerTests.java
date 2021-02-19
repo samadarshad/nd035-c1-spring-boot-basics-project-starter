@@ -1,8 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
-import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.page.*;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
@@ -14,10 +12,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -49,7 +45,8 @@ class FileControllerTests {
     private static final File file2 = new File(null, "fileName2", "application/octet-stream", (long) fileData2.length, null, fileData2);
 
     private static final String downloadsDirectory = System.getProperty("user.dir") + java.io.File.separator + "testDownloads";
-    private static final long downloadWaitTime = 1000;
+    private static final String uploadsDirectory = System.getProperty("user.dir") + java.io.File.separator + "testUploads";
+    private static final long fileTransferWaitTime = 1000;
 
     @BeforeAll
     static void beforeAll(@Autowired UserService userService,
@@ -119,14 +116,14 @@ class FileControllerTests {
         //test file1a
         int index = 0;
         homePageFileTab.downloadFile(driver, index);
-        Thread.sleep(downloadWaitTime); // wait for download
+        Thread.sleep(fileTransferWaitTime); // wait for download
         byte[] fileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + fileNames.get(index)));
         assertArrayEquals(fileContent, file1a.getFileData());
 
         //test file1b
         index = 1;
         homePageFileTab.downloadFile(driver, index);
-        Thread.sleep(downloadWaitTime); // wait for download
+        Thread.sleep(fileTransferWaitTime); // wait for download
         fileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + fileNames.get(index)));
         assertArrayEquals(fileContent, file1b.getFileData());
     }
@@ -137,9 +134,33 @@ class FileControllerTests {
 
         //test file1a
         driver.get("http://localhost:" + port + "/files/" + file1a.getFileId());
-        Thread.sleep(downloadWaitTime); // wait for download
+        Thread.sleep(fileTransferWaitTime); // wait for download
         byte[] fileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + file1a.getFileName()));
         assertArrayEquals(fileContent, file1a.getFileData());
+    }
+
+    void loginAndGoToFilesTab() {
+        Utils.login(driver, port, "user1", "pass1");
+        HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
+        homePageFileTab.waitForNav(driver);
+        Utils.click(driver, homePageFileTab.navFilesTab);
+        homePageFileTab.waitForFiles(driver);
+    }
+
+    @Test
+    void user1CanUploadFiles() throws InterruptedException {
+        loginAndGoToFilesTab();
+
+        HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
+        String fileName = "fileUpload1a";
+        String filePath = uploadsDirectory + java.io.File.separator + fileName;
+        homePageFileTab.uploadFile(driver, filePath);
+        Thread.sleep(fileTransferWaitTime);
+
+        homePageFileTab.waitForFiles(driver);
+        List<String> fileNames = homePageFileTab.getFileNameList();
+
+        assertTrue(fileNames.contains(fileName));
     }
 
 //    @Test
