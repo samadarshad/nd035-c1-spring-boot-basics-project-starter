@@ -25,6 +25,18 @@ public class HomePageNoteTab {
     @FindBy(xpath = "//*[@id=\"nav-notes\"]/button")
     public WebElement addNoteButton;
 
+    @FindBy(xpath = "//*[@id=\"note-title\"]")
+    public WebElement noteTitleInput;
+
+    @FindBy(xpath = "//*[@id=\"note-description\"]")
+    public WebElement noteDescriptionInput;
+
+    @FindBy(id = "note-save-changes")
+    public WebElement noteSaveChangesButton;
+
+    @FindBy(id = "note-cancel-changes")
+    public WebElement noteCancelChangesButton;
+
     public HomePageNoteTab (WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -37,6 +49,16 @@ public class HomePageNoteTab {
     public void waitForNotes(WebDriver driver) {
         new WebDriverWait(driver, WebDriverWaitTimeoutSeconds)
                 .until(ExpectedConditions.visibilityOfAllElements(noteTitleList));
+    }
+
+    public void waitForAddNoteButton(WebDriver driver) {
+        new WebDriverWait(driver, WebDriverWaitTimeoutSeconds)
+                .until(ExpectedConditions.elementToBeClickable(addNoteButton));
+    }
+
+    public void waitForModal(WebDriver driver) {
+        new WebDriverWait(driver, WebDriverWaitTimeoutSeconds)
+                .until(ExpectedConditions.visibilityOf(noteSaveChangesButton));
     }
 
     public List<String> getNoteTitleList() {

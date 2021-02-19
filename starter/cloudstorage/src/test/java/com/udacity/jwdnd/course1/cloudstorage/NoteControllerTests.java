@@ -79,7 +79,7 @@ class NoteControllerTests {
     }
 
     @Test
-    void user1CanReadTheirNotes() throws InterruptedException {
+    void user1CanReadTheirNotes() {
         loginAndGoToNotesTab();
 
         HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
@@ -88,5 +88,27 @@ class NoteControllerTests {
         List<String> expectedNoteTitles = Arrays.asList("title1");
         assertEquals(noteTitles, expectedNoteTitles);
     }
+
+    @Test
+    void userCanAddNewNote() {
+        loginAndGoToNotesTab();
+        HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
+        homePageNoteTab.waitForAddNoteButton(driver);
+        click(driver, homePageNoteTab.addNoteButton);
+        homePageNoteTab.waitForModal(driver);
+
+        //add note
+        String newTitle = "new title";
+        String newDescription = "new description";
+        homePageNoteTab.noteTitleInput.sendKeys(newTitle);
+        homePageNoteTab.noteDescriptionInput.sendKeys(newDescription);
+        click(driver, homePageNoteTab.noteSaveChangesButton);
+        homePageNoteTab.waitForNotes(driver);
+
+        //check note is added
+        List<String> noteTitles = homePageNoteTab.getNoteTitleList();
+        assertTrue(noteTitles.contains(newTitle));
+    }
+
 
 }
