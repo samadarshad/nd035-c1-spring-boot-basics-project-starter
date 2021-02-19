@@ -64,4 +64,8 @@ public class HomePageNoteTab {
     public List<String> getNoteTitleList() {
         return noteTitleList.stream().map(item -> item.getText()).collect(Collectors.toList());
     }
+
+    public List<String> getNoteDescriptionList() {
+        return noteDescriptionList.stream().map(item -> item.getText()).collect(Collectors.toList());
+    }
 }

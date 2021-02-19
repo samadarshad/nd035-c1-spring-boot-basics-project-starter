@@ -37,7 +37,9 @@ class NoteControllerTests {
 
     private static final User user1 = new User(null, "user1", null, "pass1", "first1", "last1");
     private static final User user2 = new User(null, "user2", null, "pass2", "first2", "last2");
-    private static final Note note1 = new Note(null, "title1", "description1", null);
+    private static final Note note1a = new Note(null, "title1a", "description1a", null);
+    private static final Note note1b = new Note(null, "title1b", "description1b", null);
+    private static final Note note1c = new Note(null, "title1c", "description1c", null);
     private static final Note note2 = new Note(null, "title2", "description2", null);
 
 
@@ -52,7 +54,7 @@ class NoteControllerTests {
         WebDriverManager.chromedriver().setup();
 
         userService.createAndUpdateObject(user1);
-        addItemsToUser(user1, crudServices, note1);
+        addItemsToUser(user1, crudServices, note1a, note1b, note1c);
 
         userService.createAndUpdateObject(user2);
         addItemsToUser(user2, crudServices, note2);
@@ -84,9 +86,13 @@ class NoteControllerTests {
 
         HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
         List<String> noteTitles = homePageNoteTab.getNoteTitleList();
+        List<String> noteDescriptions = homePageNoteTab.getNoteDescriptionList();
 
-        List<String> expectedNoteTitles = Arrays.asList("title1");
-        assertEquals(noteTitles, expectedNoteTitles);
+        List<String> expectedNoteTitles = Arrays.asList(note1a.getNotetitle(), note1b.getNotetitle());
+        List<String> expectedNoteDescriptions = Arrays.asList(note1a.getNotedescription(), note1b.getNotedescription());
+
+        assertTrue(noteTitles.containsAll(expectedNoteTitles));
+        assertTrue(noteDescriptions.containsAll(expectedNoteDescriptions));
     }
 
     @Test

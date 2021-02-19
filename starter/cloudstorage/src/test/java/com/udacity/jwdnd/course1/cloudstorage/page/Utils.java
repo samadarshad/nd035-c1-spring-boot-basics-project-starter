@@ -27,6 +27,7 @@ public final class Utils {
         loginPage.login(driver, username, password);
     }
 
+    //workaround to chrome webdriver click not working, using javascript executor instead
     public static void click(WebDriver driver, WebElement element) {
         JavascriptExecutor jexec = (JavascriptExecutor) driver;
         jexec.executeScript("arguments[0].click();", element);
@@ -36,9 +37,4 @@ public final class Utils {
         JavascriptExecutor jexec = (JavascriptExecutor) driver;
         jexec.executeScript("arguments[0].value='" + keys + "';", element);
     }
-
-    public static void waitForPageLoad() {
-        //temporary workaround for bug which causes tests to be intermittent
-    }
-
 }
