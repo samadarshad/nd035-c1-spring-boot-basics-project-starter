@@ -6,9 +6,12 @@ import com.udacity.jwdnd.course1.cloudstorage.page.*;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -93,11 +96,8 @@ class FileControllerTests {
 
     @Test
     void user1CanReadFilenames() throws InterruptedException {
-        Utils.login(driver, port, "user1", "pass1");
+        loginAndGoToFilesTab();
         HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
-        homePageFileTab.waitForNav(driver);
-        Utils.click(driver, homePageFileTab.navFilesTab);
-        homePageFileTab.waitForFiles(driver);
         List<String> fileNames = homePageFileTab.getFileNameList();
 
         List<String> expectedFileNames = Arrays.asList(file1a.getFileName(), file1b.getFileName());
@@ -106,23 +106,20 @@ class FileControllerTests {
 
     @Test
     void user1CanDownloadTheirFiles() throws InterruptedException, IOException {
-        Utils.login(driver, port, "user1", "pass1");
+        loginAndGoToFilesTab();
         HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
-        homePageFileTab.waitForNav(driver);
-        Utils.click(driver, homePageFileTab.navFilesTab);
-        homePageFileTab.waitForFiles(driver);
         List<String> fileNames = homePageFileTab.getFileNameList();
 
         //test file1a
         int index = 0;
-        homePageFileTab.downloadFile(driver, index);
+        homePageFileTab.downloadFileByFilename(driver, fileNames.get(index));
         Thread.sleep(fileTransferWaitTime); // wait for download
         byte[] fileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + fileNames.get(index)));
         assertArrayEquals(fileContent, file1a.getFileData());
 
         //test file1b
         index = 1;
-        homePageFileTab.downloadFile(driver, index);
+        homePageFileTab.downloadFileByFilename(driver, fileNames.get(index));
         Thread.sleep(fileTransferWaitTime); // wait for download
         fileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + fileNames.get(index)));
         assertArrayEquals(fileContent, file1b.getFileData());
@@ -172,6 +169,30 @@ class FileControllerTests {
         byte[] downloadedFileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + fileName));
         byte[] originalUploadedFileContent = Files.readAllBytes(Path.of(filePath));
         assertArrayEquals(originalUploadedFileContent, downloadedFileContent);
+    }
+
+    @Test
+    void userCanDeleteFile() throws InterruptedException, IOException {
+        loginAndGoToFilesTab();
+        HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
+        List<String> fileNames = homePageFileTab.getFileNameList();
+
+        //select first file
+        String fileName = fileNames.get(0);
+        int fileId = homePageFileTab.getIdOfFilename(driver, fileName);
+
+        //delete first file
+        assertTrue(fileNames.contains(fileName));
+        homePageFileTab.deleteFileByFilename(driver, fileName);
+
+        //check filename doesnt exist
+        fileNames = homePageFileTab.getFileNameList();
+        assertFalse(fileNames.contains(fileName));
+
+        //attempt to download deleted file
+        driver.get("http://localhost:" + port + "/files/" + fileId);
+        java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + fileName);
+        assertFalse(downloadedFile.exists());
     }
 
 

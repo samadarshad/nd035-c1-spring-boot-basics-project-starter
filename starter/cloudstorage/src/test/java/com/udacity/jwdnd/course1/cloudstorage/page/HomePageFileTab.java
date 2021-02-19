@@ -60,10 +60,14 @@ public class HomePageFileTab {
 
     public String getFileIdOfFilename(WebDriver driver, String filename) {
         List<String> fileIdsList = getFileIdsList(driver);
-        String fileId = fileIdsList.stream().filter(
+        return fileIdsList.stream().filter(
                 id -> getFilenameById(driver, id).equals(filename)
         ).collect(Collectors.toList()).get(0);
-        return fileId;
+    }
+
+    public Integer getIdOfFilename(WebDriver driver, String filename) {
+        String fileIdStr = getFileIdOfFilename(driver, filename);
+        return Integer.parseInt(fileIdStr.split("file")[1]);
     }
 
     public String getFilenameById(WebDriver driver, String id) {
@@ -78,6 +82,17 @@ public class HomePageFileTab {
         String xpath = "//*[@id=\"" + id + "\"]/td/a";
         WebElement downloadLink = driver.findElement(By.xpath(xpath));
         click(driver, downloadLink);
+    }
+
+    public void deleteFileById(WebDriver driver, String id) {
+        String xpath = "//*[@id=\"" + id + "\"]/td/form/button";
+        WebElement deleteButton = driver.findElement(By.xpath(xpath));
+        click(driver, deleteButton);
+    }
+
+    public void deleteFileByFilename(WebDriver driver, String filename) {
+        String fileId = getFileIdOfFilename(driver, filename);
+        deleteFileById(driver, fileId);
     }
 
     public void downloadFileByFilename(WebDriver driver, String filename) {
