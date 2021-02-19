@@ -40,6 +40,9 @@ public class HomePageNoteTab {
     @FindBy(id = "note-cancel-changes")
     public WebElement noteCancelChangesButton;
 
+    public String tableName = "noteTable";
+    public String idPrefix = "note";
+
     public HomePageNoteTab (WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -65,11 +68,11 @@ public class HomePageNoteTab {
     }
 
     public String getIdStrOfItemName(WebDriver driver, String noteTitle) {
-        return Utils.getIdStrOfItemName(driver, noteTitle, "noteTable");
+        return Utils.getIdStrOfItemName(driver, noteTitle, tableName);
     }
 
     public Integer getIdOfItemName(WebDriver driver, String filename) {
-        return Utils.getIdOfItemName(driver, filename, "noteTable", "note");
+        return Utils.getIdOfItemName(driver, filename, tableName, idPrefix);
     }
 
     public String getItemNameByIdStr(WebDriver driver, String id) {
@@ -85,26 +88,12 @@ public class HomePageNoteTab {
     }
 
     public void deleteNoteByTitle(WebDriver driver, String title) {
-        Utils.deleteItemByItemName(driver, title, "noteTable");
+        Utils.deleteItemByItemName(driver, title, tableName);
     }
 
     public void editNoteByTitle(WebDriver driver, String title) {
-        Utils.editItemByItemName(driver, title, "noteTable");
+        Utils.editItemByItemName(driver, title, tableName);
     }
-
-//    public void deleteItemByItemName(WebDriver driver, String itemName) {
-//        String idStr = getIdStrOfItemName(driver, itemName);
-//        String xpath = "//*[@id=\"" + idStr + "\"]/td[1]/form/button";
-//        WebElement deleteButton = driver.findElement(By.xpath(xpath));
-//        click(driver, deleteButton);
-//    }
-//
-//    public void editItemByItemName(WebDriver driver, String title) {
-//        String idStr = getIdStrOfItemName(driver, title);
-//        String xpath = "//*[@id=\"" + idStr + "\"]/td[1]/button";
-//        WebElement editButton = driver.findElement(By.xpath(xpath));
-//        click(driver, editButton);
-//    }
 
     public String getNoteDescriptionByTitle(WebDriver driver, String title) {
         String noteId = getIdStrOfItemName(driver, title);

@@ -45,6 +45,9 @@ public class HomePageCredentialsTab {
     @FindBy(id = "credential-cancel-changes")
     public WebElement cancelChangesButton;
 
+    public String tableName = "credentialTable";
+    public String idPrefix = "credential";
+
     public HomePageCredentialsTab (WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
@@ -70,11 +73,11 @@ public class HomePageCredentialsTab {
     }
 
     public String getIdStrOfItemName(WebDriver driver, String noteTitle) {
-        return Utils.getIdStrOfItemName(driver, noteTitle, "credentialTable");
+        return Utils.getIdStrOfItemName(driver, noteTitle, tableName);
     }
 
     public Integer getIdOfItemName(WebDriver driver, String filename) {
-        return Utils.getIdOfItemName(driver, filename, "credentialTable", "credential");
+        return Utils.getIdOfItemName(driver, filename, tableName, idPrefix);
     }
 
     public String getCredentialUrlByIdStr(WebDriver driver, String id) {
@@ -86,11 +89,11 @@ public class HomePageCredentialsTab {
     }
 
     public void deleteCredentialByUrl(WebDriver driver, String url) {
-        Utils.deleteItemByItemName(driver, url, "credentialTable");
+        Utils.deleteItemByItemName(driver, url, tableName);
     }
 
     public void editCredentialByUrl(WebDriver driver, String url) {
-        Utils.editItemByItemName(driver, url, "credentialTable");
+        Utils.editItemByItemName(driver, url, tableName);
     }
 
     public String getCredentialUsernameByUrl(WebDriver driver, String url) {
