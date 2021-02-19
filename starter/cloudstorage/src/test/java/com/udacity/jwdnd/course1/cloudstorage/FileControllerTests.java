@@ -38,13 +38,18 @@ class FileControllerTests {
 
     private static WebDriver driver;
 
+    @Autowired
+    private FileService fileService;
+
     private static final User user1 = new User(null, "user1", null, "pass1", "first1", "last1");
     private static final User user2 = new User(null, "user2", null, "pass2", "first2", "last2");
     private static final byte [] fileData1a = "Hello World1a".getBytes(StandardCharsets.UTF_8);
     private static final byte [] fileData1b = "Hello World1b".getBytes(StandardCharsets.UTF_8);
+    private static final byte [] fileData1c = "Hello World1c".getBytes(StandardCharsets.UTF_8);
     private static final byte [] fileData2 = "Hello World2".getBytes(StandardCharsets.UTF_8);
     private static final File file1a = new File(null, "fileName1a", "application/octet-stream", (long) fileData1a.length, null, fileData1a);
     private static final File file1b = new File(null, "fileName1b", "application/octet-stream", (long) fileData1b.length, null, fileData1b);
+    private static final File file1c = new File(null, "fileName1c", "application/octet-stream", (long) fileData1c.length, null, fileData1c);
     private static final File file2 = new File(null, "fileName2", "application/octet-stream", (long) fileData2.length, null, fileData2);
 
     private static final String downloadsDirectory = System.getProperty("user.dir") + java.io.File.separator + "testDownloads";
@@ -62,7 +67,7 @@ class FileControllerTests {
         WebDriverManager.chromedriver().setup();
 
         userService.createAndUpdateObject(user1);
-        addItemsToUser(user1, crudServices, file1a, file1b);
+        addItemsToUser(user1, crudServices, file1a, file1b, file1c);
 
         userService.createAndUpdateObject(user2);
         addItemsToUser(user2, crudServices, file2);
@@ -172,16 +177,16 @@ class FileControllerTests {
     }
 
     @Test
-    void userCanDeleteFile() throws InterruptedException, IOException {
+    void userCanDeleteFile() {
         loginAndGoToFilesTab();
         HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
         List<String> fileNames = homePageFileTab.getFileNameList();
 
-        //select first file
-        String fileName = fileNames.get(0);
+        //select file1c
+        String fileName = file1c.getFileName();
         int fileId = homePageFileTab.getIdOfFilename(driver, fileName);
 
-        //delete first file
+        //delete file
         assertTrue(fileNames.contains(fileName));
         homePageFileTab.deleteFileByFilename(driver, fileName);
 
@@ -195,40 +200,23 @@ class FileControllerTests {
         assertFalse(downloadedFile.exists());
     }
 
+    @Test
+    void unauthenticatedUserCannotDownloadUser1File() throws InterruptedException {
+        driver.get("http://localhost:" + port + "/files/" + file2.getFileId());
+        Thread.sleep(fileTransferWaitTime); // wait for download
+        java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + file2.getFileName());
 
+        assertFalse(downloadedFile.exists());
+    }
 
-//    @Test
-//    void unauthenticatedUserCannotDownloadUser1File() throws InterruptedException {
-//        driver.get("http://localhost:" + port + "/files/" + file2.getFileId());
-//        Thread.sleep(downloadWaitTime); // wait for download
-//        java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + file2.getFileName());
-//
-//        assertFalse(downloadedFile.exists());
-//    }
+    @Test
+    void user1CannotDownloadUser2File() throws InterruptedException {
+        Utils.login(driver, port, "user1", "pass1");
+        driver.get("http://localhost:" + port + "/files/" + file2.getFileId());
+        Thread.sleep(fileTransferWaitTime); // wait for download
+        java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + file2.getFileName());
 
-//    @Test
-//    void user1CannotDownloadUser2File() throws InterruptedException {
-//        Utils.login(driver, port, "user1", "pass1");
-//        driver.get("http://localhost:" + port + "/files/" + file2.getFileId());
-//        Thread.sleep(downloadWaitTime); // wait for download
-//        java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + file2.getFileName());
-//
-//        assertFalse(downloadedFile.exists());
-//    }
-
-//    @Test
-//    void user1CanDeleteTheirFile() {
-//
-//    }
-//
-//    @Test
-//    void unauthenticatedUserCannotDeleteUser1File() {
-//
-//    }
-//
-//    @Test
-//    void user1CannotDeleteUser2File() {
-//
-//    }
+        assertFalse(downloadedFile.exists());
+    }
 
 }
