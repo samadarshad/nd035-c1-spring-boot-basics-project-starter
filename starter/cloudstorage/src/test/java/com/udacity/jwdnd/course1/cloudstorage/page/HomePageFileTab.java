@@ -58,6 +58,14 @@ public class HomePageFileTab {
         return fileIdsList.stream().map(item -> item.getAttribute("id")).collect(Collectors.toList());
     }
 
+    public String getFileIdOfFilename(WebDriver driver, String filename) {
+        List<String> fileIdsList = getFileIdsList(driver);
+        String fileId = fileIdsList.stream().filter(
+                id -> getFilenameById(driver, id).equals(filename)
+        ).collect(Collectors.toList()).get(0);
+        return fileId;
+    }
+
     public String getFilenameById(WebDriver driver, String id) {
         //*[@id="file4"]/th
         String xpath = "//*[@id=\"" + id + "\"]/th";

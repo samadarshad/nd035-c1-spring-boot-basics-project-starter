@@ -148,11 +148,14 @@ class FileControllerTests {
     }
 
     @Test
-    void user1CanUploadFiles() throws InterruptedException {
+    void user1CanUploadFiles() throws InterruptedException, IOException {
+        byte[] fileData1a = "Hello World1a".getBytes(StandardCharsets.UTF_8);
+        String fileName = "fileUpload1a";
+
         loginAndGoToFilesTab();
 
         HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
-        String fileName = "fileUpload1a";
+
         String filePath = uploadsDirectory + java.io.File.separator + fileName;
         homePageFileTab.uploadFile(driver, filePath);
         Thread.sleep(fileTransferWaitTime);
@@ -162,12 +165,16 @@ class FileControllerTests {
 
         assertTrue(fileNames.contains(fileName));
 
-        List<String> fileIds = homePageFileTab.getFileIdsList(driver);
+        String fileId = homePageFileTab.getFileIdOfFilename(driver, fileName);
+        homePageFileTab.downloadFileById(driver, fileId);
+        Thread.sleep(fileTransferWaitTime);
 
-        homePageFileTab.downloadFileById(driver, fileIds.get(3));
+        byte[] fileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + fileName));
+
+        assertArrayEquals(fileContent, fileData1a);
     }
 
-    
+
 
 //    @Test
 //    void unauthenticatedUserCannotDownloadUser1File() throws InterruptedException {
