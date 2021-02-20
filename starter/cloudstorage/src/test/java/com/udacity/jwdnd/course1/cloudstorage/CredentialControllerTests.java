@@ -144,7 +144,7 @@ class CredentialControllerTests {
         homePageCredentialsTab.editCredentialByUrl(driver, credential1b.getUrl());
         homePageCredentialsTab.waitForModal(driver);
 
-        //edit url
+        //edit item
         String newValue = "edit url";
         homePageCredentialsTab.credentialUrlInput.sendKeys(Keys.chord(Keys.CONTROL, "a"), newValue); // selecting all text to overwrite
         click(driver, homePageCredentialsTab.saveChangesButton);
@@ -172,7 +172,26 @@ class CredentialControllerTests {
         assertEquals(username, newValue);
     }
 
-    
+    @Test
+    void editPassword() {
+        loginAndGoToCredentialsTab();
+
+        HomePageCredentialsTab homePageCredentialsTab = new HomePageCredentialsTab(driver);
+        homePageCredentialsTab.editCredentialByUrl(driver, credential1d.getUrl());
+        homePageCredentialsTab.waitForModal(driver);
+
+        //edit item
+        String newValue = "edit password";
+        homePageCredentialsTab.credentialPasswordInput.sendKeys(Keys.chord(Keys.CONTROL, "a"), newValue); // selecting all text to overwrite
+        click(driver, homePageCredentialsTab.saveChangesButton);
+        homePageCredentialsTab.waitForItems(driver);
+
+        //can only view decrypted password when click edit
+        homePageCredentialsTab.editCredentialByUrl(driver, credential1d.getUrl());
+        homePageCredentialsTab.waitForModal(driver);
+
+        assertEquals(homePageCredentialsTab.credentialPasswordInput.getAttribute("value"), newValue);
+    }
 
 
 
