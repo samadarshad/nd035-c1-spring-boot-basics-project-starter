@@ -100,41 +100,14 @@ class SignupControllerTests {
 		assertNotNull(signupPage.errorMsg);
 	}
 
-//	@Test
-//	public void whenAddUserToDatabaseTheirUsernameIsNotAvailable() {
-//		assertTrue(userService.isUsernameAvailable("user"));
-//		User user = new User(null, "user", null, "pass", "first", "last");
-//		userService.createAndUpdateObject(user);
-//		assertFalse(userService.isUsernameAvailable("user"));
-//	}
 
-//	@Test
-//	public void whenAddUserToDatabaseTheyCanLogin() {
-//		User user = new User(null, "user", null, "pass", "first", "last");
-//		userService.createAndUpdateObject(user);
-//		login("user", "pass");
-//
-//		HomePage homePage = new HomePage(driver);
-//		assertTrue(homePage.isLoggedIn());
-//	}
+	@Test
+	void incorrectLoginShowsError() {
+		Utils.login(driver, port, "user1", "badpassword");
 
-//	@Test
-//	public void newUserItemsAreEmpty() {
-//		User user = new User(null, "user", null, "pass", "first", "last");
-//		userService.createAndUpdateObject(user);
-//		login("user", "pass");
-//
-//		HomePage homePage = new HomePage(driver);
-//		assertTrue(homePage.isLoggedIn());
-//	}
-
-//	@Test
-//	void incorrectLoginShowsError() {
-//		login("user1", "badpassword");
-//
-//		LoginPage loginPage = new LoginPage(driver);
-//		// assert error is showing
-//	}
+		LoginPage loginPage = new LoginPage(driver);
+		assertNotNull(loginPage.errorMsg);
+	}
 //
 //	@Test
 //	void successfulLogoutShowsLogoutMessage() {

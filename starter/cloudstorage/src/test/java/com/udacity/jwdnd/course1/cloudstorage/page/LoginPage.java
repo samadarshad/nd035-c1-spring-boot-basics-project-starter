@@ -11,16 +11,22 @@ import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.*;
 
 public class LoginPage {
     @FindBy(id = "inputUsername")
-    private WebElement inputUsername;
+    public WebElement inputUsername;
 
     @FindBy(id = "inputPassword")
-    private WebElement inputPassword;
+    public WebElement inputPassword;
 
     @FindBy(id = "submit-button")
-    private WebElement submitButton;
+    public WebElement submitButton;
 
     @FindBy(id = "signup-link")
-    private WebElement signupLink;
+    public WebElement signupLink;
+
+    @FindBy(id = "error")
+    public WebElement errorMsg;
+
+    @FindBy(id = "logout")
+    public WebElement logoutMsg;
 
     public LoginPage (WebDriver driver) {
         PageFactory.initElements(driver, this);
