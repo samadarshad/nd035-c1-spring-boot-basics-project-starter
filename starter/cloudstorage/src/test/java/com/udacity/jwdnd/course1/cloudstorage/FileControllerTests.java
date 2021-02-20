@@ -3,6 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.page.HomePageFileTab;
+import com.udacity.jwdnd.course1.cloudstorage.page.ResultPage;
 import com.udacity.jwdnd.course1.cloudstorage.page.Utils;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -10,9 +11,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -178,6 +182,26 @@ class FileControllerTests {
         byte[] downloadedFileContent = Files.readAllBytes(Path.of(downloadsDirectory + java.io.File.separator + fileName));
         byte[] originalUploadedFileContent = Files.readAllBytes(Path.of(filePath));
         assertArrayEquals(originalUploadedFileContent, downloadedFileContent);
+    }
+
+    @Test
+    void uploadExistingFilenameFails() throws InterruptedException, IOException {
+        String fileName = "fileUpload1a";
+        String filePath = uploadsDirectory + java.io.File.separator + fileName;
+
+        loginAndGoToFilesTab();
+        HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
+
+        //upload
+        homePageFileTab.uploadFile(driver, filePath);
+        Thread.sleep(fileTransferWaitTime);
+
+        //upload again same filename
+        homePageFileTab.uploadFile(driver, filePath);
+        ResultPage resultPage = new ResultPage(driver);
+        resultPage.waitForPage(driver);
+
+        assertNotNull(resultPage.errorMsg);
     }
 
     @Test

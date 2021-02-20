@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -53,6 +55,13 @@ public class FilesController {
                 .body(new ByteArrayResource(file.getFileData()));
     }
 
+    public Boolean userHasFilename(User user, String filename) {
+        List<String> fileNames = fileService.getByUserId(user.getUserId()).stream().map(
+                File::getFileName
+        ).collect(Collectors.toList());
+        return fileNames.contains(filename);
+    }
+
     @PostMapping
     public String add(@RequestParam("fileUpload") MultipartFile fileUpload, Model model,
                       Authentication auth
@@ -63,6 +72,13 @@ public class FilesController {
                     HttpStatus.BAD_REQUEST, "No file selected to upload."
             );
         }
+
+        if(userHasFilename(user, fileUpload.getOriginalFilename())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Filename already exists."
+            );
+        }
+
         System.out.println("uploading" + fileUpload.getOriginalFilename());
         File file = new File(null,
                 fileUpload.getOriginalFilename(),
