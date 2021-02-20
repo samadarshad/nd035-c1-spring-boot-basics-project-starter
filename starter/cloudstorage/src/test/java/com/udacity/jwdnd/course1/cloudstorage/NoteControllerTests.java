@@ -31,7 +31,8 @@ class NoteControllerTests {
 
     private static WebDriver driver;
 
-    private static final User user1 = new User(null, "user1", null, "pass1", "first1", "last1");
+    private static final String pass1 = "pass1"; // storing separately as the password is hashed upon adding
+    private static final User user1 = new User(null, "user1", null, pass1, "first1", "last1");
     private static final User user2 = new User(null, "user2", null, "pass2", "first2", "last2");
     private static final Note note1a = new Note(null, "title1a", "description1a", null); // to remain same
     private static final Note note1b = new Note(null, "title1b", "description1b", null); // to have description edited
@@ -70,7 +71,7 @@ class NoteControllerTests {
     }
 
     private void loginAndGoToNotesTab() {
-        Utils.login(driver, port, "user1", "pass1");
+        Utils.login(driver, port, user1.getUsername(), pass1);
         HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
         homePageNoteTab.waitForNav(driver);
         Utils.click(driver, homePageNoteTab.navNotesTab);

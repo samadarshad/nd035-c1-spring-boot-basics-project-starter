@@ -45,7 +45,8 @@ class FileControllerTests {
 
     private static WebDriver driver;
 
-    private static final User user1 = new User(null, "user1", null, "pass1", "first1", "last1");
+    private static final String pass1 = "pass1"; // storing separately as the password is hashed upon adding
+    private static final User user1 = new User(null, "user1", null, pass1, "first1", "last1");
     private static final User user2 = new User(null, "user2", null, "pass2", "first2", "last2");
     private static final byte [] fileData1a = "Hello World1a".getBytes(StandardCharsets.UTF_8);
     private static final byte [] fileData1b = "Hello World1b".getBytes(StandardCharsets.UTF_8);
@@ -104,7 +105,7 @@ class FileControllerTests {
     }
 
     private void loginAndGoToFilesTab() {
-        Utils.login(driver, port, "user1", "pass1");
+        Utils.login(driver, port, user1.getUsername(), pass1);
         HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
         homePageFileTab.waitForNav(driver);
         Utils.click(driver, homePageFileTab.navFilesTab);
@@ -148,7 +149,7 @@ class FileControllerTests {
 
     @Test
     void downloadFilesViaUrl() throws InterruptedException, IOException {
-        Utils.login(driver, port, "user1", "pass1");
+        Utils.login(driver, port, user1.getUsername(), pass1);
 
         //test file1a
         driver.get("http://localhost:" + port + "/files/" + file1a.getFileId());
@@ -239,7 +240,7 @@ class FileControllerTests {
 
     @Test
     void user1CannotDownloadUser2File() throws InterruptedException {
-        Utils.login(driver, port, "user1", "pass1");
+        Utils.login(driver, port, user1.getUsername(), pass1);
         driver.get("http://localhost:" + port + "/files/" + file2.getFileId());
         Thread.sleep(fileTransferWaitTime); // wait for download
         java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + file2.getFileName());

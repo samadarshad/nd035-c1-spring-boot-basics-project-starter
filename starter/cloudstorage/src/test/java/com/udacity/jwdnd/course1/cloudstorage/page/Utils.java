@@ -14,7 +14,7 @@ public final class Utils {
     private Utils() {
     }
 
-    public static Integer WebDriverWaitTimeoutSeconds = 5;
+    public static Integer WebDriverWaitTimeoutSeconds = 2;
 
     public static void login(WebDriver driver, int port, String username, String password) {
         driver.get("http://localhost:" + port + "/login");
