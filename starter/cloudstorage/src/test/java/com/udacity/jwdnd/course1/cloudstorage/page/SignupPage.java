@@ -11,22 +11,25 @@ import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.WebDriverWaitTim
 
 public class SignupPage {
     @FindBy(id = "inputFirstName")
-    private WebElement inputFirstName;
+    public WebElement inputFirstName;
 
     @FindBy(id = "inputLastName")
-    private WebElement inputLastName;
+    public WebElement inputLastName;
 
     @FindBy(id = "inputUsername")
-    private WebElement inputUsername;
+    public WebElement inputUsername;
 
     @FindBy(id = "inputPassword")
-    private WebElement inputPassword;
+    public WebElement inputPassword;
 
     @FindBy(id = "submit-button")
-    private WebElement submitButton;
+    public WebElement submitButton;
 
     @FindBy(id = "success")
-    private WebElement successMsg;
+    public WebElement successMsg;
+
+    @FindBy(id = "error")
+    public WebElement errorMsg;
 
     public SignupPage (WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -34,10 +37,6 @@ public class SignupPage {
 
     public void waitForPage(WebDriver driver) {
         new WebDriverWait(driver, WebDriverWaitTimeoutSeconds).until(ExpectedConditions.elementToBeClickable(submitButton));
-    }
-
-    public void waitForSuccess(WebDriver driver) {
-        new WebDriverWait(driver, WebDriverWaitTimeoutSeconds).until(ExpectedConditions.visibilityOf(successMsg));
     }
 
     public void signup(String firstname, String lastname, String username, String password) {

@@ -30,9 +30,9 @@ import static com.udacity.jwdnd.course1.cloudstorage.utility.Utils.genCrudServic
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {"spring.datasource.url=jdbc:h2:mem:CloudStorageApplicationTests"})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {"spring.datasource.url=jdbc:h2:mem:SignupControllerTests"})
 @Transactional
-class CloudStorageApplicationTests {
+class SignupControllerTests {
 
 	@LocalServerPort
 	private int port;
@@ -62,27 +62,21 @@ class CloudStorageApplicationTests {
 		}
 	}
 
-//	public void signup(String username, String password) {
-//		String firstname = "first";
-//		String lastname = "last";
-//
-//		driver.get("http://localhost:" + port + "/signup");
-//		SignupPage signupPage = new SignupPage(driver);
-//		signupPage.signup(firstname, lastname, username, password);
-//	}
+	public void signup(String username, String password) {
+		String firstname = "first";
+		String lastname = "last";
 
-//	public void login(String username, String password) {
-//		driver.get("http://localhost:" + port + "/login");
-//		LoginPage loginPage = new LoginPage(driver);
-//
-//		loginPage.login(driver, username, password);
-//	}
+		driver.get("http://localhost:" + port + "/signup");
+		SignupPage signupPage = new SignupPage(driver);
+		signupPage.waitForPage(driver);
+		signupPage.signup(firstname, lastname, username, password);
+		signupPage.waitForPage(driver);
+	}
 
-//	public void signupAndLoginAndRedirectToHomePage(String username) {
-//		String password = "pass";
-//		signup(username, password);
-//		login(username, password);
-//	}
+	public void signupAndLoginAndRedirectToHomePage(String username, String password) {
+		signup(username, password);
+		Utils.login(driver, port, username, password);
+	}
 
 	@Test
 	public void getLoginPage() {
@@ -90,13 +84,21 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
-//	@Test
-//	public void whenUserSignsUpTheyCanLogin() throws InterruptedException {
-//		signupAndLoginAndRedirectToHomePage("user");
-//
-//		HomePage homePage = new HomePage(driver);
-//		assertTrue(homePage.isLoggedIn());
-//	}
+	@Test
+	public void newUserCanSignupAndLogin() throws InterruptedException {
+		signupAndLoginAndRedirectToHomePage("user", "pass");
+
+		HomePage homePage = new HomePage(driver);
+		homePage.waitForLogin(driver);
+		assertTrue(homePage.isLoggedIn());
+	}
+
+	@Test
+	public void errorIfSignupWithExistingUsername() {
+		signup("user1", "pass");
+		SignupPage signupPage = new SignupPage(driver);
+		assertNotNull(signupPage.errorMsg);
+	}
 
 //	@Test
 //	public void whenAddUserToDatabaseTheirUsernameIsNotAvailable() {
