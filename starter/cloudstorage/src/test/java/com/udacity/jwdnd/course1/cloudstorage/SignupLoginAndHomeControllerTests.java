@@ -21,12 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.WebDriverWaitTimeoutSeconds;
 import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.click;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {"spring.datasource.url=jdbc:h2:mem:SignupControllerTests"})
 @Transactional
-class SignupControllerTests {
+class SignupLoginAndHomeControllerTests {
 
 	@LocalServerPort
 	private int port;
@@ -121,6 +120,15 @@ class SignupControllerTests {
 		assertNotNull(loginPage.logoutMsg);
 	}
 
+	@Test
+	void unauthorizedUserCannotAccessHomePage() {
+		driver.get("http://localhost:" + port + "/");
+		HomePage homePage = new HomePage(driver);
+		assertThrows(
+				TimeoutException.class,
+				() -> homePage.waitForLogin(driver)
+		);
+	}
 
 	@Test
 	void user1CanLogin() {
