@@ -78,6 +78,12 @@ class SignupControllerTests {
 		Utils.login(driver, port, username, password);
 	}
 
+	private void login() {
+		Utils.login(driver, port, "user1", "pass1");
+		HomePage homePage = new HomePage(driver);
+		homePage.waitForLogin(driver);
+	}
+
 	@Test
 	public void getLoginPage() {
 		driver.get("http://localhost:" + this.port + "/login");
@@ -90,7 +96,7 @@ class SignupControllerTests {
 
 		HomePage homePage = new HomePage(driver);
 		homePage.waitForLogin(driver);
-		assertTrue(homePage.isLoggedIn());
+		assertNotNull(homePage.logoutButton);
 	}
 
 	@Test
@@ -108,17 +114,25 @@ class SignupControllerTests {
 		LoginPage loginPage = new LoginPage(driver);
 		assertNotNull(loginPage.errorMsg);
 	}
-//
-//	@Test
-//	void successfulLogoutShowsLogoutMessage() {
-//		login("user1", "pass1");
-//	}
+
+	@Test
+	void logoutShowsLogoutMsg() {
+		login();
+
+		HomePage homePage = new HomePage(driver);
+		click(driver, homePage.logoutButton);
+
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.waitForLoginPage(driver);
+		assertNotNull(loginPage.logoutMsg);
+	}
+
 
 	@Test
 	void user1CanLogin() {
-		Utils.login(driver, port, "user1", "pass1");
+		login();
 		HomePage homePage = new HomePage(driver);
-		homePage.waitForLogin(driver);
+		assertNotNull(homePage.logoutButton);
 	}
 
 	@Test

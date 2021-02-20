@@ -17,21 +17,13 @@ import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.WebDriverWaitTim
 
 public class HomePage {
     @FindBy(id = "logout-button")
-    private WebElement logoutButton;
+    public WebElement logoutButton;
 
     public HomePage (WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
 
-    public Boolean isLoggedIn() {
-        return logoutButton != null;
-    }
-
     public void waitForLogin(WebDriver driver) {
         new WebDriverWait(driver, WebDriverWaitTimeoutSeconds).until(ExpectedConditions.visibilityOf(logoutButton));
-    }
-
-    public void logout() {
-        logoutButton.click();
     }
 }
