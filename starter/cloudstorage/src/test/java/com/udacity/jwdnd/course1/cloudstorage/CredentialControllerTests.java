@@ -124,6 +124,17 @@ class CredentialControllerTests {
         assertFalse(passwords.contains(password1e));
     }
 
+    @Test
+    void decryptPasswordWhenEditItem() {
+        loginAndGoToCredentialsTab();
+
+        HomePageCredentialsTab homePageCredentialsTab = new HomePageCredentialsTab(driver);
+        homePageCredentialsTab.editCredentialByUrl(driver, credential1a.getUrl());
+        homePageCredentialsTab.waitForModal(driver);
+
+        assertEquals(homePageCredentialsTab.credentialPasswordInput.getAttribute("value"), password1a);
+    }
+
 
 
 
