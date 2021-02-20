@@ -97,7 +97,7 @@ class NoteControllerTests {
     }
 
     @Test
-    void userCanAddNewNote() {
+    void create() {
         loginAndGoToNotesTab();
         HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
         homePageNoteTab.waitForAddButton(driver);
@@ -118,7 +118,7 @@ class NoteControllerTests {
     }
 
     @Test
-    void userCanDeleteTheirNote() {
+    void delete() {
         loginAndGoToNotesTab();
         HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
 
@@ -133,7 +133,7 @@ class NoteControllerTests {
     }
 
     @Test
-    void userCanEditTheirNoteDescription() {
+    void editNoteDescription() {
         loginAndGoToNotesTab();
         HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
 
@@ -154,7 +154,7 @@ class NoteControllerTests {
     }
 
     @Test
-    void userCanEditTheirNoteTitle() {
+    void editNoteTitle() {
         loginAndGoToNotesTab();
         HomePageNoteTab homePageNoteTab = new HomePageNoteTab(driver);
 

@@ -117,7 +117,7 @@ class FileControllerTests {
     }
 
     @Test
-    void user1CanReadFilenames() {
+    void readFilenames() {
         loginAndGoToFilesTab();
         HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
         List<String> fileNames = homePageFileTab.getFileNameList();
@@ -127,7 +127,7 @@ class FileControllerTests {
     }
 
     @Test
-    void user1CanDownloadTheirFiles() throws InterruptedException, IOException {
+    void downloadFiles() throws InterruptedException, IOException {
         loginAndGoToFilesTab();
         HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
         List<String> fileNames = homePageFileTab.getFileNameList();
@@ -140,7 +140,7 @@ class FileControllerTests {
     }
 
     @Test
-    void user1CanDownloadTheirFilesViaUrl() throws InterruptedException, IOException {
+    void downloadFilesViaUrl() throws InterruptedException, IOException {
         Utils.login(driver, port, "user1", "pass1");
 
         //test file1a
@@ -151,7 +151,7 @@ class FileControllerTests {
     }
 
     @Test
-    void userCanUploadFileAndDownloadIt() throws InterruptedException, IOException {
+    void create() throws InterruptedException, IOException {
         String fileName = "fileUpload1a";
         String filePath = uploadsDirectory + java.io.File.separator + fileName;
 
@@ -178,7 +178,7 @@ class FileControllerTests {
     }
 
     @Test
-    void userCanDeleteFile() {
+    void delete() {
         loginAndGoToFilesTab();
         HomePageFileTab homePageFileTab = new HomePageFileTab(driver);
         List<String> fileNames = homePageFileTab.getFileNameList();
@@ -202,7 +202,7 @@ class FileControllerTests {
     }
 
     @Test
-    void unauthenticatedUserCannotDownloadUser1File() throws InterruptedException {
+    void unauthenticatedCannotDownloadFile() throws InterruptedException {
         driver.get("http://localhost:" + port + "/files/" + file2.getFileId());
         Thread.sleep(fileTransferWaitTime); // wait for download
         java.io.File downloadedFile = new java.io.File(downloadsDirectory + java.io.File.separator + file2.getFileName());
