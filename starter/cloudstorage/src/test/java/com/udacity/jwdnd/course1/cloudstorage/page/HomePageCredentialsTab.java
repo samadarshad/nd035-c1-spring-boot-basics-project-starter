@@ -89,6 +89,14 @@ public class HomePageCredentialsTab {
         return credentialsUrlsList.stream().map(item -> item.getText()).collect(Collectors.toList());
     }
 
+    public List<String> getCredentialUsernameList() {
+        return credentialsUsernamesList.stream().map(item -> item.getText()).collect(Collectors.toList());
+    }
+
+    public List<String> getCredentialPasswordList() {
+        return credentialsPasswordsList.stream().map(item -> item.getText()).collect(Collectors.toList());
+    }
+
     public void deleteCredentialByUrl(WebDriver driver, String url) {
         Utils.deleteItemByTableProperty(driver, credentialUrlTableProperty, url, tableName);
     }

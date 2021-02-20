@@ -97,13 +97,31 @@ class CredentialControllerTests {
 
         HomePageCredentialsTab homePageCredentialsTab = new HomePageCredentialsTab(driver);
         List<String> urls = homePageCredentialsTab.getCredentialUrlList();
+        List<String> usernames = homePageCredentialsTab.getCredentialUsernameList();
 
         List<String> expectedUrls = Arrays.asList(credential1a.getUrl(), credential1c.getUrl(), credential1d.getUrl());
+        List<String> expectedUsernames = Arrays.asList(credential1a.getUsername(), credential1b.getUsername(), credential1d.getUsername());
 
         assertTrue(urls.containsAll(expectedUrls));
+        assertTrue(usernames.containsAll(expectedUsernames));
 
         //check user1 cannot read user2's items
         assertFalse(urls.contains(credential2.getUrl()));
+        assertFalse(usernames.contains(credential2.getUsername()));
+    }
+
+    @Test
+    void passwordsListIsEncrypted() {
+        loginAndGoToCredentialsTab();
+
+        HomePageCredentialsTab homePageCredentialsTab = new HomePageCredentialsTab(driver);
+        List<String> passwords = homePageCredentialsTab.getCredentialPasswordList();
+
+        assertFalse(passwords.contains(password1a));
+        assertFalse(passwords.contains(password1b));
+        assertFalse(passwords.contains(password1c));
+        assertFalse(passwords.contains(password1d));
+        assertFalse(passwords.contains(password1e));
     }
 
 
