@@ -21,27 +21,25 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.WebDriverWaitTimeoutSeconds;
 import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.click;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {"spring.datasource.url=jdbc:h2:mem:SignupControllerTests"})
 @Transactional
-class SignupControllerTests {
+class SignupLoginAndHomeControllerTests {
 
 	@LocalServerPort
 	private int port;
 
 	private static WebDriver driver;
 
-	private static final User user1 = new User(null, "user1", null, "pass1", "first1", "last1");
-	private static final User user2 = new User(null, "user2", null, "pass2", "first2", "last2");
+	private static final String pass1 = "pass1"; // storing separately as the password is hashed upon adding
+	private static final User user1 = new User(null, "user1", null, pass1, "first1", "last1");
 
 	@BeforeAll
 	static void beforeAll(@Autowired UserService userService) {
 		WebDriverManager.chromedriver().setup();
 
 		userService.createAndUpdateObject(user1);
-		userService.createAndUpdateObject(user2);
 	}
 
 	@BeforeEach
@@ -73,7 +71,7 @@ class SignupControllerTests {
 	}
 
 	private void login() {
-		Utils.login(driver, port, "user1", "pass1");
+		Utils.login(driver, port, user1.getUsername(), pass1);
 		HomePage homePage = new HomePage(driver);
 		homePage.waitForLogin(driver);
 	}
@@ -85,17 +83,30 @@ class SignupControllerTests {
 	}
 
 	@Test
-	public void newUserCanSignupAndLogin() throws InterruptedException {
+	public void newUserCanSignupAndLoginThenLogoutAndCannotAccessHomePage() {
 		signupAndLoginAndRedirectToHomePage("user", "pass");
 
+		//successfully access homepage
 		HomePage homePage = new HomePage(driver);
 		homePage.waitForLogin(driver);
-		assertNotNull(homePage.logoutButton);
+
+		//logout
+		click(driver, homePage.logoutButton);
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.waitForLoginPage(driver);
+
+		//attempt to access home page again
+		driver.get("http://localhost:" + port + "/");
+		HomePage finalHomePage = new HomePage(driver);
+		assertThrows(
+				TimeoutException.class,
+				() -> finalHomePage.waitForLogin(driver)
+		);
 	}
 
 	@Test
 	public void errorIfSignupWithExistingUsername() {
-		signup("user1", "pass");
+		signup(user1.getUsername(), "pass");
 		SignupPage signupPage = new SignupPage(driver);
 		assertNotNull(signupPage.errorMsg);
 	}
@@ -121,12 +132,21 @@ class SignupControllerTests {
 		assertNotNull(loginPage.logoutMsg);
 	}
 
+	@Test
+	void unauthorizedUserCannotAccessHomePage() {
+		driver.get("http://localhost:" + port + "/");
+		HomePage homePage = new HomePage(driver);
+		assertThrows(
+				TimeoutException.class,
+				() -> homePage.waitForLogin(driver)
+		);
+	}
 
 	@Test
 	void user1CanLogin() {
 		login();
 		HomePage homePage = new HomePage(driver);
-		assertNotNull(homePage.logoutButton);
+		homePage.waitForLogin(driver);
 	}
 
 	@Test

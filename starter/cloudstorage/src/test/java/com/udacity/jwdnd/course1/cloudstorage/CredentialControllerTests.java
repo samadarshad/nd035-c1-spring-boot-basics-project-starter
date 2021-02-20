@@ -35,7 +35,8 @@ class CredentialControllerTests {
 
     private static WebDriver driver;
 
-    private static final User user1 = new User(null, "user1", null, "pass1", "first1", "last1");
+    private static final String pass1 = "pass1"; // storing separately as the password is hashed upon adding
+    private static final User user1 = new User(null, "user1", null, pass1, "first1", "last1");
     private static final User user2 = new User(null, "user2", null, "pass2", "first2", "last2");
 
     // storing passwords separately here because it will be encrypted when added to user
@@ -82,7 +83,7 @@ class CredentialControllerTests {
     }
 
     private void loginAndGoToCredentialsTab() {
-        Utils.login(driver, port, "user1", "pass1");
+        Utils.login(driver, port, user1.getUsername(), pass1);
         HomePageCredentialsTab homePageCredentialsTab = new HomePageCredentialsTab(driver);
         homePageCredentialsTab.waitForNav(driver);
         Utils.click(driver, homePageCredentialsTab.navCredentialsTab);
