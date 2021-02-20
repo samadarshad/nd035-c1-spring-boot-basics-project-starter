@@ -15,13 +15,13 @@ import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.WebDriverWaitTim
 import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.click;
 
 public class HomePageCredentialsTab {
-    @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-credentials']/div[1]/table/tbody/tr/th")
+    @FindBy(xpath = "//*[@id=\"credentialTable\"]/tbody/tr/th")
     private List<WebElement> credentialsUrlsList;
 
-    @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-credentials']/div[1]/table/tbody/tr/td[2]")
+    @FindBy(xpath = "//*[@id=\"credentialTable\"]/tbody/tr/td[2]")
     private List<WebElement> credentialsUsernamesList;
 
-    @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-credentials']/div[1]/table/tbody/tr/td[3]")
+    @FindBy(xpath = "//*[@id=\"credentialTable\"]/tbody/tr/td[3]")
     private List<WebElement> credentialsPasswordsList;
 
     @FindBy(id = "nav-credentials-tab")
@@ -73,15 +73,14 @@ public class HomePageCredentialsTab {
     }
 
     public String getIdStrOfItemName(WebDriver driver, String noteTitle) {
-        return Utils.getIdStrOfItemName(driver, noteTitle, tableName);
-    }
+        return Utils.getIdOfTableProperty(driver, "th", noteTitle, tableName);
+//        return Utils.getIdStrOfItemName(driver, noteTitle, tableName);
 
-    public Integer getIdOfItemName(WebDriver driver, String filename) {
-        return Utils.getIdOfItemName(driver, filename, tableName, idPrefix);
     }
 
     public String getCredentialUrlByIdStr(WebDriver driver, String id) {
-        return Utils.getItemNameByIdStr(driver, id);
+        return Utils.getTablePropertyById(driver, id, "th");
+//        return Utils.getItemNameByIdStr(driver, id);
     }
 
     public List<String> getCredentialUrlList() {
@@ -89,18 +88,22 @@ public class HomePageCredentialsTab {
     }
 
     public void deleteCredentialByUrl(WebDriver driver, String url) {
-        Utils.deleteItemByItemName(driver, url, tableName);
+        Utils.deleteItemByTableProperty(driver, "th", url, tableName);
+//        Utils.deleteItemByItemName(driver, url, tableName);
     }
 
     public void editCredentialByUrl(WebDriver driver, String url) {
-        Utils.editItemByItemName(driver, url, tableName);
+        Utils.editItemByTableProperty(driver, "th", url, tableName);
     }
 
     public String getCredentialUsernameByUrl(WebDriver driver, String url) {
-        return Utils.getColumnOfItemByItemName(driver, url, 2, tableName);
+        return Utils.getTablePropertyOfItemByItemTableProperty(driver, "td[2]", "th", url, tableName);
+//        return Utils.getColumnOfItemByItemName(driver, url, 2, tableName);
+//        return Utils.getColumnOfItemByItemName(driver, url, 2, tableName);
     }
 
     public String getCredentialPasswordByUrl(WebDriver driver, String url) {
-        return Utils.getColumnOfItemByItemName(driver, url, 3, tableName);
+        return Utils.getTablePropertyOfItemByItemTableProperty(driver, "td[3]", "th", url, tableName);
+//        return Utils.getColumnOfItemByItemName(driver, url, 3, tableName);
     }
 }

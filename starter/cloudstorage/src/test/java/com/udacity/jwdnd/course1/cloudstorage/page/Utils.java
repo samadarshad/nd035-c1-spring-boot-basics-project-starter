@@ -41,43 +41,43 @@ public final class Utils {
         return idsList.stream().map(item -> item.getAttribute("id")).collect(Collectors.toList());
     }
 
-    public static String getIdStrOfItemName(WebDriver driver, String itemName, String tableId) {
+    public static String getIdOfTableProperty(WebDriver driver, String tableProperty, String tablePropertyName, String tableId) {
         List<String> fileIdsList = getIdsList(driver, tableId);
         return fileIdsList.stream().filter(
-                id -> getItemNameByIdStr(driver, id).equals(itemName)
+                id -> getTablePropertyById(driver, id, tableProperty).equals(tablePropertyName)
         ).collect(Collectors.toList()).get(0); // this only gets the id of the first matching itemname
     }
 
-    public static Integer getIdOfItemName(WebDriver driver, String filename, String tableId, String idPrefix) {
-        String IdStr = getIdStrOfItemName(driver, filename, tableId);
+    public static Integer getIdNumberOfTableProperty(WebDriver driver, String tableProperty, String tablePropertyName, String tableId, String idPrefix) {
+        String IdStr = getIdOfTableProperty(driver, tableProperty, tablePropertyName, tableId);
         return Integer.parseInt(IdStr.split(idPrefix)[1]);
     }
 
-    public static String getItemNameByIdStr(WebDriver driver, String id) {
-        String xpath = "//*[@id=\"" + id + "\"]/th";
+    public static String getTablePropertyById(WebDriver driver, String id, String tableProperty) {
+        String xpath = "//*[@id=\"" + id + "\"]/" + tableProperty;
         WebElement title = driver.findElement(By.xpath(xpath));
         return title.getText();
     }
 
-    public static void deleteItemByItemName(WebDriver driver, String itemName, String tableId) {
-        String idStr = getIdStrOfItemName(driver, itemName, tableId);
+    public static void deleteItemByTableProperty(WebDriver driver, String tableProperty, String tablePropertyName, String tableId) {
+        String idStr = getIdOfTableProperty(driver, tableProperty, tablePropertyName, tableId);
         String xpath = "//*[@id=\"delete-" + idStr + "\"]";
-        WebElement deleteButton = driver.findElement(By.xpath(xpath));
-        click(driver, deleteButton);
+        WebElement button = driver.findElement(By.xpath(xpath));
+        click(driver, button);
     }
 
-    public static void editItemByItemName(WebDriver driver, String title, String tableId) {
-        String idStr = getIdStrOfItemName(driver, title, tableId);
+    public static void editItemByTableProperty(WebDriver driver, String tableProperty, String tablePropertyName, String tableId) {
+        String idStr = getIdOfTableProperty(driver, tableProperty, tablePropertyName, tableId);
         String xpath = "//*[@id=\"edit-" + idStr + "\"]";
-        WebElement editButton = driver.findElement(By.xpath(xpath));
-        click(driver, editButton);
+        WebElement button = driver.findElement(By.xpath(xpath));
+        click(driver, button);
     }
 
-    public static String getColumnOfItemByItemName(WebDriver driver, String itemName, Integer columnId, String tableId) {
-        String idStr = getIdStrOfItemName(driver, itemName, tableId);
-        String xpath = "//*[@id=\"" + idStr + "\"]/td[" + columnId + "]";
-        WebElement description = driver.findElement(By.xpath(xpath));
-        return description.getText();
+    public static String getTablePropertyOfItemByItemTableProperty(WebDriver driver, String requiredTableProperty, String givenTableProperty, String givenTablePropertyName, String tableId) {
+        String idStr = getIdOfTableProperty(driver, givenTableProperty, givenTablePropertyName, tableId);
+        String xpath = "//*[@id=\"" + idStr + "\"]/" + requiredTableProperty;
+        WebElement requiredTablePropertyElement = driver.findElement(By.xpath(xpath));
+        return requiredTablePropertyElement.getText();
     }
     // ^ consistent html format
 }

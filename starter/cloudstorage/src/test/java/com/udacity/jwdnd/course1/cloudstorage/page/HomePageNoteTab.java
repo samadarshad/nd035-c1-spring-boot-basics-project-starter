@@ -15,10 +15,10 @@ import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.WebDriverWaitTim
 
 public class HomePageNoteTab {
 
-    @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-notes']/div[1]/table/tbody/tr/th")
+    @FindBy(xpath = "//*[@id=\"noteTable\"]/tbody/tr/th")
     private List<WebElement> noteTitleList;
 
-    @FindBy(xpath = "/html/body/div/div[@id='contentDiv']/div/div[@id='nav-notes']/div[1]/table/tbody/tr/td[2]")
+    @FindBy(xpath = "//*[@id=\"noteTable\"]/tbody/tr/td[2]")
     private List<WebElement> noteDescriptionList;
 
     @FindBy(id = "nav-notes-tab")
@@ -67,11 +67,13 @@ public class HomePageNoteTab {
     }
 
     public String getIdStrOfNoteTitle(WebDriver driver, String noteTitle) {
-        return Utils.getIdStrOfItemName(driver, noteTitle, tableName);
+//        return Utils.getIdStrOfItemName(driver, noteTitle, tableName);
+        return Utils.getIdOfTableProperty(driver, "th", noteTitle, tableName);
     }
 
     public String getNoteTitleByIdStr(WebDriver driver, String id) {
-        return Utils.getItemNameByIdStr(driver, id);
+        return Utils.getTablePropertyById(driver, id, "th");
+//        return Utils.getItemNameByIdStr(driver, id);
     }
 
     public List<String> getItemNameList() {
@@ -83,14 +85,16 @@ public class HomePageNoteTab {
     }
 
     public void deleteNoteByTitle(WebDriver driver, String title) {
-        Utils.deleteItemByItemName(driver, title, tableName);
+        Utils.deleteItemByTableProperty(driver, "th", title, tableName);
+//        Utils.deleteItemByItemName(driver, title, tableName);
     }
 
     public void editNoteByTitle(WebDriver driver, String title) {
-        Utils.editItemByItemName(driver, title, tableName);
+        Utils.editItemByTableProperty(driver, "th", title, tableName);
     }
 
-    public String getNoteDescriptionByTitle(WebDriver driver, String url) {
-        return Utils.getColumnOfItemByItemName(driver, url, 2, tableName);
+    public String getNoteDescriptionByTitle(WebDriver driver, String title) {
+        return Utils.getTablePropertyOfItemByItemTableProperty(driver, "td[2]", "th", title, tableName);
+//        return Utils.getColumnOfItemByItemName(driver, url, 2, tableName);
     }
 }

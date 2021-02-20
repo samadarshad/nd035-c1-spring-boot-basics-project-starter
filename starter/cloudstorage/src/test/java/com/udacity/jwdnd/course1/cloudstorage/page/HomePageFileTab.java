@@ -51,15 +51,17 @@ public class HomePageFileTab {
     }
 
     public Integer getIdOfFilename(WebDriver driver, String filename) {
-        return Utils.getIdOfItemName(driver, filename, tableName, idPrefix);
+        return Utils.getIdNumberOfTableProperty(driver, "th", filename, tableName, idPrefix);
+//        return Utils.getIdOfItemName(driver, filename, tableName, idPrefix);
     }
 
     public void deleteFileByFilename(WebDriver driver, String filename) {
-        Utils.deleteItemByItemName(driver, filename, tableName);
+        Utils.deleteItemByTableProperty(driver, "th", filename, tableName);
+//        Utils.deleteItemByItemName(driver, filename, tableName);
     }
 
     public void downloadFileByFilename(WebDriver driver, String filename) {
-        Utils.editItemByItemName(driver, filename, tableName);
+        Utils.editItemByTableProperty(driver, "th", filename, tableName);
     }
 
     public void uploadFile(WebDriver driver, String filePath) {
