@@ -204,8 +204,39 @@ class CredentialControllerTests {
         homePageCredentialsTab.deleteCredentialByUrl(driver, credential1e.getUrl());
         homePageCredentialsTab.waitForItems(driver);
 
+        urls = homePageCredentialsTab.getCredentialUrlList();
         assertFalse(urls.contains(credential1e.getUrl()));
     }
 
+    @Test
+    void create() {
+        loginAndGoToCredentialsTab();
+
+        HomePageCredentialsTab homePageCredentialsTab = new HomePageCredentialsTab(driver);
+        click(driver, homePageCredentialsTab.addCredentialButton);
+        homePageCredentialsTab.waitForModal(driver);
+
+        String newUrl = "new url";
+        homePageCredentialsTab.credentialUrlInput.sendKeys(newUrl);
+
+        String newUsername = "new username";
+        homePageCredentialsTab.credentialUsernameInput.sendKeys(newUsername);
+
+        String newPassword = "new password";
+        homePageCredentialsTab.credentialPasswordInput.sendKeys(newPassword);
+
+        click(driver, homePageCredentialsTab.saveChangesButton);
+
+        homePageCredentialsTab.waitForItems(driver);
+        List<String> urls = homePageCredentialsTab.getCredentialUrlList();
+        List<String> usernames = homePageCredentialsTab.getCredentialUsernameList();
+        List<String> passwords = homePageCredentialsTab.getCredentialPasswordList();
+
+
+        assertTrue(urls.contains(newUrl));
+        assertTrue(usernames.contains(newUsername));
+        //assert that the password is encrypted
+        assertFalse(passwords.contains(newPassword));
+    }
 
 }
