@@ -193,7 +193,19 @@ class CredentialControllerTests {
         assertEquals(homePageCredentialsTab.credentialPasswordInput.getAttribute("value"), newValue);
     }
 
+    @Test
+    void delete() {
+        loginAndGoToCredentialsTab();
 
+        HomePageCredentialsTab homePageCredentialsTab = new HomePageCredentialsTab(driver);
+        List<String> urls = homePageCredentialsTab.getCredentialUrlList();
+        assertTrue(urls.contains(credential1e.getUrl()));
+
+        homePageCredentialsTab.deleteCredentialByUrl(driver, credential1e.getUrl());
+        homePageCredentialsTab.waitForItems(driver);
+
+        assertFalse(urls.contains(credential1e.getUrl()));
+    }
 
 
 }
