@@ -135,6 +135,25 @@ class CredentialControllerTests {
         assertEquals(homePageCredentialsTab.credentialPasswordInput.getAttribute("value"), password1a);
     }
 
+    @Test
+    void editUrl() {
+        loginAndGoToCredentialsTab();
+
+        HomePageCredentialsTab homePageCredentialsTab = new HomePageCredentialsTab(driver);
+        String id = homePageCredentialsTab.getIdOfCredentialUrl(driver, credential1b.getUrl()); // keeping id for future reference
+        homePageCredentialsTab.editCredentialByUrl(driver, credential1b.getUrl());
+        homePageCredentialsTab.waitForModal(driver);
+
+        //edit url
+        String newValue = "edit url";
+        homePageCredentialsTab.credentialUrlInput.sendKeys(Keys.chord(Keys.CONTROL, "a"), newValue); // selecting all text to overwrite
+        click(driver, homePageCredentialsTab.saveChangesButton);
+        homePageCredentialsTab.waitForItems(driver);
+
+        String url = homePageCredentialsTab.getCredentialUrlById(driver, id);
+        assertEquals(url, newValue);
+    }
+
 
 
 
