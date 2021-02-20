@@ -92,10 +92,18 @@ class CredentialControllerTests {
     }
 
     @Test
-    void user1CanReadTheirCredentialsButNotUser2Notes() {
+    void user1CanReadTheirCredentialsButNotUser2Credentials() {
         loginAndGoToCredentialsTab();
 
+        HomePageCredentialsTab homePageCredentialsTab = new HomePageCredentialsTab(driver);
+        List<String> urls = homePageCredentialsTab.getCredentialUrlList();
 
+        List<String> expectedUrls = Arrays.asList(credential1a.getUrl(), credential1c.getUrl(), credential1d.getUrl());
+
+        assertTrue(urls.containsAll(expectedUrls));
+
+        //check user1 cannot read user2's items
+        assertFalse(urls.contains(credential2.getUrl()));
     }
 
 
