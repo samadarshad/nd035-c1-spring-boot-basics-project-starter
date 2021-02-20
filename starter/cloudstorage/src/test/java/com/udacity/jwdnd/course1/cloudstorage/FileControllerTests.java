@@ -187,7 +187,7 @@ class FileControllerTests {
 
     @Test
     void uploadExistingFilenameFails() throws InterruptedException, IOException {
-        String fileName = "fileUpload1a";
+        String fileName = "fileUpload1b";
         String filePath = uploadsDirectory + java.io.File.separator + fileName;
 
         loginAndGoToFilesTab();
