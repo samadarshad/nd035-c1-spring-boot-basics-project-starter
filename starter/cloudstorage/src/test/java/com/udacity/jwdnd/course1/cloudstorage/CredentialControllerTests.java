@@ -1,10 +1,8 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
-import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.page.HomePageCredentialsTab;
-import com.udacity.jwdnd.course1.cloudstorage.page.HomePageNoteTab;
 import com.udacity.jwdnd.course1.cloudstorage.page.Utils;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
