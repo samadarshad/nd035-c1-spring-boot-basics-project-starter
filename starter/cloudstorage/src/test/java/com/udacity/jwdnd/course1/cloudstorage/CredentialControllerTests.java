@@ -39,11 +39,18 @@ class CredentialControllerTests {
 
     private static final User user1 = new User(null, "user1", null, "pass1", "first1", "last1");
     private static final User user2 = new User(null, "user2", null, "pass2", "first2", "last2");
-    private static final Credential credential1a = new Credential(null, "url1a", "username1a", null, "password1a", null); // to remain same
-    private static final Credential credential1b = new Credential(null, "url1b", "username1b", null, "password1b", null); // to have url edited
-    private static final Credential credential1c = new Credential(null, "url1c", "username1c", null, "password1c", null); // to have username edited
-    private static final Credential credential1d = new Credential(null, "url1d", "username1d", null, "password1d", null); // to have password edited
-    private static final Credential credential1e = new Credential(null, "url1e", "username1e", null, "password1e", null); // to be deleted
+
+    // storing passwords separately here because it will be encrypted when added to user
+    private static final String password1a = "password1a";
+    private static final String password1b = "password1b";
+    private static final String password1c = "password1c";
+    private static final String password1d = "password1d";
+    private static final String password1e = "password1e";
+    private static final Credential credential1a = new Credential(null, "url1a", "username1a", null, password1a, null); // to remain same
+    private static final Credential credential1b = new Credential(null, "url1b", "username1b", null, password1b, null); // to have url edited
+    private static final Credential credential1c = new Credential(null, "url1c", "username1c", null, password1c, null); // to have username edited
+    private static final Credential credential1d = new Credential(null, "url1d", "username1d", null, password1d, null); // to have password edited
+    private static final Credential credential1e = new Credential(null, "url1e", "username1e", null, password1e, null); // to be deleted
     private static final Credential credential2 = new Credential(null, "url2", "username2", null, "password2", null);
 
 
