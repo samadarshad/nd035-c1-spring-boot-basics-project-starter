@@ -14,10 +14,15 @@ import java.util.stream.Collectors;
 import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.*;
 
 public class HomePageFileTab {
-    @FindBy(xpath = "//*[@id=\"fileTable\"]/tbody/tr/th")
+    public static final String filenameTableProperty = "th";
+    public static final String fileDownloadLinkTableProperty = "td/a";
+    public static final String tableName = "fileTable";
+    public static final String idPrefix = "file";
+
+    @FindBy(xpath = "//*[@id=\"" + tableName + "\"]/tbody/tr/" + filenameTableProperty)
     private List<WebElement> fileNameList;
 
-    @FindBy(xpath = "//*[@id=\"fileTable\"]/tbody/tr/td/a")
+    @FindBy(xpath = "//*[@id=\"" + tableName + "\"]/tbody/tr/" + fileDownloadLinkTableProperty)
     private List<WebElement> fileDownloadLinkList;
 
     @FindBy(id = "nav-files-tab")
@@ -29,8 +34,7 @@ public class HomePageFileTab {
     @FindBy(id = "upload-button")
     public WebElement uploadButton;
 
-    public String tableName = "fileTable";
-    public String idPrefix = "file";
+
 
     public HomePageFileTab (WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -51,17 +55,15 @@ public class HomePageFileTab {
     }
 
     public Integer getIdOfFilename(WebDriver driver, String filename) {
-        return Utils.getIdNumberOfTableProperty(driver, "th", filename, tableName, idPrefix);
-//        return Utils.getIdOfItemName(driver, filename, tableName, idPrefix);
+        return Utils.getIdNumberOfTableProperty(driver, filenameTableProperty, filename, tableName, idPrefix);
     }
 
     public void deleteFileByFilename(WebDriver driver, String filename) {
-        Utils.deleteItemByTableProperty(driver, "th", filename, tableName);
-//        Utils.deleteItemByItemName(driver, filename, tableName);
+        Utils.deleteItemByTableProperty(driver, filenameTableProperty, filename, tableName);
     }
 
     public void downloadFileByFilename(WebDriver driver, String filename) {
-        Utils.editItemByTableProperty(driver, "th", filename, tableName);
+        Utils.editItemByTableProperty(driver, filenameTableProperty, filename, tableName);
     }
 
     public void uploadFile(WebDriver driver, String filePath) {

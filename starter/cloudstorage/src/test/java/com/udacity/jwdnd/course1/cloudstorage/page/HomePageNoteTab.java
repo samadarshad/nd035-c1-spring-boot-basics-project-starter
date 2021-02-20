@@ -15,10 +15,15 @@ import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.WebDriverWaitTim
 
 public class HomePageNoteTab {
 
-    @FindBy(xpath = "//*[@id=\"noteTable\"]/tbody/tr/th")
+    public static final String noteTitleTableProperty = "th";
+    public static final String noteDescriptionTableProperty = "td[2]";
+    public static final String tableName = "noteTable";
+    public static final String idPrefix = "note";
+
+    @FindBy(xpath = "//*[@id=\"" + tableName + "\"]/tbody/tr/" + noteTitleTableProperty)
     private List<WebElement> noteTitleList;
 
-    @FindBy(xpath = "//*[@id=\"noteTable\"]/tbody/tr/td[2]")
+    @FindBy(xpath = "//*[@id=\"" + tableName + "\"]/tbody/tr/" + noteDescriptionTableProperty)
     private List<WebElement> noteDescriptionList;
 
     @FindBy(id = "nav-notes-tab")
@@ -39,8 +44,7 @@ public class HomePageNoteTab {
     @FindBy(id = "note-cancel-changes")
     public WebElement noteCancelChangesButton;
 
-    public String tableName = "noteTable";
-    public String idPrefix = "note";
+
 
     public HomePageNoteTab (WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -67,13 +71,11 @@ public class HomePageNoteTab {
     }
 
     public String getIdStrOfNoteTitle(WebDriver driver, String noteTitle) {
-//        return Utils.getIdStrOfItemName(driver, noteTitle, tableName);
-        return Utils.getIdOfTableProperty(driver, "th", noteTitle, tableName);
+        return Utils.getIdOfTableProperty(driver, noteTitleTableProperty, noteTitle, tableName);
     }
 
     public String getNoteTitleByIdStr(WebDriver driver, String id) {
-        return Utils.getTablePropertyById(driver, id, "th");
-//        return Utils.getItemNameByIdStr(driver, id);
+        return Utils.getTablePropertyById(driver, id, noteTitleTableProperty);
     }
 
     public List<String> getItemNameList() {
@@ -85,16 +87,14 @@ public class HomePageNoteTab {
     }
 
     public void deleteNoteByTitle(WebDriver driver, String title) {
-        Utils.deleteItemByTableProperty(driver, "th", title, tableName);
-//        Utils.deleteItemByItemName(driver, title, tableName);
+        Utils.deleteItemByTableProperty(driver, noteTitleTableProperty, title, tableName);
     }
 
     public void editNoteByTitle(WebDriver driver, String title) {
-        Utils.editItemByTableProperty(driver, "th", title, tableName);
+        Utils.editItemByTableProperty(driver, noteTitleTableProperty, title, tableName);
     }
 
     public String getNoteDescriptionByTitle(WebDriver driver, String title) {
-        return Utils.getTablePropertyOfItemByItemTableProperty(driver, "td[2]", "th", title, tableName);
-//        return Utils.getColumnOfItemByItemName(driver, url, 2, tableName);
+        return Utils.getTablePropertyOfItemByItemTableProperty(driver, noteDescriptionTableProperty, noteTitleTableProperty, title, tableName);
     }
 }

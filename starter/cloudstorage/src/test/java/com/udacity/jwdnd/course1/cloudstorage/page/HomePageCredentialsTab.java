@@ -15,13 +15,20 @@ import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.WebDriverWaitTim
 import static com.udacity.jwdnd.course1.cloudstorage.page.Utils.click;
 
 public class HomePageCredentialsTab {
-    @FindBy(xpath = "//*[@id=\"credentialTable\"]/tbody/tr/th")
+
+    public static final String credentialUrlTableProperty = "th";
+    public static final String credentialUsernameTableProperty = "td[2]";
+    public static final String credentialPasswordTableProperty = "td[3]";
+    public static final String tableName = "credentialTable";
+    public static final String idPrefix = "credential";
+
+    @FindBy(xpath = "//*[@id=\"" + tableName + "\"]/tbody/tr/" + credentialUrlTableProperty)
     private List<WebElement> credentialsUrlsList;
 
-    @FindBy(xpath = "//*[@id=\"credentialTable\"]/tbody/tr/td[2]")
+    @FindBy(xpath = "//*[@id=\"" + tableName + "\"]/tbody/tr/" + credentialUsernameTableProperty)
     private List<WebElement> credentialsUsernamesList;
 
-    @FindBy(xpath = "//*[@id=\"credentialTable\"]/tbody/tr/td[3]")
+    @FindBy(xpath = "//*[@id=\"" + tableName + "\"]/tbody/tr/" + credentialPasswordTableProperty)
     private List<WebElement> credentialsPasswordsList;
 
     @FindBy(id = "nav-credentials-tab")
@@ -44,9 +51,6 @@ public class HomePageCredentialsTab {
 
     @FindBy(id = "credential-cancel-changes")
     public WebElement cancelChangesButton;
-
-    public String tableName = "credentialTable";
-    public String idPrefix = "credential";
 
     public HomePageCredentialsTab (WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -72,15 +76,13 @@ public class HomePageCredentialsTab {
                 .until(ExpectedConditions.visibilityOf(saveChangesButton));
     }
 
-    public String getIdStrOfItemName(WebDriver driver, String noteTitle) {
-        return Utils.getIdOfTableProperty(driver, "th", noteTitle, tableName);
-//        return Utils.getIdStrOfItemName(driver, noteTitle, tableName);
+    public String getIdOfCredentialUrl(WebDriver driver, String url) {
+        return Utils.getIdOfTableProperty(driver, credentialUrlTableProperty, url, tableName);
 
     }
 
-    public String getCredentialUrlByIdStr(WebDriver driver, String id) {
-        return Utils.getTablePropertyById(driver, id, "th");
-//        return Utils.getItemNameByIdStr(driver, id);
+    public String getCredentialUrlById(WebDriver driver, String id) {
+        return Utils.getTablePropertyById(driver, id, credentialUrlTableProperty);
     }
 
     public List<String> getCredentialUrlList() {
@@ -88,22 +90,18 @@ public class HomePageCredentialsTab {
     }
 
     public void deleteCredentialByUrl(WebDriver driver, String url) {
-        Utils.deleteItemByTableProperty(driver, "th", url, tableName);
-//        Utils.deleteItemByItemName(driver, url, tableName);
+        Utils.deleteItemByTableProperty(driver, credentialUrlTableProperty, url, tableName);
     }
 
     public void editCredentialByUrl(WebDriver driver, String url) {
-        Utils.editItemByTableProperty(driver, "th", url, tableName);
+        Utils.editItemByTableProperty(driver, credentialUrlTableProperty, url, tableName);
     }
 
     public String getCredentialUsernameByUrl(WebDriver driver, String url) {
-        return Utils.getTablePropertyOfItemByItemTableProperty(driver, "td[2]", "th", url, tableName);
-//        return Utils.getColumnOfItemByItemName(driver, url, 2, tableName);
-//        return Utils.getColumnOfItemByItemName(driver, url, 2, tableName);
+        return Utils.getTablePropertyOfItemByItemTableProperty(driver, credentialUsernameTableProperty, credentialUrlTableProperty, url, tableName);
     }
 
     public String getCredentialPasswordByUrl(WebDriver driver, String url) {
-        return Utils.getTablePropertyOfItemByItemTableProperty(driver, "td[3]", "th", url, tableName);
-//        return Utils.getColumnOfItemByItemName(driver, url, 3, tableName);
+        return Utils.getTablePropertyOfItemByItemTableProperty(driver, credentialPasswordTableProperty, credentialUrlTableProperty, url, tableName);
     }
 }
