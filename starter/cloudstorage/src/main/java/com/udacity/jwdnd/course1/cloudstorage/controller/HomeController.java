@@ -35,6 +35,9 @@ public class HomeController {
                               Authentication auth
     ) {
         User user = this.userService.get(auth.getName());
+        if (user == null) {
+            return "login";
+        }
         model.addAttribute("notes", noteService.getByUserId(user.getUserId()));
         model.addAttribute("files", fileService.getByUserId(user.getUserId()));
         model.addAttribute("credentials", credentialService.getByUserId(user.getUserId()));
