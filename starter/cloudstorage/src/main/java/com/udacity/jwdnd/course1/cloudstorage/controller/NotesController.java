@@ -43,7 +43,7 @@ public class NotesController {
             Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(existingNote, user);
             noteService.update(note);
         }
-        return "redirect:/";
+        return "redirect:/?success";
     }
 
     @DeleteMapping("/{id}")
@@ -54,7 +54,7 @@ public class NotesController {
         Note existingNote = noteService.get(noteId);
         Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(existingNote, user);
         noteService.delete(noteId);
-        return "redirect:/";
+        return "redirect:/?success";
     }
 
 }

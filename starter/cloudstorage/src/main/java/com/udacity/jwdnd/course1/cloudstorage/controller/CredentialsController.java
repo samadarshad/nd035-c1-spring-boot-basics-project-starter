@@ -46,7 +46,6 @@ public class CredentialsController {
         Credential credential = credentialService.get(id);
         Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(credential, user);
         return credential;
-        //display decrypted creds to user
     }
 
     @PostMapping
@@ -69,7 +68,7 @@ public class CredentialsController {
             Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(existingCredential, user);
             credentialService.update(credential);
         }
-        return "redirect:/";
+        return "redirect:/?success";
     }
 
     @DeleteMapping("/{id}")
@@ -80,7 +79,7 @@ public class CredentialsController {
         Credential credential = credentialService.get(id);
         Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(credential, user);
         credentialService.delete(id);
-        return "redirect:/";
+        return "redirect:/?success";
     }
 
 }
