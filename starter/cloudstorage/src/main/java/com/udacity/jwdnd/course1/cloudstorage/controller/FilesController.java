@@ -6,6 +6,8 @@ import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 
 import com.udacity.jwdnd.course1.cloudstorage.utility.Utils;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -62,6 +65,9 @@ public class FilesController {
         return fileNames.contains(filename);
     }
 
+    @Value("${spring.servlet.multipart.max-file-size}")
+    private Integer maxFileSize;
+
     @PostMapping
     public String add(@RequestParam("fileUpload") MultipartFile fileUpload, Model model,
                       Authentication auth
@@ -87,8 +93,16 @@ public class FilesController {
                 user.getUserId(),
                 fileUpload.getBytes());
 
+        if (file.getFileSize() > maxFileSize) {
+            throw new ResponseStatusException(
+                    HttpStatus.PAYLOAD_TOO_LARGE, "Filesize exceeds " + maxFileSize + "."
+            );
+        }
         fileService.createAndUpdateObject(file);
-        return "redirect:/";
+
+        return "redirect:/?success";
+
+
     }
 
     @DeleteMapping("/{id}")
@@ -99,7 +113,7 @@ public class FilesController {
         File existingFile = fileService.get(id);
         Utils.checkItemExistsAndUserIsAuthorizedOrThrowError(existingFile, user);
         fileService.delete(id);
-        return "redirect:/";
+        return "redirect:/?success";
     }
 
 }
