@@ -7,6 +7,7 @@ import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 
 import com.udacity.jwdnd.course1.cloudstorage.utility.Utils;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -64,6 +65,9 @@ public class FilesController {
         return fileNames.contains(filename);
     }
 
+    @Value("${spring.servlet.multipart.max-file-size}")
+    private Integer maxFileSize;
+
     @PostMapping
     public String add(@RequestParam("fileUpload") MultipartFile fileUpload, Model model,
                       Authentication auth
@@ -89,8 +93,13 @@ public class FilesController {
                 user.getUserId(),
                 fileUpload.getBytes());
 
-
+        if (file.getFileSize() > maxFileSize) {
+            throw new ResponseStatusException(
+                    HttpStatus.PAYLOAD_TOO_LARGE, "Filesize exceeds " + maxFileSize + "."
+            );
+        }
         fileService.createAndUpdateObject(file);
+
         return "redirect:/?success";
 
 
