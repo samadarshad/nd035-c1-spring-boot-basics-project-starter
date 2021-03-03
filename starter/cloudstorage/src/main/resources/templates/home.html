@@ -243,6 +243,15 @@
             if(activeTab){
                 $('.nav-tabs a[href="' + activeTab + '"]').tab('show');
             }
+
+            // For limiting file upload size
+            $('#fileUpload').bind('change', function() {
+                if(this.files[0].size>10485760){
+                    alert("File uploaded is of bigger size than allowed. Max file size permitted is 10MB");
+                    this.value = '';
+                }
+            });
+
         </script>
 
 
